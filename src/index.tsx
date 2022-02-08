@@ -8,7 +8,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root'),
 );
-
-const myArray: any[] = [{ number: 1 }];
-
-myArray.forEach((item) => item);

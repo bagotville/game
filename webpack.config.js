@@ -17,10 +17,7 @@ const optimization = () => {
   };
 
   if (isProd) {
-    config.minimizer = [
-      new OptimizeCssAssetsWebpackPlugin(),
-      new TerserWebpackPlugin(),
-    ];
+    config.minimizer = [new OptimizeCssAssetsWebpackPlugin(), new TerserWebpackPlugin()];
   }
 
   return config;
@@ -59,10 +56,12 @@ module.exports = {
     }),
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin({
-      patterns: [{
-        from: path.join(__dirname, 'src/favicon.svg'),
-        to: path.join(__dirname, 'dist'),
-      }],
+      patterns: [
+        {
+          from: path.join(__dirname, 'src/favicon.svg'),
+          to: path.join(__dirname, 'dist'),
+        },
+      ],
     }),
     new MiniCssExtractPlugin({
       filename: filename('css'),
@@ -77,11 +76,7 @@ module.exports = {
       },
       {
         test: /\.s?[ca]ss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader',
-        ],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
