@@ -15,7 +15,7 @@
   "lint-staged": {
     "**/*{ts,js,tsx,jsx}": "eslint --fix --max-warnings=0",
     "**/*": "prettier --write --ignore-unknown",
-    "**/*{scss}": "stylelint --fix \"src/**/*.scss\""
+    "**/*scss": "stylelint --fix \"src/**/*.scss\""
   },
   "devDependencies": {
     "@babel/core": "^7.17.0",
