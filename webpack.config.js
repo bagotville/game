@@ -59,10 +59,12 @@ module.exports = {
     }),
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin({
-      patterns: [{
-        from: path.join(__dirname, 'src/favicon.svg'),
-        to: path.join(__dirname, 'dist'),
-      }],
+      patterns: [
+        {
+          from: path.join(__dirname, 'src/favicon.svg'),
+          to: path.join(__dirname, 'dist'),
+        },
+      ],
     }),
     new MiniCssExtractPlugin({
       filename: filename('css'),
@@ -79,7 +81,13 @@ module.exports = {
         test: /\.s?[ca]ss$/,
         use: [
           MiniCssExtractPlugin.loader,
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              modules: true,
+            },
+          },
           'sass-loader',
         ],
       },
