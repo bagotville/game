@@ -7,12 +7,15 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
-      jsx: true,
+      jsx: 'readonly',
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'prettier'],
+  globals: {
+    JSX: true,
+  },
+  plugins: ['react', '@typescript-eslint', 'prettier', 'react-hooks'],
   rules: {
     'import/extensions': 'off',
     'linebreak-style': 'off',
