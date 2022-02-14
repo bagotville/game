@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import SignUp from './pages/signup/SignUp';
-import SignIn from './pages/signin/SignIn';
+import { Route, Routes } from 'react-router-dom';
 import Auth from './api/auth/auth';
 import GuardRoute from './components/GuardRoute/GuardRoute';
 
@@ -21,23 +19,6 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route
-          path="/login"
-          element={
-            <GuardRoute canActivate={!isAuth} redirectTo="/general">
-              <SignIn />
-            </GuardRoute>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <GuardRoute canActivate={!isAuth} redirectTo="/general">
-              <SignUp />
-            </GuardRoute>
-          }
-        />
         <Route
           path="/general"
           element={
