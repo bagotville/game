@@ -1,0 +1,67 @@
+$border-color: #cccccc;
+$tab-color: #a9a9a9;
+$primary-text-color: black;
+$console-text-color: #cccccc;
+
+#console-page-container {
+    background-color: black;
+    border: 3px solid $border-color;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -60%);
+    display: grid;
+    grid-template-rows: 35px 1fr;
+    width: 768px;
+    height: 416px;
+    border-radius: 8px;
+}
+
+#console-page-header {
+    background-color: $border-color;
+}
+
+#console-page-header-nav {
+    height: 100%;
+    ul {
+        display: inline-block;
+        list-style: none;
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-left: 0;
+        margin-right: 0;
+        padding: 0;
+        height: 100%;
+        li {
+            a {
+                display: inline-block;
+                margin-top: auto;
+                margin-bottom: auto;
+                line-height: 26px;
+                text-decoration: none;
+                color: black;
+            }
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+            font-family: Consolas;
+            margin-left: 5px;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            height: 28px;
+            width: 178px;
+            font-size: 18px;
+            background-color: $tab-color;
+        }
+        .active {
+            background-color: white;
+        }
+    }
+}
+
+#console-page-body{
+    color: white;
+    font-family: Consolas;
+    font-size: 18px;
+    padding: 15px;
+}
