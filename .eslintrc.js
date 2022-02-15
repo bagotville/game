@@ -12,7 +12,10 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'prettier'],
+  globals: {
+    JSX: true,
+  },
+  plugins: ['react', '@typescript-eslint', 'prettier', 'react-hooks'],
   rules: {
     'import/extensions': 'off',
     'linebreak-style': 'off',
