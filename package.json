@@ -8,6 +8,7 @@
     "dev": "cross-env NODE_ENV=development webpack --mode development",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "stylelint": "stylelint --fix \"src/**/*.scss\"",
+    "codestyle": "eslint \"src/**/*.ts\"",
     "prepare": "husky install"
   },
   "author": "",
