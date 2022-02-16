@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App';
-import './styles/root.scss';
+import RegisterPage from './pages/register/register.index';
 
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
-      <App />
+      <RegisterPage login='' password='' messages={['signup to bagoville', 'please enter your login...']}/>
     </React.StrictMode>
   </BrowserRouter>,
   document.getElementById('root'),

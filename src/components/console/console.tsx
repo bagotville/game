@@ -4,9 +4,14 @@ import { IConsoleProps } from './console.types';
 import style from './console.style.scss';
 
 export default function Console(props: IConsoleProps) {
-    const { tabs, children, selectedTabName } = props;
+    const { tabs, children, selectedTabName, onMouseDown } = props;
+    const { onKeyDownCallback } = props;
     return (
-        <div id={style['console-page-container']}>
+        <div id={style['console-page-container']} 
+        onKeyDown={onKeyDownCallback} 
+        onMouseDown={onMouseDown} 
+        role="textbox" 
+        tabIndex={0}>
             <div id={style['console-page-header']}>
                 <div id={style['console-page-header-nav']}>
                     <ul>
