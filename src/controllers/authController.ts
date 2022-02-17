@@ -1,42 +1,31 @@
 import AuthAPI from '../api/auth/auth'
 
-import { ISignupForm, IUserData } from '../api/auth/auth.types';
+import { ISignupForm } from '../api/auth/auth.types';
 import { useAppDispatch } from '../store/store.hooks';
 import { error, fetchUser, signOut } from '../pages/auth/auth.reducer';
-
-export interface authState {
-    isSignedIn: boolean;
-    user: IUserData | undefined;
-    error: string;
-}
+import { authState } from './authController.types';
 
 class AuthController {
-    private api;
+    private api = AuthAPI;
 
-    private dispatch;
-
-    constructor() {
-        this.api = AuthAPI;
-        this.dispatch = useAppDispatch();
-    }
+    private dispatch = useAppDispatch();
 
     private async getUser(): Promise<authState> {
-
         const result: authState = await this.api.getUserData()
             .then(user => ({
                 error: '',
-                isSignedIn: true,
+                isAuth: true,
                 user
             }))
             .catch(exception => ({
                 error: exception.reason,
-                isSignedIn: false,
+                isAuth: false,
                 user: undefined
             }));
         return result;
     }
 
-    async fetchUser() {
+    public async fetchUser() {
         const newState = await this.getUser();
         if (!newState.error && newState.user) {
             this.dispatch(fetchUser(newState.user));
@@ -45,7 +34,7 @@ class AuthController {
         }
     }
 
-    async signUp(user: ISignupForm) {
+    public async signUp(user: ISignupForm) {
         await this.api.signup(user)
             .then(() => {
                 this.fetchUser();
@@ -59,7 +48,7 @@ class AuthController {
             });
     }
 
-    async signIn(login: string, password: string) {
+    public async signIn(login: string, password: string) {
         await this.api.signin({ login, password })
             .then(() => {
                 this.fetchUser();

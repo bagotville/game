@@ -1,8 +1,7 @@
 import { ISigninForm, ISignupForm, IUserData } from './auth.types';
 import BaseAPI from '../baseApi';
 
-class Auth extends BaseAPI {
-
+export default class Auth extends BaseAPI {
   public signup(formValue: ISignupForm): Promise<{ id: number }> {
     return this.http.post('/auth/signup', { ...formValue });
   }
@@ -19,6 +18,3 @@ class Auth extends BaseAPI {
     return this.http.post('/auth/logout');
   }
 }
-
-const AuthApi = new Auth();
-export default AuthApi;

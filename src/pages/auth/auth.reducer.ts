@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IUserData } from "../../api/auth/auth.types";
-import { authState } from "../../controllers/authController";
+import { authState } from "../../controllers/authController.types";
 import { RootState } from "../../store/store";
 
 const initialState: authState = {
     error: '',
-    isSignedIn: false,
+    isAuth: false,
     user: undefined
 }
 
@@ -15,16 +15,16 @@ export const reducer = createSlice({
     reducers: {
         signIn: (state, action: PayloadAction<IUserData>) => {
             if (action.payload) {
-                state.isSignedIn = true;
+                state.isAuth = true;
                 state.user = action.payload;
             } else {
-                state.isSignedIn = false;
+                state.isAuth = false;
                 state.user = undefined;
             }
         },
         signOut: (state) => {
             state.error = '';
-            state.isSignedIn = false;
+            state.isAuth = false;
             state.user = undefined;
         },
         fetchUser: (state, action: PayloadAction<IUserData>) => {
