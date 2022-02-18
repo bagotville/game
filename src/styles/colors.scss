@@ -12,3 +12,10 @@ $green-color: #5e8f2d;
 $pink-color: #ff6188;
 $light-blue-color: #78dce8;
 $yellow-color: #fce566;
+
+//SVG COLORS
+:export {
+  gray-color: $gray-color;
+  light-gray-color: $light-gray-color;
+  yellow-color: $yellow-color;
+}

@@ -1,3 +1,5 @@
+import colors from '../../styles/colors.scss';
+
 export interface ISvgProps {
   icon: Icons;
   height?: number;
@@ -23,10 +25,10 @@ export enum Icons {
 }
 
 export const ICONS_DATA: TIconsData = {
-  [Icons.Console]: { color: '#69676C', width: 28, height: 24 },
-  [Icons.LogoBug]: { color: '#FCE566', width: 22, height: 26 },
-  [Icons.OpenTree]: { color: '#69676C', width: 10, height: 10 },
-  [Icons.Forum]: { color: '#98969B', width: 28, height: 28 },
-  [Icons.Leaders]: { color: '#98969B', width: 28, height: 28 },
-  [Icons.Profile]: { color: '#98969B', width: 28, height: 28 },
+  [Icons.Console]: { color: colors['gray-color'], width: 28, height: 24 },
+  [Icons.LogoBug]: { color: colors['yellow-color'], width: 22, height: 26 },
+  [Icons.OpenTree]: { color: colors['gray-color'], width: 10, height: 10 },
+  [Icons.Forum]: { color: colors['light-gray-color'], width: 28, height: 28 },
+  [Icons.Leaders]: { color: colors['light-gray-color'], width: 28, height: 28 },
+  [Icons.Profile]: { color: colors['light-gray-color'], width: 28, height: 28 },
 };
