@@ -26,6 +26,12 @@ module.exports = {
     'no-prototype-builtins': 'off',
     'func-names': 'off',
     'react/jsx-filename-extension': 'off',
+    'no-restricted-exports': 'off',
+    'no-shadow': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
+    'no-unused-vars': 'off',
+    'jsx-a11y/no-static-element-interactions': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
     'max-len': ['error', { code: 120, tabWidth: 2 }],
   },
 };

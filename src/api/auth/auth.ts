@@ -1,7 +1,7 @@
 import { ISigninForm, ISignupForm, IUserData } from './auth.types';
-import http from '../../utils/axios/axios.service';
+import { http } from '../../utils';
 
-export default class Auth {
+export class Auth {
   static signup(formValue: ISignupForm): Promise<{ id: number }> {
     return http.post('/auth/signup', { ...formValue });
   }
