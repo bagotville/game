@@ -9,7 +9,7 @@ const initialState: authState = {
     user: undefined
 }
 
-export const reducer = createSlice({
+export const slice = createSlice({
     name: 'authReducer',
     initialState,
     reducers: {
@@ -40,6 +40,6 @@ export const reducer = createSlice({
     }
 })
 
-export const { signIn, signOut, error, fetchUser } = reducer.actions;
-export default reducer.reducer;
+export const { signIn, signOut, error, fetchUser } = slice.actions;
+export default slice.reducer;
 export const getUser = (state: RootState) => state.authReducer.user;

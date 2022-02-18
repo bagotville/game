@@ -1,4 +1,4 @@
-import AuthAPI from '../api/auth/auth'
+import AuthAPI from '../api/auth/index'
 
 import { ISignupForm } from '../api/auth/auth.types';
 import { useAppDispatch } from '../store/store.hooks';
@@ -11,7 +11,7 @@ class AuthController {
     private dispatch = useAppDispatch();
 
     private async getUser(): Promise<authState> {
-        const result: authState = await this.api.getUserData()
+        const result: Promise<authState> = this.api.getUserData()
             .then(user => ({
                 error: '',
                 isAuth: true,
@@ -35,7 +35,7 @@ class AuthController {
     }
 
     public async signUp(user: ISignupForm) {
-        await this.api.signup(user)
+        this.api.signup(user)
             .then(() => {
                 this.fetchUser();
             })
@@ -49,7 +49,7 @@ class AuthController {
     }
 
     public async signIn(login: string, password: string) {
-        await this.api.signin({ login, password })
+        this.api.signin({ login, password })
             .then(() => {
                 this.fetchUser();
             })
@@ -59,7 +59,7 @@ class AuthController {
     }
 
     async logout() {
-        await this.api.logout()
+        this.api.logout()
             .then(() => {
                 this.dispatch(signOut());
             })
