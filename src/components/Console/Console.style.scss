@@ -1,6 +1,6 @@
 $disabled-console-color: #2a2a2a;
 
-#console-window {
+.console-window {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -8,12 +8,10 @@ $disabled-console-color: #2a2a2a;
   border: 1px solid white;
   border-radius: 5px;
   background-color: black;
-  color: white;
-  font-family: Consolas, sans-serif;
   font-size: 18px;
 }
 
-#console-header {
+.console-header {
   h4 {
     margin-top: 0;
     margin-bottom: 0;
@@ -26,11 +24,11 @@ $disabled-console-color: #2a2a2a;
   border: 1px solid white;
 }
 
-#console-content {
+.console-content {
   padding: 15px;
 }
 
-#tab-container {
+.tab-container {
   ul {
     margin-top: 0;
     margin-bottom: 0;

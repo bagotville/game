@@ -1,27 +1,30 @@
 import React from "react";
+import classNames from "classnames";
 import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from "./Console.constant";
 import style from './Console.style.scss';
 import { IConsoleProps } from "./console.types";
 
 export default function Console(props: IConsoleProps) {
-    const { tabs, header, children, width, height, hidden, enabled } = props;
+    const { 
+        tabs, 
+        header, 
+        children, 
+        width = DEFAULT_WIDTH, 
+        height = DEFAULT_HEIGHT, 
+        hidden = false, 
+        enabled = true } = props;
     const isTabsExists = tabs && tabs.length > 0;
-    const realWidth = width || DEFAULT_WIDTH;
-    const realHeight = height || DEFAULT_HEIGHT;
-    const realHidden = hidden || false;
-    const realEnabled = enabled || true;
 
     return (
-        <div id={style['console-window']}
-            hidden={realHidden}
-            className={realEnabled ? 'disabled' : ''}
-            style={{ width: realWidth, height: realHeight }}>
-            <div id={style['console-header']}>
+        <div className={classNames(style['console-window'], enabled ? null : style.disabled)}
+            hidden={hidden}
+            style={{ width, height }}>
+            <div className={style['console-header']}>
                 <div>
                     <h4>{header}</h4>
                 </div>
                 {isTabsExists ?
-                    <div id={style['tab-container']}>
+                    <div className={style['tab-container']}>
                         <ul>
                             {tabs.map(tab =>
                                 <li className={tab.selected ? [style.tab, style['tab-selected']].join(' ') : style.tab}
@@ -31,11 +34,11 @@ export default function Console(props: IConsoleProps) {
                             )}
                         </ul>
                     </div>
-                    : ''}
+                    : null}
             </div>
-            <div id={style['console-content']}>
+            <div className={style['console-content']}>
                 {children}
             </div>
         </div>
-    )
+    );
 }
