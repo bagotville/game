@@ -1,20 +1,20 @@
 import { ISigninForm, ISignupForm, IUserData } from './auth.types';
-import { http } from '../../utils';
+import BaseAPI from '../baseApi';
 
-export class Auth {
-  static signup(formValue: ISignupForm): Promise<{ id: number }> {
-    return http.post('/auth/signup', { ...formValue });
+export default class Auth extends BaseAPI {
+  public signup(formValue: ISignupForm): Promise<{ id: number }> {
+    return this.http.post('/auth/signup', { ...formValue });
   }
 
-  static signin(formValue: ISigninForm): Promise<'OK'> {
-    return http.post('/auth/signin', { ...formValue });
+  public signin(formValue: ISigninForm): Promise<'OK'> {
+    return this.http.post('/auth/signin', { ...formValue });
   }
 
-  static getUserData(): Promise<IUserData> {
-    return http.get('/auth/user');
+  public getUserData(): Promise<IUserData> {
+    return this.http.get('/auth/user');
   }
 
-  static logout(): Promise<'OK'> {
-    return http.post('/auth/logout');
+  public logout(): Promise<'OK'> {
+    return this.http.post('/auth/logout');
   }
 }
