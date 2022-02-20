@@ -1,1 +1,12 @@
-@import '~normalize.css';
+@import "~normalize.css";
+
+* {
+    font-family: Consolas;
+    color: white;
+}
+
+head, body, #root{
+    width: 100%;
+    height: 100%;
+    background-color: black;
+}
