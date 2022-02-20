@@ -22,13 +22,21 @@ export enum Icons {
   Forum = 'i_forum',
   Leaders = 'i_leaders',
   Profile = 'i_profile',
+  Success = 'i_success',
+  Warning = 'i_warning',
+  Signin = 'i_signin',
+  Signup = 'i_signup',
 }
 
 export const ICONS_DATA: TIconsData = {
-  [Icons.Console]: { color: colors['gray-color'], width: 28, height: 24 },
-  [Icons.LogoBug]: { color: colors['yellow-color'], width: 22, height: 26 },
-  [Icons.OpenTree]: { color: colors['gray-color'], width: 10, height: 10 },
-  [Icons.Forum]: { color: colors['light-gray-color'], width: 28, height: 28 },
-  [Icons.Leaders]: { color: colors['light-gray-color'], width: 28, height: 28 },
-  [Icons.Profile]: { color: colors['light-gray-color'], width: 28, height: 28 },
+  [Icons.Console]: { color: colors.grayColor, width: 28, height: 24 },
+  [Icons.LogoBug]: { color: colors.yellowColor, width: 22, height: 26 },
+  [Icons.OpenTree]: { color: colors.grayColor, width: 10, height: 10 },
+  [Icons.Forum]: { color: colors.lightGrayColor, width: 28, height: 28 },
+  [Icons.Leaders]: { color: colors.lightGrayColor, width: 28, height: 28 },
+  [Icons.Profile]: { color: colors.lightGrayColor, width: 28, height: 28 },
+  [Icons.Success]: { color: colors.greenColor, width: 12, height: 12 },
+  [Icons.Warning]: { color: colors.pinkColor, width: 12, height: 12 },
+  [Icons.Signin]: { color: colors.blackGrayColor, width: 12, height: 18 },
+  [Icons.Signup]: { color: colors.blackGrayColor, width: 20, height: 18 },
 };
