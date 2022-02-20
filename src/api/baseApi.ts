@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { http } from '../utils';
+import { http } from '../services';
 
 export default abstract class BaseAPI {
   protected http: AxiosInstance;

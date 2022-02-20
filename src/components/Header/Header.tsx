@@ -1,9 +1,9 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './Header.scss';
-import Svg from '../../components/Svg';
-import { Icons } from '../../components/Svg/Svg.types';
+import { Icons } from '../Svg/Svg.types';
 import { HEADLINES } from './Header.constants';
+import { Svg } from '../Svg';
 
 export function Header() {
   const location = useLocation();

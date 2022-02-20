@@ -72,9 +72,13 @@
   transition: fill 0.3s;
 }
 
-.link-active {
-  background-color: $white-color !important;
-  color: $light-black-color !important;
+.nav-button.link-active {
+  background-color: $white-color;
+  color: $light-black-color;
+
+  &:hover {
+    background-color: $white-color;
+  }
 
   .icon-active {
     fill: $light-black-color;

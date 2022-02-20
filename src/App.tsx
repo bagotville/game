@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './App.scss';
-import Main from './shared/Main';
-import Header from './shared/Header';
-import Sidebar from './shared/Sidebar';
+import { Main } from './components/Main';
+import { Sidebar } from './components/Sidebar';
+import { Header } from './components/Header';
 
-function App() {
+export function App() {
   return (
     <div className={styles.app}>
       <Header />
@@ -15,5 +15,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

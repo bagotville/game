@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import styles from './Sidebar.scss';
-import Svg from '../../components/Svg';
-import { Icons } from '../../components/Svg/Svg.types';
+import { Icons } from '../Svg/Svg.types';
+import { Svg } from '../Svg';
 
 export function Sidebar() {
   const [isOpenTree, setIsOpenTree] = useState(false);

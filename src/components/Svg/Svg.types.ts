@@ -35,7 +35,7 @@ export const ICONS_DATA: TIconsData = {
   [Icons.Forum]: { color: colors.lightGrayColor, width: 28, height: 28 },
   [Icons.Leaders]: { color: colors.lightGrayColor, width: 28, height: 28 },
   [Icons.Profile]: { color: colors.lightGrayColor, width: 28, height: 28 },
-  [Icons.Success]: { color: colors.greenColor, width: 12, height: 12 },
+  [Icons.Success]: { color: colors.greenColor, width: 14, height: 14 },
   [Icons.Warning]: { color: colors.pinkColor, width: 12, height: 12 },
   [Icons.Signin]: { color: colors.blackGrayColor, width: 12, height: 18 },
   [Icons.Signup]: { color: colors.blackGrayColor, width: 20, height: 18 },

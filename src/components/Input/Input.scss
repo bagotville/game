@@ -1,0 +1,55 @@
+@import '../../styles/colors';
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  margin: 5px 0;
+  padding: 5px;
+  transition: border-color 0.2s;
+  border: 1px dashed $gray-color;
+  border-radius: 4px;
+  background-color: transparent;
+  color: $white-color;
+  font-size: 16px;
+
+  &:focus {
+    border-color: $light-gray-color;
+    outline: none;
+  }
+}
+
+.success {
+  border-color: $green-color;
+
+  &:focus {
+    border-color: $green-color;
+  }
+}
+
+.error {
+  border-color: $pink-color;
+
+  &:focus {
+    border-color: $pink-color;
+  }
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+
+  & > span {
+    margin-left: 5px;
+  }
+
+  &_success {
+    color: $green-color;
+  }
+
+  &_error {
+    color: $pink-color;
+  }
+}
