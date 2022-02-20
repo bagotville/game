@@ -33,5 +33,6 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     'max-len': ['error', { code: 120, tabWidth: 2 }],
+    'no-plusplus': 'off'
   },
 };
