@@ -1,3 +1,3 @@
-import AuthApi from './auth';
+export { authApi } from './auth';
 
-export default new AuthApi();
+export { ISigninForm, ISignupForm, IUserData } from './auth.types';

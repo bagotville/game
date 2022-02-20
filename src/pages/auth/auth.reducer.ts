@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IUserData } from '../../api/auth/auth.types';
 import { authState } from '../../controllers/authController.types';
 import { RootState } from '../../store/store';
+import { IUserData } from '../../api/auth';
 
 const initialState: authState = {
   error: '',

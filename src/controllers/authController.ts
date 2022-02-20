@@ -1,12 +1,11 @@
-import AuthAPI from '../api/auth/index';
-
-import { ISignupForm } from '../api/auth/auth.types';
 import { useAppDispatch } from '../store/store.hooks';
 import { error, fetchUser, signOut } from '../pages/auth/auth.reducer';
 import { authState } from './authController.types';
+import { authApi } from '../api';
+import { ISignupForm } from '../api/auth';
 
 class AuthController {
-  private api = AuthAPI;
+  private api = authApi;
 
   private dispatch = useAppDispatch();
 
