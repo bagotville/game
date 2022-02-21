@@ -11,7 +11,7 @@ export function Input(props: IInputProps) {
     value,
     label,
     type,
-    autoComplete,
+    autoComplete = 'off',
     isValid = false,
     isInvalid = false,
     errorMessage = '',
