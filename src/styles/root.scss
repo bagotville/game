@@ -1,15 +1,13 @@
 @import '~normalize.css';
-
-* {
-  color: white;
-  font-family: Consolas, sans-serif;
-}
+@import 'scroll';
 
 html,
 body {
   height: 100%;
+  color: white;
+  font-family: Consolas, sans-serif;
 
-  & > div {
+  & > div:first-child {
     height: 100%;
   }
 }

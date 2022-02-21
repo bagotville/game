@@ -4,6 +4,7 @@ export interface IInputProps {
   id: string;
   value: string;
   label: string;
+  type: 'text' | 'email' | 'password';
   isValid?: boolean;
   isInvalid?: boolean;
   errorMessage?: string;

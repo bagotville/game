@@ -9,6 +9,7 @@
   "plugins": ["stylelint-prettier"],
   "rules": {
     "prettier/prettier": true,
-    "selector-pseudo-element-no-unknown": true
+    "selector-pseudo-element-no-unknown": true,
+    "at-rule-no-unknown": null
   }
 }
