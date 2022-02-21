@@ -1,0 +1,16 @@
+@import '../../styles/colors';
+
+.header {
+  display: flex;
+  position: relative;
+  z-index: 2;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 8px;
+  background-color: $black-gray-color;
+  box-shadow: 0 2px 2px rgb(0 0 0 / 60%);
+  color: $white-color;
+  font-size: 20px;
+}

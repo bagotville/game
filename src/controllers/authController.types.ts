@@ -1,7 +1,7 @@
-import { IUserData } from "../api/auth/auth.types";
+import { IUserData } from '../api/auth';
 
 export interface authState {
-    isAuth: boolean;
-    user?: IUserData;
-    error: string;
+  isAuth: boolean;
+  user?: IUserData;
+  error: string;
 }

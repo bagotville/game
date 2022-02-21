@@ -1,10 +1,10 @@
 import { AxiosInstance } from 'axios';
-import http from '../utils/axios/axios.service'
+import { http } from '../services';
 
 export default abstract class BaseAPI {
-    protected http: AxiosInstance;
+  protected http: AxiosInstance;
 
-    public constructor() {
-        this.http = http;
-    }
+  public constructor() {
+    this.http = http;
+  }
 }
