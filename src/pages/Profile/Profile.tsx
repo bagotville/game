@@ -3,8 +3,8 @@ import styles from './Profile.scss';
 import { Icons } from '../../components/Svg/Svg.types';
 import { Input } from '../../components/Input';
 import { Svg } from '../../components/Svg';
-import { useValidate } from '../../services/hooks/useValidate/useValidate';
 import { Controls } from '../../services/hooks/useValidate/types';
+import { useValidate } from '../../services';
 
 export function Profile() {
   const emailControl = useValidate(Controls.Email);

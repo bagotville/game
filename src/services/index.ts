@@ -1,5 +1,7 @@
 export { http } from './axios/axios.service';
 
+export { useValidate } from './hooks/useValidate';
+
 export { BASE_URL } from './constants';
 export { ROUTES } from './constants';
 

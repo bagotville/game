@@ -10,6 +10,8 @@ export function Input(props: IInputProps) {
     id,
     value,
     label,
+    type,
+    autoComplete,
     isValid = false,
     isInvalid = false,
     errorMessage = '',
@@ -38,7 +40,8 @@ export function Input(props: IInputProps) {
         id={id}
         value={value}
         disabled={disabled}
-        autoComplete="off"
+        autoComplete={autoComplete}
+        type={type}
         onInput={(e) => (onInput ? onInput(e) : null)}
       />
       {isValid ? (

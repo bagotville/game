@@ -5,6 +5,7 @@ export interface IInputProps {
   value: string;
   label: string;
   type: 'text' | 'email' | 'password';
+  autoComplete?: 'on' | 'off';
   isValid?: boolean;
   isInvalid?: boolean;
   errorMessage?: string;
