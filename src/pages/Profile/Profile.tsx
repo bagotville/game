@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
+import classNames from 'classnames';
 import styles from './Profile.scss';
 import { Icons } from '../../components/Svg/Svg.types';
 import { Input } from '../../components/Input';
 import { Svg } from '../../components/Svg';
 import {
   ControlNames,
+  IPropsProfile,
   PROFILE_INPUTS_DATA,
   PROFILE_INPUTS_PASSWORD,
 } from './Profile.types';
 import { Validator } from '../../services';
 import { useValidateForm } from '../../services/hooks/useValidateForm';
 import { IControlInfo } from '../../services/hooks/useValidate/types';
-import { Button } from '../../components/Button/Button';
+import { Button } from '../../components/Button';
 
 function getErrorMessage(
   control: IControlInfo,
@@ -56,7 +58,10 @@ function getErrorMessage(
   return errors.passwordRepeat;
 }
 
-export function Profile() {
+export function Profile(props: IPropsProfile) {
+  const { className: externalClassName } = props;
+  const profileClasses = classNames(styles.profile, externalClassName);
+
   const [passValue, setPassValue] = useState('');
 
   const formData = useValidateForm({
@@ -130,7 +135,7 @@ export function Profile() {
   }
 
   return (
-    <div className={styles.profile}>
+    <div className={profileClasses}>
       {numbers.map((number) => (
         <div className={styles.number} key={number}>
           {number}

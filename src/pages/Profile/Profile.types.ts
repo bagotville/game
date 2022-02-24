@@ -1,3 +1,7 @@
+export interface IPropsProfile {
+  className?: string;
+}
+
 export interface IProfileInput {
   id: string;
   type: 'text' | 'email' | 'password';

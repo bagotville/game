@@ -8,7 +8,10 @@ export function Main() {
   return (
     <div className={styles.main}>
       <Routes>
-        <Route path={ROUTES.profile} element={<Profile />} />
+        <Route
+          path={ROUTES.profile}
+          element={<Profile className={styles.page} />}
+        />
       </Routes>
     </div>
   );

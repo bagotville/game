@@ -5,4 +5,5 @@ export interface IPropsButton {
   disabled?: boolean;
   type?: 'confirm' | 'cancel';
   onCLick?: MouseEventHandler<HTMLButtonElement>;
+  className?: string;
 }
