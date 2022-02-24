@@ -1,22 +1,127 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Profile.scss';
 import { Icons } from '../../components/Svg/Svg.types';
 import { Input } from '../../components/Input';
 import { Svg } from '../../components/Svg';
-import { Controls } from '../../services/hooks/useValidate/types';
-import { useValidate } from '../../services';
+import {
+  ControlNames,
+  PROFILE_INPUTS_DATA,
+  PROFILE_INPUTS_PASSWORD,
+} from './Profile.types';
+import { Validator } from '../../services';
+import { useValidateForm } from '../../services/hooks/useValidateForm';
+import { IControlInfo } from '../../services/hooks/useValidate/types';
+import { Button } from '../../components/Button/Button';
+
+function getErrorMessage(
+  control: IControlInfo,
+  controlName: ControlNames,
+): string {
+  const { errors } = control;
+
+  if (controlName === ControlNames.Login) {
+    return (
+      errors.required || errors.minLength || errors.maxLength || errors.login
+    );
+  }
+  if (controlName === ControlNames.DisplayName) {
+    return (
+      errors.required || errors.minLength || errors.maxLength || errors.login
+    );
+  }
+  if (controlName === ControlNames.FirstName) {
+    return errors.required || errors.userName;
+  }
+  if (controlName === ControlNames.LastName) {
+    return errors.required || errors.userName;
+  }
+  if (controlName === ControlNames.Email) {
+    return errors.required || errors.email;
+  }
+  if (controlName === ControlNames.Phone) {
+    return (
+      errors.required || errors.minLength || errors.maxLength || errors.phone
+    );
+  }
+  if (controlName === ControlNames.NewPassword) {
+    return (
+      errors.required || errors.minLength || errors.maxLength || errors.password
+    );
+  }
+  if (controlName === ControlNames.OldPassword) {
+    return (
+      errors.required || errors.minLength || errors.maxLength || errors.password
+    );
+  }
+  return errors.passwordRepeat;
+}
 
 export function Profile() {
-  const emailControl = useValidate(Controls.Email);
-  const firstNameControl = useValidate(Controls.FirstName);
-  const lastNameControl = useValidate(Controls.LastName);
-  const loginControl = useValidate(Controls.Login);
-  const phoneControl = useValidate(Controls.Phone);
-  const displayNameControl = useValidate(Controls.DisplayName);
+  const [passValue, setPassValue] = useState('');
 
-  const passwordControl = useValidate(Controls.Password);
-  const repeatPassControl = useValidate(Controls.PasswordRepeat);
-  const oldPasswordControl = useValidate(Controls.Password);
+  const formData = useValidateForm({
+    [ControlNames.FirstName]: [
+      'Ivan',
+      [Validator.required('First name'), Validator.userName],
+    ],
+    [ControlNames.LastName]: [
+      'Ivanov',
+      [Validator.required('Last name'), Validator.userName],
+    ],
+    [ControlNames.Email]: [
+      'ivanov321@yandex.ru',
+      [Validator.required('Email'), Validator.email],
+    ],
+    [ControlNames.DisplayName]: [
+      'Ivan',
+      [
+        Validator.required('Display name'),
+        Validator.login,
+        Validator.minLength(3),
+        Validator.maxLength(20),
+      ],
+    ],
+    [ControlNames.Phone]: [
+      '8432442334423',
+      [
+        Validator.required('Phone'),
+        Validator.phone,
+        Validator.minLength(10),
+        Validator.maxLength(15),
+      ],
+    ],
+    [ControlNames.Login]: [
+      'Ivan123',
+      [
+        Validator.required('Login'),
+        Validator.login,
+        Validator.minLength(3),
+        Validator.maxLength(20),
+      ],
+    ],
+  });
+
+  const formPass = useValidateForm({
+    [ControlNames.OldPassword]: [
+      '',
+      [
+        Validator.required('Old password'),
+        Validator.password,
+        Validator.minLength(8),
+        Validator.maxLength(40),
+      ],
+    ],
+    [ControlNames.NewPassword]: [
+      '',
+      [
+        Validator.required('New password'),
+        Validator.password,
+        Validator.minLength(8),
+        Validator.maxLength(40),
+      ],
+    ],
+    [ControlNames.PasswordRepeat]: ['', [Validator.passwordRepeat(passValue)]],
+  });
 
   const numbers: number[] = [];
 
@@ -38,12 +143,8 @@ export function Profile() {
       <div className={styles['avatar-header']}>## Avatar</div>
 
       <div className={styles['change-avatar-btn']}>
-        <div className={styles['change-button']}>
-          [ <span>Change</span> ]
-        </div>
-        <div>
-          [ <span className={styles['cancel-button']}>Cancel</span> ]
-        </div>
+        <Button name="Change" type="confirm" />
+        <Button name="Cancel" type="cancel" />
       </div>
 
       <div className={styles['avatar-wrapper']}>
@@ -55,173 +156,72 @@ export function Profile() {
       <div className={styles['data-header']}>## Data</div>
 
       <div className={styles['change-data-btn']}>
-        <div className={styles['change-button']}>
-          [ <span>Change</span> ]
-        </div>
-        <div>
-          [ <span className={styles['cancel-button']}>Cancel</span> ]
-        </div>
-      </div>
-
-      <div className={styles['first-row-inputs']}>
-        <Input
-          id="profile-login"
-          type="text"
-          value={loginControl.value}
-          label="Login"
-          isValid={loginControl.isValid && loginControl.isDirty}
-          successMessage={loginControl.successMessage}
-          isInvalid={loginControl.isInvalid && loginControl.isDirty}
-          errorMessage={loginControl.errorMessage}
-          onInput={(event) => {
-            loginControl.setValue((event.target as HTMLInputElement).value);
-          }}
+        <Button
+          name="Change"
+          type="confirm"
+          disabled={formData.isInvalid || !formData.isDirty}
         />
-
-        <Input
-          id="profile-display-name"
-          type="text"
-          value={displayNameControl.value}
-          label="Display name"
-          isValid={displayNameControl.isValid && displayNameControl.isDirty}
-          successMessage={displayNameControl.successMessage}
-          isInvalid={displayNameControl.isInvalid && displayNameControl.isDirty}
-          errorMessage={displayNameControl.errorMessage}
-          onInput={(event) => {
-            displayNameControl.setValue(
-              (event.target as HTMLInputElement).value,
-            );
-          }}
-        />
-      </div>
-
-      <div className={styles['second-row-inputs']}>
-        <Input
-          id="profile-first-name"
-          type="text"
-          value={firstNameControl.value}
-          label="First name"
-          isValid={firstNameControl.isValid && firstNameControl.isDirty}
-          successMessage={firstNameControl.successMessage}
-          isInvalid={firstNameControl.isInvalid && firstNameControl.isDirty}
-          errorMessage={firstNameControl.errorMessage}
-          onInput={(e) => {
-            firstNameControl.setValue((e.target as HTMLInputElement).value);
-          }}
-        />
-
-        <Input
-          id="profile-last-name"
-          type="text"
-          value={lastNameControl.value}
-          label="Last name"
-          isValid={lastNameControl.isValid && lastNameControl.isDirty}
-          successMessage={lastNameControl.successMessage}
-          isInvalid={lastNameControl.isInvalid && lastNameControl.isDirty}
-          errorMessage={lastNameControl.errorMessage}
-          onInput={(e) => {
-            lastNameControl.setValue((e.target as HTMLInputElement).value);
-          }}
-        />
-      </div>
-
-      <div className={styles['third-row-inputs']}>
-        <Input
-          id="profile-email"
-          value={emailControl.value}
-          type="email"
-          label="Email"
-          isValid={emailControl.isValid && emailControl.isDirty}
-          successMessage={emailControl.successMessage}
-          isInvalid={emailControl.isInvalid && emailControl.isDirty}
-          errorMessage={emailControl.errorMessage}
-          onInput={(event) => {
-            emailControl.setValue((event.target as HTMLInputElement).value);
-          }}
-        />
-
-        <Input
-          id="profile-phone"
-          value={phoneControl.value}
-          type="text"
-          label="Phone"
-          isValid={phoneControl.isValid && phoneControl.isDirty}
-          successMessage={phoneControl.successMessage}
-          isInvalid={phoneControl.isInvalid && phoneControl.isDirty}
-          errorMessage={phoneControl.errorMessage}
-          onInput={(event) => {
-            phoneControl.setValue((event.target as HTMLInputElement).value);
-          }}
-        />
+        <Button name="Cancel" type="cancel" disabled={!formData.isDirty} />
       </div>
 
       <div className={styles['pass-header']}>## Password</div>
 
       <div className={styles['change-pass-btn']}>
-        <div className={styles['change-button']}>
-          [ <span>Change</span> ]
-        </div>
-        <div>
-          [ <span className={styles['cancel-button']}>Cancel</span> ]
-        </div>
+        <Button
+          name="Change"
+          type="confirm"
+          disabled={formPass.isInvalid || !formPass.isDirty}
+        />
+        <Button name="Cancel" type="cancel" disabled={!formPass.isDirty} />
       </div>
 
-      <div className={styles['fourth-row-inputs']}>
-        <Input
-          id="profile-new-pass"
-          value={passwordControl.value}
-          type="password"
-          label="New password"
-          isValid={passwordControl.isValid && passwordControl.isDirty}
-          successMessage={passwordControl.successMessage}
-          isInvalid={passwordControl.isInvalid && passwordControl.isDirty}
-          errorMessage={passwordControl.errorMessage}
-          onInput={(event) => {
-            passwordControl.setValue((event.target as HTMLInputElement).value);
-          }}
-        />
+      {PROFILE_INPUTS_DATA.map((item) => {
+        const control = formData.controls[item.controlName];
 
-        <Input
-          id="profile-repeat-pass"
-          value={repeatPassControl.value}
-          type="password"
-          label="Password (Repeat)"
-          isValid={
-            repeatPassControl.value === passwordControl.value &&
-            repeatPassControl.isDirty &&
-            !!repeatPassControl.value
-          }
-          successMessage={repeatPassControl.successMessage}
-          isInvalid={
-            repeatPassControl.value !== passwordControl.value &&
-            repeatPassControl.isDirty
-          }
-          errorMessage="Passwords mismatch"
-          onInput={(event) => {
-            repeatPassControl.setValue(
-              (event.target as HTMLInputElement).value,
-            );
-          }}
-        />
-      </div>
+        return (
+          <Input
+            id={item.id}
+            key={item.id}
+            type={item.type}
+            label={item.label}
+            className={styles[item.className]}
+            value={control.value}
+            isValid={control.isValid && control.isDirty}
+            successMessage={`${item.label} is correct`}
+            isInvalid={control.isInvalid && control.isDirty}
+            errorMessage={getErrorMessage(control, item.controlName)}
+            onInput={(event) => {
+              control.setValue((event.target as HTMLInputElement).value);
+            }}
+          />
+        );
+      })}
 
-      <div className={styles['fifth-row-inputs']}>
-        <Input
-          id="profile-old-pass"
-          value={oldPasswordControl.value}
-          type="password"
-          label="Old password"
-          isValid={oldPasswordControl.isValid && oldPasswordControl.isDirty}
-          successMessage={oldPasswordControl.successMessage}
-          isInvalid={oldPasswordControl.isInvalid && oldPasswordControl.isDirty}
-          errorMessage={oldPasswordControl.errorMessage}
-          onInput={(event) => {
-            oldPasswordControl.setValue(
-              (event.target as HTMLInputElement).value,
-            );
-          }}
-        />
-      </div>
+      {PROFILE_INPUTS_PASSWORD.map((item) => {
+        const control = formPass.controls[item.controlName];
+
+        return (
+          <Input
+            id={item.id}
+            key={item.id}
+            label={item.label}
+            type={item.type}
+            className={styles[item.className]}
+            value={control.value}
+            isValid={control.isValid && control.isDirty}
+            successMessage={`${item.label} is correct`}
+            isInvalid={control.isInvalid && control.isDirty}
+            errorMessage={getErrorMessage(control, item.controlName)}
+            onInput={(event) => {
+              control.setValue((event.target as HTMLInputElement).value);
+
+              if (item.controlName === ControlNames.NewPassword) {
+                setPassValue((event.target as HTMLInputElement).value);
+              }
+            }}
+          />
+        );
+      })}
     </div>
   );
 }

@@ -1,0 +1,42 @@
+@import '../../styles/colors';
+
+.button {
+  width: fit-content;
+  height: fit-content;
+  margin: 0 10px 0 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  color: $white-color;
+
+  &:disabled {
+    color: $gray-color;
+
+    & > span {
+      color: $gray-color;
+      cursor: auto;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.confirm {
+  color: $light-blue-color;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.cancel {
+  color: $pink-color;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

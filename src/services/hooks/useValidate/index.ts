@@ -1,1 +1,1 @@
-export { useValidate } from './useValidate';
+export { useValidateControl } from './useValidateControl';

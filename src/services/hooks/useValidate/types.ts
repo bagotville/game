@@ -1,20 +1,11 @@
-export enum Controls {
-  Email = 'email',
-  Login = 'login',
-  FirstName = 'first name',
-  LastName = 'last name',
-  DisplayName = 'display name',
-  Phone = 'phone',
-  Password = 'password',
-  PasswordRepeat = 'password repeat',
-}
+import { IValidationErrors } from '../../validatior/validator.types';
 
-export interface IControl {
+export interface IControlInfo {
   value: string;
   isValid: boolean;
   isInvalid: boolean;
   isDirty: boolean;
-  errorMessage: string;
-  successMessage: string;
+  errors: IValidationErrors;
   setValue: (value: string) => void;
+  update: () => void;
 }
