@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { TValidatorFn } from '../../validatior/validator.types';
-import { useValidateControl } from '../useValidate';
-import { IControlInfo } from '../useValidate/types';
+import { useValidateControl } from '../useValidateControl';
+import { IControlInfo } from '../useValidateControl/useValidateContol.types';
+import { IFormInfo } from './useValidateForm.types';
 
 interface IControls {
   [key: string]: [string, TValidatorFn[]];
 }
 
-export function useValidateForm(controls: IControls) {
+export function useValidateForm(controls: IControls): IFormInfo {
   const [isValid, setIsValid] = useState(false);
   const [isInvalid, setIsInvalid] = useState(false);
   const [isDirty, setIsDirty] = useState(false);

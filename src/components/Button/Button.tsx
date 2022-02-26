@@ -20,7 +20,7 @@ export function Button(props: IPropsButton) {
       type="button"
       onClick={onCLick}
       className={buttonClasses}>
-      [ <span className={styles[type]}>{name}</span> ]
+      [ <span className={styles[`type-${type}`]}>{name}</span> ]
     </button>
   );
 }

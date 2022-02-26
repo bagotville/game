@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IControlInfo } from './types';
+import { IControlInfo } from './useValidateContol.types';
 import {
   IValidationErrors,
   TValidatorFn,

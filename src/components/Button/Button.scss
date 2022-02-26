@@ -1,6 +1,6 @@
 @import '../../styles/colors';
 
-.confirm {
+.type-confirm {
   color: $light-blue-color;
   cursor: pointer;
 
@@ -9,7 +9,7 @@
   }
 }
 
-.cancel {
+.type-cancel {
   color: $pink-color;
   cursor: pointer;
 
@@ -30,8 +30,8 @@
   &:disabled {
     color: $gray-color;
 
-    .confirm,
-    .cancel {
+    .type-confirm,
+    .type-cancel {
       color: $gray-color;
       cursor: auto;
 

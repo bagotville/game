@@ -4,16 +4,15 @@ import styles from './Profile.scss';
 import { Icons } from '../../components/Svg/Svg.types';
 import { Input } from '../../components/Input';
 import { Svg } from '../../components/Svg';
-import {
-  ControlNames,
-  IPropsProfile,
-  PROFILE_INPUTS_DATA,
-  PROFILE_INPUTS_PASSWORD,
-} from './Profile.types';
+import { ControlNames, IPropsProfile } from './Profile.types';
 import { Validator } from '../../services';
 import { useValidateForm } from '../../services/hooks/useValidateForm';
-import { IControlInfo } from '../../services/hooks/useValidate/types';
+import { IControlInfo } from '../../services/hooks/useValidateControl/useValidateContol.types';
 import { Button } from '../../components/Button';
+import {
+  PROFILE_INPUTS_DATA,
+  PROFILE_INPUTS_PASSWORD,
+} from './Profile.constants';
 
 function getErrorMessage(
   control: IControlInfo,
@@ -189,7 +188,7 @@ export function Profile(props: IPropsProfile) {
             key={item.id}
             type={item.type}
             label={item.label}
-            className={styles[item.className]}
+            className={item.className}
             value={control.value}
             isValid={control.isValid && control.isDirty}
             successMessage={`${item.label} is correct`}
@@ -211,7 +210,7 @@ export function Profile(props: IPropsProfile) {
             key={item.id}
             label={item.label}
             type={item.type}
-            className={styles[item.className]}
+            className={item.className}
             value={control.value}
             isValid={control.isValid && control.isDirty}
             successMessage={`${item.label} is correct`}
