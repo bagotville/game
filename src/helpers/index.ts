@@ -1,0 +1,1 @@
+export { ucOnlyFirstLetter } from './ucOnlyFirstLetter';
