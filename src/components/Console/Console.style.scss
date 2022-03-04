@@ -4,6 +4,7 @@ $disabled-console-color: #2a2a2a;
   position: absolute;
   top: 50%;
   left: 50%;
+  overflow-y: auto;
   transform: translate(-50%, -50%);
   border: 1px solid white;
   border-radius: 5px;
@@ -12,6 +13,9 @@ $disabled-console-color: #2a2a2a;
 }
 
 .console-header {
+  border: 1px solid white;
+  user-select: none;
+
   h4 {
     margin-top: 0;
     margin-bottom: 0;
@@ -20,8 +24,6 @@ $disabled-console-color: #2a2a2a;
     color: black;
     text-align: center;
   }
-
-  border: 1px solid white;
 }
 
 .console-content {
@@ -44,6 +46,7 @@ $disabled-console-color: #2a2a2a;
     border: 1px solid gray;
     line-height: 30px;
     cursor: pointer;
+    user-select: none;
   }
 
   .tab-selected {

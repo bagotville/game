@@ -1,179 +1,136 @@
-import React, { FormEvent, KeyboardEvent } from 'react';
+import React, { FormEvent, KeyboardEvent, useEffect, useState } from 'react';
+import { computeHashForMessage } from '../../utils/objectUtils';
 import style from './ConsoleStrategy.style.scss';
 import {
   IConsoleStrategyProps,
-  IConsoleStrategyState,
   IMessage,
-  instanseOfReadMessage,
-  IReadMessage,
   StringOnlyValues,
 } from './ConsoleStrategy.types';
 
-export class ConsoleStrategy<
-  T extends StringOnlyValues,
-> extends React.Component<IConsoleStrategyProps<T>, IConsoleStrategyState<T>> {
-  private inputRef = React.createRef<HTMLInputElement>();
+export function ConsoleStrategy<T extends StringOnlyValues>(
+  props: IConsoleStrategyProps<StringOnlyValues>,
+) {
+  const inputRef = React.createRef<HTMLInputElement>();
+  const { messages } = props;
+  const [prevMessagesLen, setPrevMessagesLen] = useState(0);
+  const { onSuccessHookHandler } = props;
+  const [inputValue, setInputValue] = useState({} as T);
+  let tempInputValue = '';
+  const [printedMessages, setPrintedMessages] = useState<IMessage<T>[]>([]);
+  const [lastMessageIndex, setLastMessageIndex] = useState(0);
 
-  private messages;
+  const currentMessage = messages[lastMessageIndex];
 
-  private onSuccessHookHandler;
-
-  private currentValue: keyof T;
-
-  constructor(props: IConsoleStrategyProps<T>) {
-    super(props);
-    this.messages = props.messages;
-    this.onSuccessHookHandler = props.onSucessHookHandler;
-    this.state = {
-      inputData: {} as T,
-      lastMessageIndex: 0,
-      isWaitingForInpit: false,
-      output: [],
-      writtenMessages: [],
-      inputType: 'text',
-    };
-  }
-
-  public componentDidMount() {
-    this.writeMessages();
+  useEffect(() => {
     document.onkeydown = () => {
-      this.handleDocumentKeyDown();
+      catchFocus();
     };
+  });
+
+  const catchFocus = () => {
+    inputRef.current?.focus();
+  };
+
+  const printMessages = () => {
+    if (printedMessages.includes(currentMessage)) {
+      return;
+    }
+    setPrintedMessages((prev) => [...prev, currentMessage]);
+  };
+
+  const tryMoveNext = () => {
+    if (!currentMessage.inputType) {
+      moveNext();
+    }
+  };
+
+  const moveNext = () => {
+    if (lastMessageIndex + 1 >= messages.length) {
+      clearState();
+      setTimeout(() => {
+        onSuccessHookHandler(inputValue);
+      }, 0);
+    } else {
+      setLastMessageIndex((prev) => prev + 1);
+    }
+  };
+
+  const clearState = () => {
+    setPrintedMessages([]);
+    setInputValue({} as T);
+    setLastMessageIndex(0);
+    return null;
+  };
+
+  if (prevMessagesLen !== messages.length) {
+    clearState();
+    setPrevMessagesLen(messages.length);
+    return null;
   }
 
-  public componentDidUpdate() {
-    this.writeMessages();
-  }
-
-  public componentWillUnmount() {
-    document.onkeydown = null;
-  }
-
-  private handleDocumentKeyDown() {
-    this.catchFocus();
-  }
-
-  private onInput = (key: KeyboardEvent) => {
+  const saveValue = (key: KeyboardEvent) => {
     if (key.key !== 'Enter') {
       return;
     }
-    this.handleSubmit();
+    storeCurrentValue();
+    printCurrentValue();
+    moveNext();
+    clearInput();
   };
 
-  private handleSubmit = () => {
-    const { inputType } = this.state;
-    const inputElem = this.inputRef.current!;
-    const isTypedSecret = inputType === 'password';
-    if (isTypedSecret) {
-      this.pushMessage(inputElem.value.replace(/./g, '*'), true);
-    } else {
-      this.pushMessage(inputElem.value, true);
-    }
-    inputElem.value = '';
-
-    this.setState((prevState) => ({ ...prevState, isWaitingForInpit: false }));
-    this.readNext();
+  const handleValueChanged = (input: FormEvent<HTMLInputElement>) => {
+    tempInputValue = input.currentTarget.value;
   };
 
-  private storeCurrentValue = (input: FormEvent<HTMLInputElement>) => {
-    const { inputData } = this.state;
-    inputData[this.currentValue] = input.currentTarget.value as T[keyof T];
+  const storeCurrentValue = () => {
+    const temp = inputValue;
+    if (currentMessage.mapToField) {
+      temp[currentMessage.mapToField as keyof T] = tempInputValue as T[keyof T];
+      setInputValue(temp);
+    }
   };
 
-  private catchFocus() {
-    this.inputRef.current?.focus();
-  }
-
-  private writeMessages() {
-    const { lastMessageIndex, writtenMessages } = this.state;
-    const currentPos = writtenMessages.length > 0 ? writtenMessages.length : 0;
-    for (let i = currentPos; i <= lastMessageIndex; i++) {
-      const currentMessage = this.messages[i];
-      this.writeMessage(currentMessage);
+  const printCurrentValue = () => {
+    let valueToPrint = tempInputValue;
+    if (currentMessage.inputType && currentMessage.inputType === 'password') {
+      valueToPrint = valueToPrint.replace(/./g, '*');
     }
-  }
+    const newMsg: IMessage<T> = {
+      message: valueToPrint,
+    };
+    setPrintedMessages((prev) => [...prev, newMsg]);
+  };
 
-  private async writeMessage(message: IMessage) {
-    if (instanseOfReadMessage(message)) {
-      this.readLine(message);
-      return;
-    }
+  const clearInput = () => {
+    inputRef.current!.value = '';
+  };
 
-    this.pushMessage(message.message);
-    if (message.delay) {
-      await setTimeout(() => {
-        this.readNext();
-      }, message.delay);
-    } else {
-      this.readNext();
-    }
-  }
+  printMessages();
+  tryMoveNext();
 
-  private readNext() {
-    const { messages } = this.props;
-    const { lastMessageIndex, inputData } = this.state;
-    if (lastMessageIndex + 1 >= messages.length) {
-      this.onSuccessHookHandler(inputData);
-      return;
-    }
-    const shouldRead: boolean = instanseOfReadMessage(
-      messages[lastMessageIndex + 1],
-    );
-
-    this.setState((prevState) => ({
-      ...prevState,
-      lastMessageIndex: prevState.lastMessageIndex + 1,
-      isWaitingForInpit: shouldRead,
-    }));
-  }
-
-  private readLine(message: IReadMessage<StringOnlyValues>): void {
-    this.pushMessage(message.message, false, message.isSecret);
-
-    this.currentValue = message.mapToField;
-  }
-
-  private pushMessage(
-    message: string,
-    toOutputOnly?: boolean,
-    isSecret?: boolean,
-  ) {
-    if (toOutputOnly) {
-      this.setState((prevState) => ({
-        ...prevState,
-        output: [...prevState.output, message],
-        inputType: isSecret ? 'password' : 'text',
-      }));
-    } else {
-      this.setState((prevState) => ({
-        ...prevState,
-        output: [...prevState.output, message],
-        writtenMessages: [...prevState.writtenMessages, message],
-        inputType: isSecret ? 'password' : 'text',
-      }));
-    }
-  }
-
-  render() {
-    const { isWaitingForInpit } = this.state;
-    const { output, inputType } = this.state;
-
-    return (
-      <div>
-        {output.map((msg) => (
-          <p key={msg}>{msg}</p>
-        ))}
-        {isWaitingForInpit ? (
-          <input
-            ref={this.inputRef}
-            id="console-input"
-            onInput={this.storeCurrentValue}
-            onKeyDown={this.onInput}
-            className={style['console-input']}
-            type={inputType}
-          />
-        ) : null}
-      </div>
-    );
-  }
+  return (
+    <div>
+      {printedMessages.map((message, index) => (
+        <p
+          key={`${index.toString()}_${computeHashForMessage(
+            message,
+          ).toString()}`}
+          className={
+            style[message.outputClassName ? message.outputClassName : '']
+          }>
+          {message.message}
+        </p>
+      ))}
+      {currentMessage.inputType ? (
+        <input
+          ref={inputRef}
+          id="console-input"
+          onInput={handleValueChanged}
+          onKeyDown={saveValue}
+          className={style['console-input']}
+          type={currentMessage.inputType}
+        />
+      ) : null}
+    </div>
+  );
 }

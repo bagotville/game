@@ -1,35 +1,18 @@
 /* eslint-disable no-unused-vars */
 export interface IConsoleStrategyProps<T extends StringOnlyValues> {
-  messages: (IWriteMessage | IReadMessage<T>)[];
-  onSucessHookHandler: (result: T) => void;
+  messages: IMessage<T>[];
+  onSuccessHookHandler: (result: T) => void;
 }
 
-export interface IMessage {
+export interface IMessage<T extends StringOnlyValues> {
   message: string;
   delay?: number;
+  mapToField?: keyof T;
+  inputType?: InputType;
+  outputClassName?: string;
 }
 
-export interface IReadMessage<T extends StringOnlyValues> extends IMessage {
-  mapToField: keyof T;
-  isSecret?: boolean;
-}
-
-export interface IWriteMessage extends IMessage {}
-
-export interface IConsoleStrategyState<T extends StringOnlyValues> {
-  inputData: T;
-  lastMessageIndex: number;
-  isWaitingForInpit: boolean;
-  inputType: 'text' | 'password';
-  output: string[];
-  writtenMessages: string[];
-}
-
-export function instanseOfReadMessage<T extends StringOnlyValues>(
-  a: IMessage,
-): a is IReadMessage<T> {
-  return 'mapToField' in a;
-}
+export type InputType = 'text' | 'password' | 'email';
 
 export type StringOnlyValues = {
   [key: string]: string;

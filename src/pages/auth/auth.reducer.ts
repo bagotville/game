@@ -30,6 +30,7 @@ export const slice = createSlice({
     fetchUser: (state, action: PayloadAction<IUserData>) => {
       if (action.payload) {
         state.user = action.payload;
+        state.isAuth = true;
       }
     },
     error: (state, action: PayloadAction<string>) => {
@@ -43,3 +44,5 @@ export const slice = createSlice({
 export const { signIn, signOut, error, fetchUser } = slice.actions;
 export default slice.reducer;
 export const getUser = (state: RootState) => state.authReducer.user;
+export const isAuth = (state: RootState) => state.authReducer.isAuth;
+export const getAuthErrors = (state: RootState) => state.authReducer.error;

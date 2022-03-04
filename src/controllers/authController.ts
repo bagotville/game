@@ -1,16 +1,14 @@
-import { useAppDispatch } from '../store/store.hooks';
-import { error, fetchUser, signOut } from '../pages/auth/auth.reducer';
+import { error, fetchUser as fetch, signOut } from '../pages/auth/auth.reducer';
 import { authState } from './authController.types';
 import { authApi } from '../api';
-import { ISignupForm } from '../api/auth';
+import { ISignupForm } from '../api/auth/auth.types';
+import { AppDispatch } from '../store/store';
 
-class AuthController {
-  private api = authApi;
+function authController() {
+  const api = authApi;
 
-  private dispatch = useAppDispatch();
-
-  private async getUser(): Promise<authState> {
-    const result: Promise<authState> = this.api
+  const getUser = (): Promise<authState> => {
+    const result: Promise<authState> = api
       .getUserData()
       .then((user) => ({
         error: '',
@@ -23,54 +21,69 @@ class AuthController {
         user: undefined,
       }));
     return result;
-  }
+  };
 
-  public async fetchUser() {
-    const newState = await this.getUser();
+  const fetchUser = async (dispatch: AppDispatch) => {
+    const newState = await getUser();
     if (!newState.error && newState.user) {
-      this.dispatch(fetchUser(newState.user));
+      dispatch(fetch(newState.user));
     } else {
-      this.dispatch(error(newState.error));
+      dispatch(error(newState.error));
     }
-  }
+  };
 
-  public async signUp(user: ISignupForm) {
-    this.api
+  const signUp = async (user: ISignupForm, dispatch: AppDispatch) => {
+    api
       .signup(user)
       .then(() => {
-        this.fetchUser();
+        fetchUser(dispatch);
       })
       .catch((exception) => {
-        if (exception === 'User already in system') {
-          this.fetchUser();
+        if (exception.response.data.reason === 'User already in system') {
+          fetchUser(dispatch);
         } else {
-          this.dispatch(error(exception));
+          dispatch(error(exception));
         }
       });
-  }
+  };
 
-  public async signIn(login: string, password: string) {
-    this.api
+  const signIn = async (
+    login: string,
+    password: string,
+    dispatch: AppDispatch,
+  ) => {
+    api
       .signin({ login, password })
       .then(() => {
-        this.fetchUser();
+        fetchUser(dispatch);
       })
       .catch((exception) => {
-        this.dispatch(error(exception.reason));
+        if (exception.response.data.reason === 'User already in system') {
+          fetchUser(dispatch);
+        } else {
+          dispatch(error(exception.response.data.reason));
+        }
       });
-  }
+  };
 
-  async logout() {
-    this.api
+  const logout = async (dispatch: AppDispatch) => {
+    api
       .logout()
       .then(() => {
-        this.dispatch(signOut());
+        dispatch(signOut());
       })
       .catch((exception) => {
-        this.dispatch(error(exception));
+        dispatch(error(exception));
       });
-  }
+  };
+
+  return {
+    getUser,
+    fetchUser,
+    signUp,
+    signIn,
+    logout,
+  };
 }
 
-const authController = new AuthController();
-export default authController;
+export default authController();
