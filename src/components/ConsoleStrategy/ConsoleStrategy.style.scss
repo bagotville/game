@@ -1,3 +1,5 @@
+@import '../../styles/colors';
+
 .console-input {
   border: none;
   outline: none;
@@ -6,5 +8,5 @@
 }
 
 .error {
-  color: red;
+  color: $error-color;
 }

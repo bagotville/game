@@ -1,5 +1,4 @@
 import React, { FormEvent, KeyboardEvent, useEffect, useState } from 'react';
-import { computeHashForMessage } from '../../utils/objectUtils';
 import style from './ConsoleStrategy.style.scss';
 import {
   IConsoleStrategyProps,
@@ -110,11 +109,9 @@ export function ConsoleStrategy<T extends StringOnlyValues>(
 
   return (
     <div>
-      {printedMessages.map((message, index) => (
+      {printedMessages.map((message) => (
         <p
-          key={`${index.toString()}_${computeHashForMessage(
-            message,
-          ).toString()}`}
+          key={message.message}
           className={
             style[message.outputClassName ? message.outputClassName : '']
           }>

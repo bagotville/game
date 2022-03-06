@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-unused-vars */
-/* eslint-disable spaced-comment */
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Console from '../../../components/Console/Console';
@@ -11,31 +8,28 @@ import authController from '../../../controllers/authController';
 import { ROUTES } from '../../../services/constants';
 import { useAppDispatch } from '../../../store/store.hooks';
 import { getAuthErrors, isAuth } from '../auth.reducer';
-import { defaultLoginProps, loginTabs } from './Login.constants';
+import { loginTabs } from './Login.constants';
+import { LoginMessages } from './Login.types';
 
-export function LoginPage() {
-  const loginProps = defaultLoginProps;
+export function LoginPage(props: LoginMessages) {
   const dispatch = useAppDispatch();
   const errors = useSelector(getAuthErrors);
   const isAuthenticated = useSelector(isAuth);
-
-  let actualMessages = [...loginProps.messages];
+  const { messages } = props;
+  let actualMessages = messages;
   if (errors) {
     actualMessages = [
       {
         message: errors,
         outputClassName: 'error',
       },
-      ...loginProps.messages,
+      ...messages,
     ];
   }
 
   const tryLogin = (result: StringOnlyValues) => {
-    console.log('login', result);
     if (isValid(result)) {
-      authController
-        .signIn(result.login, result.password, dispatch)
-        .catch((resp) => console.log(resp));
+      authController.signIn(result.login, result.password, dispatch);
     }
   };
 

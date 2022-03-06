@@ -10,7 +10,9 @@ import { GuardRoute } from './components/GuardRoute';
 import { ROUTES } from './services';
 import { Logout } from './components/Logout/Logout';
 import { LoginPage } from './pages/auth/Login/Login';
+import { LOGIN_MESSAGES } from './pages/auth/Login/Login.constants';
 import { RegisterPage } from './pages/auth/register/Register';
+import { REGISTER_PAGE_MESSAGES } from './pages/auth/register/Register.constants';
 
 export function App() {
   const isAuthenticated = useSelector(isAuth);
@@ -42,7 +44,7 @@ export function App() {
         path={ROUTES.login}
         element={
           <div className={styles['console-background']}>
-            <LoginPage />
+            <LoginPage messages={LOGIN_MESSAGES} />
           </div>
         }
       />
@@ -50,7 +52,7 @@ export function App() {
         path={ROUTES.register}
         element={
           <div className={styles['console-background']}>
-            <RegisterPage />
+            <RegisterPage messages={REGISTER_PAGE_MESSAGES} />
           </div>
         }
       />

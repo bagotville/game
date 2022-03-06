@@ -1,28 +1,25 @@
 import { ITab } from '../../../components/Console/console.types';
 import {
-  IConsoleStrategyProps,
+  IMessage,
   StringOnlyValues,
 } from '../../../components/ConsoleStrategy/ConsoleStrategy.types';
 import { ROUTES } from '../../../services';
 
-export const defaultLoginProps: IConsoleStrategyProps<StringOnlyValues> = {
-  messages: [
-    {
-      message: 'ssh bugoville...',
-    },
-    {
-      message: 'Please enter you login to grant sudo privelegies:',
-      mapToField: 'login',
-      inputType: 'text',
-    },
-    {
-      message: 'Please enter your password:',
-      mapToField: 'password',
-      inputType: 'password',
-    },
-  ],
-  onSuccessHookHandler: () => {},
-};
+export const LOGIN_MESSAGES: IMessage<StringOnlyValues>[] = [
+  {
+    message: 'ssh bugoville...',
+  },
+  {
+    message: 'Please enter you login to grant sudo privelegies:',
+    mapToField: 'login',
+    inputType: 'text',
+  },
+  {
+    message: 'Please enter your password:',
+    mapToField: 'password',
+    inputType: 'password',
+  },
+];
 
 export const loginTabs: ITab[] = [
   {
