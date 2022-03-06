@@ -3,6 +3,39 @@ import Decorations from './Decorations';
 import Entity from './Entity';
 import { LevelMap } from './global';
 
+/* 
+
+Инструкцию по активации игры
+
+{{ selector }} — селектор выбранного для рендеринга элемента
+
+1. Забрать класс игры и конфиг уровня:
+import Game from './game/Game';
+import { level01 } from './game/global';
+
+2. Создать экзмпляр игры, передав внутрь селектор и конфиг уровня:
+const game = new Game({{ selector }}, level01);
+game.init();
+
+3. Добавить в стили следущее
+{{ selector }} {
+  display: flex;
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  background: #2e2e38;
+
+  canvas {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+}
+
+*/
+
 export default class Game {
   prepareList = [];
 

@@ -55,10 +55,20 @@ export default class Entity {
   game: Game;
 
   // Неизменяемые параметры
-  settings: EntitySettings;
+  settings: EntitySettings = {
+    src: '',
+    speed: 0,
+    factor: 0,
+  };
 
   // Изменяемые параметры
-  props: EntityProps;
+  props: EntityProps = {
+    width: 0,
+    height: 0,
+    sprite: null,
+    x: 0,
+    y: 0,
+  };
 
   state: MoveState = {
     left: null,

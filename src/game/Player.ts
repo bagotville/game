@@ -1,5 +1,5 @@
 import Entity, { StartCoords } from './Entity';
-import src from '../assets/sprite.svg';
+import src from '../assets/images/player.svg';
 import Game from './Game';
 
 type PlayerMove = 'left' | 'right';

@@ -1,7 +1,7 @@
 import Entity, { StartCoords } from './Entity';
 import Game from './Game';
 import { CELL_SIDE } from './global';
-import src from '../assets/wall.svg';
+import src from '../assets/images/wall.svg';
 
 const settings = {
   src,
