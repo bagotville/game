@@ -1,9 +1,14 @@
 export const BASE_URL: string = 'https://ya-praktikum.tech/api/v2';
 
-export const ROUTES: { [key: string]: string } = {
+export const ROUTES = {
   leaderboard: '/leaderboard',
   forum: '/forum',
   profile: '/profile',
+  login: '/login',
+  logout: '/logout',
+  register: '/register',
+  any: '/*',
+  home: '/',
 };
 
 export const REG_EXP_VALIDATE_LOGIN = /^\b[A-Za-z][\w-]+\b$/;

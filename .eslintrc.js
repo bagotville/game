@@ -3,7 +3,12 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['plugin:react/recommended', 'airbnb', 'prettier'],
+  extends: [
+    'plugin:react/recommended',
+    'airbnb',
+    'prettier',
+    'plugin:react-hooks/recommended',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -34,6 +39,8 @@ module.exports = {
     'jsx-a11y/click-events-have-key-events': 'off',
     'max-len': ['error', { code: 120, tabWidth: 2 }],
     'no-plusplus': 'off',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
     'import/no-extraneous-dependencies': [
       'error',
       {
@@ -42,8 +49,10 @@ module.exports = {
           '**/*.spec.ts',
           '**/*.spec.jsx',
           '**/*.spec.tsx',
+          '*webpack.config.js',
         ],
       },
     ],
+    'no-restricted-syntax': 'off',
   },
 };

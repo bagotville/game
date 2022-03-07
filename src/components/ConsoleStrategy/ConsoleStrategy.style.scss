@@ -1,5 +1,12 @@
+@import '../../styles/colors';
+
 .console-input {
   border: none;
   outline: none;
   background-color: black;
+  color: white;
+}
+
+.error {
+  color: $error-color;
 }
