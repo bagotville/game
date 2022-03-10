@@ -15,6 +15,7 @@ export function useValidateForm(controls: IControls): IFormInfo {
 
   const form = Object.entries(controls).reduce(
     (acc: { [key: string]: IControlInfo }, [key, value]) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       acc[key] = useValidateControl(value[0], value[1]);
       return acc;
     },
