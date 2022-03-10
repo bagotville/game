@@ -9,7 +9,7 @@
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "test-components": "ts-mocha --require ignore-styles -p \"./tsconfig.json\" \"src/**/*.spec.{js,jsx,ts,tsx}\"",
     "stylelint": "stylelint --fix \"src/**/*.scss\"",
-    "codestyle": "eslint \"src/**/*.ts\"",
+    "codestyle": "eslint \"src/**/*.{ts,tsx}\"",
     "prepare": "husky install"
   },
   "author": "",
@@ -18,7 +18,7 @@
     "node": ">= 12"
   },
   "lint-staged": {
-    "**/*{ts,js,tsx,jsx}": "eslint --fix --max-warnings=0",
+    "**/*{ts,js,tsx,jsx}": "eslint --fix \"src/**/*.{ts,tsx}\"",
     "**/*": "prettier --write --ignore-unknown",
     "**/*scss": "stylelint --fix \"src/**/*.scss\""
   },

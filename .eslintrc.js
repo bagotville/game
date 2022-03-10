@@ -10,6 +10,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
   ],
   parser: '@typescript-eslint/parser',
+
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -55,4 +56,9 @@ module.exports = {
     ],
     'no-restricted-syntax': 'off',
   },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+    },
+  ],
 };
