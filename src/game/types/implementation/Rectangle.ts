@@ -12,6 +12,7 @@ export class Rectangle {
 
   size: Size;
 
+
   public isColidedWith(other: Rectangle) {
     return (
       Rectangle.isCollided(this, other) || Rectangle.isCollided(other, this)
