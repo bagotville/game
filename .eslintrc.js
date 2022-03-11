@@ -42,6 +42,7 @@ module.exports = {
     'no-plusplus': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    'class-methods-use-this': 'off',
     'import/no-extraneous-dependencies': [
       'error',
       {

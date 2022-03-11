@@ -29,7 +29,8 @@ module.exports = {
   context: path.join(__dirname, 'src'),
   mode: 'development',
   entry: {
-    main: ['@babel/polyfill', './index.tsx'],
+    // main: ['@babel/polyfill', './index.tsx'],
+    main: ['@babel/polyfill', './game/index.ts'],
   },
   output: {
     path: path.join(__dirname, '/dist'),
@@ -50,7 +51,8 @@ module.exports = {
   devtool: isDev ? 'source-map' : false,
   plugins: [
     new HtmlWebpackPlugin({
-      template: '../static/index.html',
+      // template: '../static/index.html',
+      template: './game/index.html',
       minify: {
         collapseWhitespace: isProd,
       },
