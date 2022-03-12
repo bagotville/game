@@ -3,7 +3,7 @@ export const BASE_URL: string = 'https://ya-praktikum.tech/api/v2';
 export const ROUTES = {
   leaderboard: '/leaderboard',
   forum: '/forum',
-  profile: '/profile',
+  profile: 'profile',
   login: '/login',
   logout: '/logout',
   register: '/register',

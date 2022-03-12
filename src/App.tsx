@@ -28,6 +28,7 @@ export function App() {
       <Route
         path={ROUTES.home}
         element={
+
           <GuardRoute canActivate={isAuthenticated} redirectTo={ROUTES.login}>
             <div className={styles.app}>
               <Header isAuthRefetch={authCurrent.refetch} />
@@ -60,6 +61,8 @@ export function App() {
           </GuardRoute>
         }
       />
+
+      <Route path={ROUTES.logout} element={<Logout />} />
     </Routes>
   );
 }
