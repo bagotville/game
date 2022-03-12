@@ -1,11 +1,11 @@
 import { ICollidableEntity } from '../../base/ICollidableEntity';
-import { IRenderableEntity } from '../../base/IRenderableEntity';
 import { Point } from '../Point';
+import { Rectangle } from '../Rectangle';
 import { Size } from '../Size';
 import { Speed } from '../Speed';
 import { Code } from './Code';
 
-export class Level implements IRenderableEntity, ICollidableEntity {
+export class Level implements ICollidableEntity {
   coordinates: Point;
 
   size: Size;
@@ -14,7 +14,7 @@ export class Level implements IRenderableEntity, ICollidableEntity {
 
   levelData: string;
 
-  visualElements: IRenderableEntity[];
+  visualElements: ICollidableEntity[];
 
   constructor(id: number, levelData: string) {
     this.id = id;
@@ -31,16 +31,14 @@ export class Level implements IRenderableEntity, ICollidableEntity {
 
   generateLevel() {
     // TODO доработать генерацию уровня
-    const level = new Code(0, { x: 0, y: 100 }, this.levelData);
-    this.visualElements.push(level);
+    const code1 = new Code(0, { x: 0, y: 300 }, this.levelData);
+    const code2 = new Code(0, { x: 50, y: 250 }, 'another block');
+    this.visualElements.push(code1);
+    this.visualElements.push(code2);
   }
 
-  geCollisionPoints: () => Point[] = () => {
-    // TODO доработать отдачу всех точек столкновения для уровня
-    const result: Point[] = [];
-
-    return result;
-  };
+  getCollisionRectangles: () => Rectangle[] = () =>
+    this.visualElements.flatMap((elem) => elem.getCollisionRectangles());
 
   private calculateSize(): Size {
     return {
@@ -49,9 +47,11 @@ export class Level implements IRenderableEntity, ICollidableEntity {
     };
   }
 
-  isCollided: (other: ICollidableEntity) => boolean;
+  isCollided(other: ICollidableEntity) {
+    return this.visualElements.some((elem) => elem.isCollided(other));
+  }
 
-  onCollide: () => void;
+  onCollide: (other: ICollidableEntity) => void = () => {};
 
   render(canvas: CanvasRenderingContext2D) {
     this.visualElements.forEach((element) => element.render(canvas));
