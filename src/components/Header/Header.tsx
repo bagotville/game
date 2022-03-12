@@ -22,6 +22,7 @@ export function Header(props: Props) {
       <span>{HEADLINES[location.pathname] || 'home'} — bugoville</span>
       <Svg
         onClick={() => {
+          // todo: add modal for confirm
           authApi.logout().then(() => {
             refetch();
           });
