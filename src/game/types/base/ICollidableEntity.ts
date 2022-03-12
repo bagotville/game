@@ -1,7 +1,8 @@
-import { Point } from '../implementation/Point';
+import { Rectangle } from '../implementation/Rectangle';
+import { IRenderableEntity } from './IRenderableEntity';
 
-export interface ICollidableEntity {
+export interface ICollidableEntity extends IRenderableEntity {
   isCollided: (other: ICollidableEntity) => boolean;
-  onCollide: () => void;
-  geCollisionPoints: () => Point[];
+  onCollide: (other: ICollidableEntity) => void;
+  getCollisionRectangles: () => Rectangle[];
 }
