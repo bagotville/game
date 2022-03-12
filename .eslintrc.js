@@ -3,12 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'plugin:react/recommended',
-    'airbnb',
-    'prettier',
-    'plugin:react-hooks/recommended',
-  ],
+  extends: ['plugin:react/recommended', 'airbnb', 'prettier', 'plugin:react-hooks/recommended'],
   parser: '@typescript-eslint/parser',
 
   parserOptions: {
@@ -36,6 +31,7 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
     'no-unused-vars': 'off',
+    'no-unused-expressions': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     'max-len': ['error', { code: 120, tabWidth: 2 }],
@@ -45,13 +41,7 @@ module.exports = {
     'import/no-extraneous-dependencies': [
       'error',
       {
-        devDependencies: [
-          '**/*.spec.js',
-          '**/*.spec.ts',
-          '**/*.spec.jsx',
-          '**/*.spec.tsx',
-          '*webpack.config.js',
-        ],
+        devDependencies: ['**/*.spec.js', '**/*.spec.ts', '**/*.spec.jsx', '**/*.spec.tsx', '*webpack.config.js'],
       },
     ],
     'no-restricted-syntax': 'off',

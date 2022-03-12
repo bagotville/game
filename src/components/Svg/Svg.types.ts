@@ -5,6 +5,7 @@ export interface ISvgProps {
   height?: number;
   width?: number;
   className?: string;
+  onClick?: (event?: MouseEvent) => void;
 }
 
 type TIconsData = {

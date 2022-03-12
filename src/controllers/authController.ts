@@ -1,7 +1,7 @@
-import { error, fetchUser as fetch, signOut } from '../pages/auth/auth.reducer';
+import { error, fetchUser as fetch, signOut } from '../store/reducers/auth';
 import { authState } from './authController.types';
 import { authApi } from '../api';
-import { ISignupForm } from '../api/auth/auth.types';
+import { ISignupForm } from '../api/auth';
 import { AppDispatch } from '../store/store';
 
 function authController() {
@@ -47,11 +47,7 @@ function authController() {
       });
   };
 
-  const signIn = async (
-    login: string,
-    password: string,
-    dispatch: AppDispatch,
-  ) => {
+  const signIn = async (login: string, password: string, dispatch: AppDispatch) => {
     api
       .signin({ login, password })
       .then(() => {
