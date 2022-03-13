@@ -2,12 +2,9 @@ import React, { useRef } from 'react';
 import classNames from 'classnames';
 import styles from './Forum.scss';
 import { Button } from '../../components/Button';
+import { ForumProps } from './Forum.types';
 
-interface Props {
-  className: string;
-}
-
-export function Forum(props: Props) {
+export function Forum(props: ForumProps) {
   const { className: externalClassName } = props;
   const forumClasses = classNames(styles.forum, externalClassName);
 

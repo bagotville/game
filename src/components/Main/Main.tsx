@@ -4,6 +4,7 @@ import styles from './Main.scss';
 import { ROUTES } from '../../services';
 import { Profile } from '../../pages/Profile';
 import { Forum } from '../../pages/Forum';
+import { Leaderboard } from '../../pages/Leaderboard';
 
 export function Main() {
   return (
@@ -16,6 +17,10 @@ export function Main() {
         <Route
           path={ROUTES.forum}
           element={<Forum className={styles.page} />}
+        />
+        <Route
+          path={ROUTES.leaderboard}
+          element={<Leaderboard className={styles.page} />}
         />
       </Routes>
     </div>

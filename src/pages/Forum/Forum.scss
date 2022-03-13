@@ -1,3 +1,5 @@
+@import '../../styles/colors';
+
 $height-grid-cell: 30px;
 
 .forum {
@@ -18,7 +20,7 @@ $height-grid-cell: 30px;
 
 .number {
   height: $height-grid-cell;
-  color: #69676c;
+  color: $gray-color;
   font-size: 19px;
   font-weight: bold;
 }
@@ -29,23 +31,23 @@ $height-grid-cell: 30px;
 
 .header {
   height: $height-grid-cell;
-  color: #96939b;
+  color: $light-blue-gray-color;
   font-size: 18px;
 }
 
 .divider {
   height: $height-grid-cell;
-  color: #96939b;
+  color: $light-blue-gray-color;
   font-size: 18px;
 }
 
 .forum-card {
   height: 2 * $height-grid-cell;
-  color: #67636c;
+  color: $blackberry-color;
 }
 
 .topic-name {
-  color: white;
+  color: $white-color;
 }
 
 .actions {
