@@ -6,7 +6,7 @@ import { Speed } from '../Speed';
 import { Code } from './Code';
 
 export class Level implements ICollidableEntity {
-  coordinates: Point;
+  globalCoordinates: Point;
 
   size: Size;
 
@@ -20,12 +20,12 @@ export class Level implements ICollidableEntity {
     this.id = id;
     this.levelData = levelData;
     this.size = this.calculateSize();
-    this.coordinates = { x: 0, y: 0 };
+    this.globalCoordinates = { x: 0, y: 0 };
     this.visualElements = [];
     this.generateLevel();
   }
 
-  move() {}
+  refresh() {}
 
   speed: Speed = { x: 0, y: 0 };
 
@@ -53,7 +53,7 @@ export class Level implements ICollidableEntity {
 
   onCollide: (other: ICollidableEntity) => void = () => {};
 
-  render(canvas: CanvasRenderingContext2D) {
-    this.visualElements.forEach((element) => element.render(canvas));
+  render(canvas: CanvasRenderingContext2D, viewport: Rectangle) {
+    this.visualElements.forEach((element) => element.render(canvas, viewport));
   }
 }
