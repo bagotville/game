@@ -1,0 +1,59 @@
+$height-grid-cell: 30px;
+
+.forum {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 10px 5px 0;
+  color: white;
+}
+
+.numbers {
+  position: fixed;
+  height: 100%;
+  overflow: hidden;
+  text-align: right;
+}
+
+.number {
+  height: $height-grid-cell;
+  color: #69676c;
+  font-size: 19px;
+  font-weight: bold;
+}
+
+.content {
+  margin-left: 40px;
+}
+
+.header {
+  height: $height-grid-cell;
+  color: #96939b;
+  font-size: 18px;
+}
+
+.divider {
+  height: $height-grid-cell;
+  color: #96939b;
+  font-size: 18px;
+}
+
+.forum-card {
+  height: 2 * $height-grid-cell;
+  color: #67636c;
+}
+
+.topic-name {
+  color: white;
+}
+
+.actions {
+  margin-top: 12px;
+}
+
+.action {
+  & > span {
+    font-style: italic;
+  }
+}
