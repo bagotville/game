@@ -15,7 +15,7 @@ export function Svg(props: ISvgProps) {
       width={width || ICONS_DATA[icon].width}
       height={height || ICONS_DATA[icon].height}
       onClick={(e) => {
-        onClick ? onClick(e as unknown as MouseEvent) : null;
+        onClick?.(e);
       }}>
       <use xlinkHref={`${sprite}#${icon}`} />
     </svg>

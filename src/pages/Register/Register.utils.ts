@@ -1,4 +1,3 @@
-import { ISignupForm } from '../../api/auth';
 import {
   REG_EXP_VALIDATE_EMAIL,
   REG_EXP_VALIDATE_LOGIN,
@@ -6,6 +5,7 @@ import {
   REG_EXP_VALIDATE_PASSWORD,
   REG_EXP_VALIDATE_PHONE,
 } from '../../services';
+import { ISignupForm } from '../../types/api/auth';
 
 export function validate(result: ISignupForm) {
   const errorMessage = [];

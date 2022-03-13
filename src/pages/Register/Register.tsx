@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { ISignupForm } from '../../api/auth';
 import Console from '../../components/Console/Console';
 import { ConsoleStrategy } from '../../components/ConsoleStrategy/ConsoleStrategy';
 import { registerTabs } from './Register.constants';
 import { RegisterPageMessages } from './Register.types';
 import { validate } from './Register.utils';
 import { TStringOnlyValues } from '../../components/ConsoleStrategy/ConsoleStrategy.types';
-import { useSignUp } from '../../api/hooks/useSignUp';
+import { ISignupForm } from '../../types/api/auth';
+import { useSignUp } from '../../api';
 
 export function RegisterPage(props: RegisterPageMessages) {
-  const { messages, refetch } = props;
+  const { messages, isAuthRefetch } = props;
 
   const signUp = useSignUp();
   const [error, setError] = useState(messages);
@@ -18,9 +18,7 @@ export function RegisterPage(props: RegisterPageMessages) {
     const validationResult = validate(result);
 
     if (validationResult.length === 0) {
-      signUp.mutateAsync(result).then(() => {
-        refetch();
-      });
+      signUp.mutateAsync(result).then(() => isAuthRefetch());
     } else {
       setError([
         {

@@ -2,5 +2,5 @@ import { IMessage, TStringOnlyValues } from '../../components/ConsoleStrategy/Co
 
 export interface LoginMessages {
   messages: IMessage<TStringOnlyValues>[];
-  refetch: () => void;
+  isAuthRefetch: () => void;
 }

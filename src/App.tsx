@@ -1,22 +1,23 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styles from './App.scss';
 import { Main } from './components/Main';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { ROUTES } from './services';
-import { Logout } from './components/Logout/Logout';
 import { LoginPage } from './pages/Login/Login';
 import { LOGIN_MESSAGES } from './pages/Login/Login.constants';
 import { RegisterPage } from './pages/Register/Register';
 import { REGISTER_PAGE_MESSAGES } from './pages/Register/Register.constants';
-import { useAuthCurrent } from './api/hooks/useAuthCurrent';
 import { GuardRoute } from './components/GuardRoute';
 import { Profile } from './pages/Profile';
+import { useAuthCurrent } from './api';
+import { isAuth } from './store/reducers/auth';
 
 export function App() {
   const authCurrent = useAuthCurrent();
-  const isAuth = !!authCurrent.data && authCurrent.status !== 'error';
+  const isAuthenticated = useSelector(isAuth);
 
   return authCurrent.isLoading ? (
     <div className={styles.loading}>Loading...</div>
@@ -25,9 +26,9 @@ export function App() {
       <Route
         path={ROUTES.home}
         element={
-          <GuardRoute canActivate={isAuth} redirectTo={ROUTES.login}>
+          <GuardRoute canActivate={isAuthenticated} redirectTo={ROUTES.login}>
             <div className={styles.app}>
-              <Header refetch={authCurrent.refetch} />
+              <Header isAuthRefetch={authCurrent.refetch} />
               <div className={styles.main}>
                 <Sidebar />
                 <Main />
@@ -41,8 +42,8 @@ export function App() {
       <Route
         path={ROUTES.login}
         element={
-          <GuardRoute canActivate={!isAuth} redirectTo={ROUTES.home}>
-            <LoginPage refetch={authCurrent.refetch} messages={LOGIN_MESSAGES} />
+          <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
+            <LoginPage isAuthRefetch={authCurrent.refetch} messages={LOGIN_MESSAGES} />
           </GuardRoute>
         }
       />
@@ -50,13 +51,11 @@ export function App() {
       <Route
         path={ROUTES.register}
         element={
-          <GuardRoute canActivate={!isAuth} redirectTo={ROUTES.home}>
-            <RegisterPage refetch={authCurrent.refetch} messages={REGISTER_PAGE_MESSAGES} />
+          <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
+            <RegisterPage isAuthRefetch={authCurrent.refetch} messages={REGISTER_PAGE_MESSAGES} />
           </GuardRoute>
         }
       />
-
-      <Route path={ROUTES.logout} element={<Logout />} />
     </Routes>
   );
 }

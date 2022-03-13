@@ -1,3 +1,4 @@
+import React from 'react';
 import colors from '../../styles/colors.scss';
 
 export interface ISvgProps {
@@ -5,7 +6,7 @@ export interface ISvgProps {
   height?: number;
   width?: number;
   className?: string;
-  onClick?: (event?: MouseEvent) => void;
+  onClick?: (event?: React.MouseEvent<SVGSVGElement>) => void;
 }
 
 type TIconsData = {
