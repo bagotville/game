@@ -22,18 +22,18 @@
 }
 
 .success {
-  border-color: $green-color;
+  border-color: $herbal-color;
 
   &:focus {
-    border-color: $green-color;
+    border-color: $herbal-color;
   }
 }
 
 .error {
-  border-color: $pink-color;
+  border-color: $watermelon-color;
 
   &:focus {
-    border-color: $pink-color;
+    border-color: $watermelon-color;
   }
 }
 
@@ -46,10 +46,10 @@
   }
 
   &_success {
-    color: $green-color;
+    color: $herbal-color;
   }
 
   &_error {
-    color: $pink-color;
+    color: $watermelon-color;
   }
 }
