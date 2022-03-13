@@ -4,25 +4,34 @@ $light-gray-color: #98969b;
 $gray-color: #69676c;
 $dark-gray-color: #525053;
 $light-black-gray-color: #222;
-$black-gray-color: #191919;
+$graphite-color: #191919;
 $light-black-color: #131313;
+$black-color: #111;
+$night-color: #282729;
+$dust-color: #9b9696;
+$blackberry-color: #67636c;
 $brown-black-color: #2a2a2a;
 
 //COLORFUL COLORS
-$green-color: #5e8f2d;
-$pink-color: #ff6188;
+$herbal-color: #5e8f2d;
+$watermelon-color: #ff6188;
 $error-color: red;
-$light-blue-color: #78dce8;
-$yellow-color: #fce566;
+$aquamarine-color: #78dce8;
+$dandelion-color: #fce566;
+$lilac-color: #ab9df2;
+$peach-color: #fc9867;
+$ice-color: #f7f5fa;
 
 //SVG COLORS
 :export {
   grayColor: $gray-color;
   lightGrayColor: $light-gray-color;
-  yellowColor: $yellow-color;
-  greenColor: $green-color;
-  pinkColor: $pink-color;
-  blackGrayColor: $black-gray-color;
+  dandelionColor: $dandelion-color;
+  herbalColor: $herbal-color;
+  watermelonColor: $watermelon-color;
+  graphiteColor: $graphite-color;
+  lilacColor: $lilac-color;
+  peachColor: $peach-color;
 }
 
 // OTHER COLORS

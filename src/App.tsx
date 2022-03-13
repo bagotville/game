@@ -14,6 +14,7 @@ import { GuardRoute } from './components/GuardRoute';
 import { Profile } from './pages/Profile';
 import { useAuthCurrent } from './api';
 import { isAuth } from './store/reducers/auth';
+import { Leaderboard } from './pages/Leaderboard';
 
 export function App() {
   const authCurrent = useAuthCurrent();
@@ -37,6 +38,7 @@ export function App() {
           </GuardRoute>
         }>
         <Route path={ROUTES.profile} element={<Profile className={styles.page} />} />
+        <Route path={ROUTES.leaderboard} element={<Leaderboard className={styles.page} />} />
       </Route>
 
       <Route
