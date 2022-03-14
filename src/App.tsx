@@ -1,59 +1,61 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styles from './App.scss';
 import { Main } from './components/Main';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
-import { isAuth } from './pages/auth/auth.reducer';
-import { GuardRoute } from './components/GuardRoute';
 import { ROUTES } from './services';
-import { Logout } from './components/Logout/Logout';
-import { LoginPage } from './pages/auth/Login/Login';
-import { LOGIN_MESSAGES } from './pages/auth/Login/Login.constants';
-import { RegisterPage } from './pages/auth/register/Register';
-import { REGISTER_PAGE_MESSAGES } from './pages/auth/register/Register.constants';
+import { LoginPage } from './pages/Login/Login';
+import { LOGIN_MESSAGES } from './pages/Login/Login.constants';
+import { RegisterPage } from './pages/Register/Register';
+import { REGISTER_PAGE_MESSAGES } from './pages/Register/Register.constants';
+import { GuardRoute } from './components/GuardRoute';
+import { Profile } from './pages/Profile';
+import { useAuthCurrent } from './api';
+import { isAuth } from './store/reducers/auth';
+import { Leaderboard } from './pages/Leaderboard';
 
 export function App() {
+  const authCurrent = useAuthCurrent();
   const isAuthenticated = useSelector(isAuth);
-  return (
+
+  return authCurrent.isLoading ? (
+    <div className={styles.loading}>Loading...</div>
+  ) : (
     <Routes>
       <Route
         path={ROUTES.home}
         element={
-          <GuardRoute redirectTo={ROUTES.login} canActivate={isAuthenticated}>
+          <GuardRoute canActivate={isAuthenticated} redirectTo={ROUTES.login}>
             <div className={styles.app}>
-              <Header />
+              <Header isAuthRefetch={authCurrent.refetch} />
               <div className={styles.main}>
                 <Sidebar />
                 <Main />
               </div>
             </div>
           </GuardRoute>
-        }
-      />
-      <Route
-        path={ROUTES.logout}
-        element={
-          <div className={styles['console-background']}>
-            <Logout />
-          </div>
-        }
-      />
+        }>
+        <Route path={ROUTES.profile} element={<Profile className={styles.page} />} />
+        <Route path={ROUTES.leaderboard} element={<Leaderboard className={styles.page} />} />
+      </Route>
+
       <Route
         path={ROUTES.login}
         element={
-          <div className={styles['console-background']}>
-            <LoginPage messages={LOGIN_MESSAGES} />
-          </div>
+          <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
+            <LoginPage isAuthRefetch={authCurrent.refetch} messages={LOGIN_MESSAGES} />
+          </GuardRoute>
         }
       />
+
       <Route
         path={ROUTES.register}
         element={
-          <div className={styles['console-background']}>
-            <RegisterPage messages={REGISTER_PAGE_MESSAGES} />
-          </div>
+          <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
+            <RegisterPage isAuthRefetch={authCurrent.refetch} messages={REGISTER_PAGE_MESSAGES} />
+          </GuardRoute>
         }
       />
     </Routes>

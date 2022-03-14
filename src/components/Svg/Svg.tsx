@@ -5,7 +5,7 @@ import { ICONS_DATA, ISvgProps } from './Svg.types';
 import sprite from '../../assets/images/sprite.svg';
 
 export function Svg(props: ISvgProps) {
-  const { icon, className: externalClassName, height, width } = props;
+  const { icon, className: externalClassName, height, width, onClick } = props;
   const svgClasses = classNames(styles.image, externalClassName);
 
   return (
@@ -13,7 +13,10 @@ export function Svg(props: ISvgProps) {
       className={svgClasses}
       fill={ICONS_DATA[icon].color}
       width={width || ICONS_DATA[icon].width}
-      height={height || ICONS_DATA[icon].height}>
+      height={height || ICONS_DATA[icon].height}
+      onClick={(e) => {
+        onClick?.(e);
+      }}>
       <use xlinkHref={`${sprite}#${icon}`} />
     </svg>
   );

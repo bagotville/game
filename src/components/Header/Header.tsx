@@ -1,18 +1,31 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './Header.scss';
 import { Icons } from '../Svg/Svg.types';
 import { HEADLINES } from './Header.constants';
 import { Svg } from '../Svg';
+import { HeaderProps } from './Header.types';
+import { useLogout } from '../../api';
 
-export function Header() {
+export function Header(props: HeaderProps) {
+  const { isAuthRefetch } = props;
+
   const location = useLocation();
+  const navigate = useNavigate();
+  const logout = useLogout();
+
+  // todo: add modal for confirm
+  const logoutHandler = () => {
+    logout.mutateAsync({}).then(() => {
+      isAuthRefetch();
+    });
+  };
 
   return (
     <div className={styles.header}>
-      <Svg icon={Icons.LogoBug} height={24} />
-      <span>{HEADLINES[location.pathname]} — bugoville</span>
-      <Svg icon={Icons.Console} height={24} />
+      <Svg onClick={() => navigate('/')} className={styles.action} icon={Icons.LogoBug} height={24} />
+      <span>{HEADLINES[location.pathname] || 'home'} — bugoville</span>
+      <Svg onClick={logoutHandler} className={styles.action} icon={Icons.Console} height={24} />
     </div>
   );
 }

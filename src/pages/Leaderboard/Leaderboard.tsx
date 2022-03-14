@@ -64,16 +64,14 @@ export function Leaderboard(props: Props) {
           });
 
           return (
-            <div className={styles['user-card']}>
+            <div className={styles['user-card']} key={place}>
               <div className={avatarClasses}>
                 <Svg icon={Icons.LogoBug} />
               </div>
 
               <div className={styles['user-info-wrapper']}>
                 <div className={userInfoClasses}>
-                  <span className={styles['user-icon']}>
-                    {getUserIcon(place)}&ensp;
-                  </span>
+                  <span className={styles['user-icon']}>{getUserIcon(place)}&ensp;</span>
                   <span className={styles['user-name']}>Username</span>
                   <span>| {getUserPlace(place)}&ensp;</span>
                   <span>| 100500 points </span>
