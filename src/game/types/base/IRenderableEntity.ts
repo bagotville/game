@@ -1,12 +1,6 @@
-import { Point } from '../implementation/Point';
-import { Size } from '../implementation/Size';
-import { Speed } from '../implementation/Speed';
-import { IBaseEntity } from './IBaseEntity';
+import { Rectangle } from '../implementation/Rectangle';
+import { IGameEntity } from './IGameEntity';
 
-export interface IRenderableEntity extends IBaseEntity {
-  render: (canvas: CanvasRenderingContext2D) => void;
-  move: () => void;
-  coordinates: Point;
-  size: Size;
-  speed: Speed;
+export interface IRenderableEntity extends IGameEntity {
+  render: (canvas: CanvasRenderingContext2D, viewport: Rectangle) => void;
 }

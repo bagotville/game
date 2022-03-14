@@ -20,7 +20,7 @@ export abstract class InteractiveCharacter
 {
   constructor(id: number, coordinates: Point, size: Size) {
     this.id = id;
-    this.coordinates = coordinates;
+    this.globalCoordinates = coordinates;
     this.size = size;
     this.collideRectangle = new Rectangle(coordinates, size);
     this.vectors = [];
@@ -41,8 +41,8 @@ export abstract class InteractiveCharacter
   collideRectangle: Rectangle;
 
   moveCollideRectangle = () => {
-    this.collideRectangle.coordinates.x = this.coordinates.x;
-    this.collideRectangle.coordinates.y = this.coordinates.y;
+    this.collideRectangle.coordinates.x = this.globalCoordinates.x;
+    this.collideRectangle.coordinates.y = this.globalCoordinates.y;
   };
 
   isCollided: (other: ICollidableEntity) => boolean = (other) =>
@@ -68,7 +68,8 @@ export abstract class InteractiveCharacter
   private checkCollisionRight(other: Rectangle) {
     if (Rectangle.isCollidedRight(this.collideRectangle, other)) {
       this.speed.x = 0;
-      this.coordinates.x = other.coordinates.x - this.size.x - COLLISION_LAG;
+      this.globalCoordinates.x =
+        other.coordinates.x - this.size.x - COLLISION_LAG;
       this.isRightBlocked = true;
     } else {
       this.isRightBlocked = false;
@@ -78,7 +79,8 @@ export abstract class InteractiveCharacter
   private checkCollisionLeft(other: Rectangle) {
     if (Rectangle.isCollidedLeft(this.collideRectangle, other)) {
       this.speed.x = 0;
-      this.coordinates.x = other.coordinates.x + other.size.x + COLLISION_LAG;
+      this.globalCoordinates.x =
+        other.coordinates.x + other.size.x + COLLISION_LAG;
       this.isLeftBlocked = true;
     } else {
       this.isLeftBlocked = false;
@@ -90,7 +92,7 @@ export abstract class InteractiveCharacter
       this.speed.y = 0;
       this.isOnTheGround = true;
       this.groundRectangle = other;
-      this.coordinates.y = other.coordinates.y - this.size.y;
+      this.globalCoordinates.y = other.coordinates.y - this.size.y;
       this.vectors = this.vectors.filter(
         (vector) => vector.key !== VECTOR_KEYS.JUMP,
       );
@@ -120,7 +122,10 @@ export abstract class InteractiveCharacter
     return false;
   }
 
-  render: (canvas: CanvasRenderingContext2D) => void = (canvas) => {
+  render: (canvas: CanvasRenderingContext2D, viewport: Rectangle) => void = (
+    canvas,
+    viewport,
+  ) => {
     const absoluteVector: Vector = { x: 0, y: 0, key: VECTOR_KEYS.UNDEFINED };
     this.vectors.forEach((vector) => {
       absoluteVector.x += vector.x;
@@ -137,25 +142,28 @@ export abstract class InteractiveCharacter
         (vector) => vector.key !== VECTOR_KEYS.GRAVITY,
       );
     }
-    this.draw(canvas);
+    this.draw(canvas, viewport);
   };
 
-  abstract draw: (canvas: CanvasRenderingContext2D) => void;
+  abstract draw: (
+    canvas: CanvasRenderingContext2D,
+    viewportRectangle: Rectangle,
+  ) => void;
 
-  move: () => void = () => {
+  refresh: () => void = () => {
     if (
       (this.speed.x > 0 && !this.isRightBlocked) ||
       (this.speed.x < 0 && !this.isLeftBlocked)
     ) {
-      this.coordinates.x += this.speed.x;
+      this.globalCoordinates.x += this.speed.x;
     }
     if ((this.speed.y > 0 && !this.isOnTheGround) || this.speed.y < 0) {
-      this.coordinates.y += this.speed.y;
+      this.globalCoordinates.y += this.speed.y;
     }
     this.moveCollideRectangle();
   };
 
-  coordinates: Point;
+  globalCoordinates: Point;
 
   vectors: Vector[];
 
@@ -216,7 +224,7 @@ export abstract class InteractiveCharacter
   private jump() {
     if (this.isOnTheGround) {
       this.vectors.push({ x: 0, y: -PLAYER_JUMP_SPEED, key: VECTOR_KEYS.JUMP });
-      this.coordinates.y -= COLLISION_LAG * 2;
+      this.globalCoordinates.y -= COLLISION_LAG * 2;
     }
   }
 
