@@ -105,6 +105,8 @@ export abstract class InteractiveCharacter
 
   private checkCollisionTop(other: Rectangle) {
     if (Rectangle.isCollidedTop(this.collideRectangle, other)) {
+      this.globalCoordinates.y += COLLISION_LAG;
+      this.vectors = this.vectors.filter((vector) => vector.y >= 0);
       this.speed.y = 0;
     }
   }

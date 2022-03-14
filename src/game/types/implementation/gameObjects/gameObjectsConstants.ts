@@ -1,3 +1,5 @@
+import { Size } from '../Size';
+
 export const CODE_WIDTH = 10;
 export const CODE_HEIGHT = 30;
 
@@ -25,3 +27,22 @@ export const KEYS = {
   ARROW_UP: 'ArrowUp',
   ARROW_DOWN: 'ArrowDown',
 };
+
+export const LEVEL_OBJECT_TYPE = {
+  WALL: '#',
+  PLAYER: '0',
+  FREE_SPACE: ' ',
+};
+
+export const DEFAULT_WALL_WIDTH = 50;
+
+export const DEFAULT_WALL_HEIGHT = 50;
+
+export const PLAYER_SIZE: Size = {
+  x: 45,
+  y: 45,
+};
+
+export const CANVAS_FONT_SIZE = 30;
+
+export const CANVAS_FONT = `${CANVAS_FONT_SIZE}px consolas`;
