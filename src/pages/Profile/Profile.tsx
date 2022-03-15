@@ -147,8 +147,8 @@ export function Profile(props: IPropsProfile) {
       <div className={styles['avatar-header']}>## Avatar</div>
 
       <div className={styles['change-avatar-btn']}>
-        <Button name="Change" type="confirm" />
-        <Button name="Cancel" type="cancel" />
+        <Button name="Change" />
+        <Button name="Cancel" color="pink" />
       </div>
 
       <div className={styles['avatar-wrapper']}>
@@ -162,10 +162,9 @@ export function Profile(props: IPropsProfile) {
       <div className={styles['change-data-btn']}>
         <Button
           name="Change"
-          type="confirm"
           disabled={formData.isInvalid || !formData.isDirty}
         />
-        <Button name="Cancel" type="cancel" disabled={!formData.isDirty} />
+        <Button name="Cancel" color="pink" disabled={!formData.isDirty} />
       </div>
 
       <div className={styles['pass-header']}>## Password</div>
@@ -173,10 +172,9 @@ export function Profile(props: IPropsProfile) {
       <div className={styles['change-pass-btn']}>
         <Button
           name="Change"
-          type="confirm"
           disabled={formPass.isInvalid || !formPass.isDirty}
         />
-        <Button name="Cancel" type="cancel" disabled={!formPass.isDirty} />
+        <Button name="Cancel" color="pink" disabled={!formPass.isDirty} />
       </div>
 
       {PROFILE_INPUTS_DATA.map((item) => {

@@ -1,0 +1,61 @@
+@import '../../styles/colors';
+
+$height-grid-cell: 30px;
+
+.forum {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 10px 5px 0;
+  color: white;
+}
+
+.numbers {
+  position: fixed;
+  height: 100%;
+  overflow: hidden;
+  text-align: right;
+}
+
+.number {
+  height: $height-grid-cell;
+  color: $gray-color;
+  font-size: 19px;
+  font-weight: bold;
+}
+
+.content {
+  margin-left: 40px;
+}
+
+.header {
+  height: $height-grid-cell;
+  color: $light-blue-gray-color;
+  font-size: 18px;
+}
+
+.divider {
+  height: $height-grid-cell;
+  color: $light-blue-gray-color;
+  font-size: 18px;
+}
+
+.forum-card {
+  height: 2 * $height-grid-cell;
+  color: $blackberry-color;
+}
+
+.topic-name {
+  color: $white-color;
+}
+
+.actions {
+  margin-top: 12px;
+}
+
+.action {
+  & > span {
+    font-style: italic;
+  }
+}
