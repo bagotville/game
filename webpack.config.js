@@ -62,6 +62,10 @@ module.exports = {
           from: path.join(__dirname, 'static/favicon.svg'),
           to: path.join(__dirname, 'dist'),
         },
+        {
+          from: path.join(__dirname, 'static/_redirects'),
+          to: path.join(__dirname, 'dist'),
+        },
       ],
     }),
     new MiniCssExtractPlugin({
@@ -83,7 +87,9 @@ module.exports = {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              modules: true,
+              modules: {
+                localIdentName: '[local]_[hash:base64:3]',
+              },
             },
           },
           'sass-loader',

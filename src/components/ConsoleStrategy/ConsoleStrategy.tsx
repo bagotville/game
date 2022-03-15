@@ -1,14 +1,8 @@
 import React, { FormEvent, KeyboardEvent, useEffect, useState } from 'react';
 import style from './ConsoleStrategy.style.scss';
-import {
-  IConsoleStrategyProps,
-  IMessage,
-  StringOnlyValues,
-} from './ConsoleStrategy.types';
+import { IConsoleStrategyProps, IMessage, TStringOnlyValues } from './ConsoleStrategy.types';
 
-export function ConsoleStrategy<T extends StringOnlyValues>(
-  props: IConsoleStrategyProps<StringOnlyValues>,
-) {
+export function ConsoleStrategy<T extends TStringOnlyValues>(props: IConsoleStrategyProps<TStringOnlyValues>) {
   const inputRef = React.createRef<HTMLInputElement>();
   const { messages } = props;
   const [prevMessagesLen, setPrevMessagesLen] = useState(0);
@@ -110,11 +104,7 @@ export function ConsoleStrategy<T extends StringOnlyValues>(
   return (
     <div>
       {printedMessages.map((message) => (
-        <p
-          key={message.message}
-          className={
-            style[message.outputClassName ? message.outputClassName : '']
-          }>
+        <p key={message.message} className={style[message.outputClassName ? message.outputClassName : '']}>
           {message.message}
         </p>
       ))}

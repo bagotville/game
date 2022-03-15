@@ -7,7 +7,6 @@ export const ROUTES = {
   login: '/login',
   logout: '/logout',
   register: '/register',
-  any: '/*',
   home: '/',
 };
 

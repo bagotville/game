@@ -1,48 +1,46 @@
-import { ITab } from '../../../components/Console/console.types';
-import {
-  IMessage,
-  StringOnlyValues,
-} from '../../../components/ConsoleStrategy/ConsoleStrategy.types';
-import { ROUTES } from '../../../services';
+import { ITab } from '../../components/Console/Console.types';
+import { IMessage, TStringOnlyValues } from '../../components/ConsoleStrategy/ConsoleStrategy.types';
+import { ROUTES } from '../../services';
+import { InputTypes } from '../../components/Input/Input.types';
 
-export const REGISTER_PAGE_MESSAGES: IMessage<StringOnlyValues>[] = [
+export const REGISTER_PAGE_MESSAGES: IMessage<TStringOnlyValues>[] = [
   {
     message: 'ssh bugoville...',
   },
   {
     message: 'Please enter your first name:',
     mapToField: 'first_name',
-    inputType: 'text',
+    inputType: InputTypes.Text,
   },
   {
     message: 'Please enter your second name:',
     mapToField: 'second_name',
-    inputType: 'text',
+    inputType: InputTypes.Text,
   },
   {
     message: 'Please enter your login:',
     mapToField: 'login',
-    inputType: 'text',
+    inputType: InputTypes.Text,
   },
   {
     message: 'Please enter your email:',
     mapToField: 'email',
-    inputType: 'email',
+    inputType: InputTypes.Email,
   },
   {
     message: 'Please enter your phone:',
     mapToField: 'phone',
-    inputType: 'text',
+    inputType: InputTypes.Text,
   },
   {
     message: 'Please enter your password:',
     mapToField: 'password',
-    inputType: 'password',
+    inputType: InputTypes.Password,
   },
   {
     message: 'Please repeat your password:',
     mapToField: 'repeatPassword',
-    inputType: 'password',
+    inputType: InputTypes.Password,
   },
 ];
 

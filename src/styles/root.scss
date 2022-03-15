@@ -1,9 +1,11 @@
+@import 'colors';
 @import '~normalize.css';
 @import 'scroll';
 
 html,
 body {
   height: 100%;
+  background-color: $light-black-gray-color;
   color: white;
   font-family: Consolas, sans-serif;
 
