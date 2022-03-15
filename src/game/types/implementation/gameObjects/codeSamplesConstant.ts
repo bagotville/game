@@ -1,4 +1,4 @@
-import { LEVEL_01 } from './levels/levels';
+export const CODE_SAMPLE = `import { testLevel } from './levels/test';
 import { IRenderableEntity } from './types/base/IRenderableEntity';
 import { Player } from './types/implementation/gameObjects/Player';
 import { Level } from './types/implementation/gameObjects/Level';
@@ -6,7 +6,6 @@ import { IInteractiveEntity } from './types/base/IInteractiveEntity';
 import { ICollidableEntity } from './types/base/ICollidableEntity';
 import { Camera } from './types/implementation/gameObjects/Camera';
 import { IGameEntity } from './types/base/IGameEntity';
-import { getNewId } from './types/implementation/ObjectsRegistrator';
 
 export class Game {
   private gameObjects: IGameEntity[];
@@ -19,22 +18,21 @@ export class Game {
 
   private camera: Camera;
 
-  private player: Player;
-
-  private interactiveObjects: IInteractiveEntity[];
+  private keyEventSubscribers: IInteractiveEntity[];
 
   private collidableObjects: ICollidableEntity[];
 
   public start() {
     this.initialize();
     this.setupKeyboard();
-    this.loadLevel();
     this.createCamera();
+    this.loadLevel();
+    this.createPlayer();
     this.setupRenderer();
   }
 
   private initialize() {
-    this.interactiveObjects = [];
+    this.keyEventSubscribers = [];
     this.visualObjects = [];
     this.gameObjects = [];
     this.collidableObjects = [];
@@ -51,12 +49,12 @@ export class Game {
 
   private setupKeyboard() {
     document.addEventListener('keydown', (keyEvent) => {
-      this.interactiveObjects.forEach((subscriber) =>
+      this.keyEventSubscribers.forEach((subscriber) =>
         subscriber.onKeyDown(keyEvent),
       );
     });
     document.addEventListener('keyup', (keyEvent) => {
-      this.interactiveObjects.forEach((subscriber) =>
+      this.keyEventSubscribers.forEach((subscriber) =>
         subscriber.onKeyUp(keyEvent),
       );
     });
@@ -77,8 +75,7 @@ export class Game {
   }
 
   private clearScreen() {
-    this.canvasContext.fillStyle = 'black';
-    this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   private checkForCollisions() {
@@ -96,32 +93,34 @@ export class Game {
 
   private createCamera() {
     this.camera = new Camera(
-      getNewId(),
-      {
-        x: this.player.globalCoordinates.x,
-        y: this.player.globalCoordinates.y,
-      },
+      -1,
+      { x: 0, y: 0 },
       { x: this.canvas.width, y: this.canvas.height },
       { x: 0, y: 0 },
     );
     this.gameObjects.push(this.camera);
-    this.camera.follow(this.player);
   }
 
   private loadLevel() {
-    const currentLevel = new Level(LEVEL_01);
-    currentLevel
-      .getGameObjects()
-      .forEach((item) => this.gameObjects.push(item));
-    currentLevel
-      .getCollidableObjects()
-      .forEach((item) => this.collidableObjects.push(item));
-    currentLevel
-      .getInteractiveObjects()
-      .forEach((item) => this.interactiveObjects.push(item));
-    currentLevel
-      .getVisualObjects()
-      .forEach((item) => this.visualObjects.push(item));
-    this.player = currentLevel.getPlayer();
+    // TODO реализовать загрузку разных уровней
+    // пока заглушка
+    this.applyLevel(testLevel);
+  }
+
+  private createPlayer() {
+    const player = new Player(1, { x: 50, y: 50 }, { x: 50, y: 50 });
+    this.gameObjects.push(player);
+    this.visualObjects.push(player);
+    this.collidableObjects.push(player);
+    this.keyEventSubscribers.push(player);
+    this.camera.follow(player);
+  }
+
+  private applyLevel(levelData: string) {
+    const level = new Level(101, levelData);
+    this.gameObjects.push(level);
+    this.visualObjects.push(level);
+    this.collidableObjects.push(level);
   }
 }
+`;

@@ -3,7 +3,8 @@ import { Point } from '../Point';
 import { Rectangle } from '../Rectangle';
 import { Size } from '../Size';
 import { Speed } from '../Speed';
-import { CODE_HEIGHT, CODE_WIDTH } from './gameObjectsConstants';
+import { CODE_SAMPLE } from './codeSamplesConstant';
+import { CANVAS_FONT, CANVAS_FONT_SIZE } from './gameObjectsConstants';
 
 export class Code implements ICollidableEntity {
   globalCoordinates: Point;
@@ -16,12 +17,23 @@ export class Code implements ICollidableEntity {
 
   collisionRectangle: Rectangle;
 
-  constructor(id: number, coordinates: Point, code: string) {
+  constructor(id: number, coordinates: Point, size: Size) {
     this.id = id;
     this.globalCoordinates = coordinates;
-    this.code = code;
-    this.calculateSize();
+    this.size = size;
+    this.code = this.getRandomCode(this.size.x / (CANVAS_FONT_SIZE / 3));
     this.collisionRectangle = new Rectangle(coordinates, this.size);
+  }
+
+  getRandomCode(len: number) {
+    const codeSample = CODE_SAMPLE.replace('\n', '')
+      .replace('\t', '')
+      .replace(/\s/g, '')
+      .replace('\r\n', '');
+
+    const start = Math.random() * codeSample.length - len;
+    const end = start + len;
+    return codeSample.slice(start, end);
   }
 
   isCollided: (other: ICollidableEntity) => boolean = (other) =>
@@ -29,7 +41,7 @@ export class Code implements ICollidableEntity {
       .getCollisionRectangles()
       .some((rect) => this.collisionRectangle.isColidedWith(rect));
 
-  onCollide: () => void;
+  onCollide: () => void = () => {};
 
   getCollisionRectangles: () => Rectangle[] = () => [this.collisionRectangle];
 
@@ -37,20 +49,17 @@ export class Code implements ICollidableEntity {
 
   speed: Speed = { x: 0, y: 0 };
 
-  private calculateSize() {
-    this.size = {
-      x: this.code.length * CODE_WIDTH,
-      y: CODE_HEIGHT,
-    };
-  }
-
   render(canvas: CanvasRenderingContext2D, viewport: Rectangle) {
-    canvas.fillStyle = 'black';
-    canvas.fillRect(
-      this.globalCoordinates.x - viewport.coordinates.x + viewport.size.x / 2,
-      this.globalCoordinates.y - viewport.coordinates.y + viewport.size.y / 2,
-      this.size.x,
-      this.size.y,
-    );
+    const realX =
+      this.globalCoordinates.x - viewport.coordinates.x + viewport.size.x / 2;
+    const realY =
+      this.globalCoordinates.y -
+      viewport.coordinates.y +
+      viewport.size.y / 2 +
+      CANVAS_FONT_SIZE;
+
+    canvas.fillStyle = 'white';
+    canvas.font = CANVAS_FONT;
+    canvas.fillText(this.code, realX, realY, this.size.x);
   }
 }
