@@ -4,6 +4,6 @@ export interface IPropsButton {
   name: string;
   disabled?: boolean;
   color?: 'blue' | 'pink' | 'yellow';
-  onCLick?: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
 }

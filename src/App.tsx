@@ -16,6 +16,7 @@ import { useAuthCurrent } from './api';
 import { isAuth } from './store/reducers/auth';
 import { Leaderboard } from './pages/Leaderboard';
 import { Forum } from './pages/Forum';
+import '@reach/dialog/styles.css';
 
 export function App() {
   const authCurrent = useAuthCurrent();
@@ -30,7 +31,7 @@ export function App() {
         element={
           <GuardRoute canActivate={isAuthenticated} redirectTo={ROUTES.login}>
             <div className={styles.app}>
-              <Header isAuthRefetch={authCurrent.refetch} />
+              <Header />
               <div className={styles.main}>
                 <Sidebar />
                 <Main />
