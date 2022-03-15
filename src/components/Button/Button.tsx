@@ -6,13 +6,14 @@ import { IPropsButton } from './Button.types';
 export function Button(props: IPropsButton) {
   const {
     name,
-    type = 'confirm',
+    color = 'blue',
     disabled = false,
     onCLick,
     className: externalClassName,
   } = props;
 
   const buttonClasses = classNames(styles.button, externalClassName);
+  const textBtnClasses = classNames(styles.text, styles[`color-${color}`]);
 
   return (
     <button
@@ -20,7 +21,7 @@ export function Button(props: IPropsButton) {
       type="button"
       onClick={onCLick}
       className={buttonClasses}>
-      [ <span className={styles[`type-${type}`]}>{name}</span> ]
+      [ <span className={textBtnClasses}>{name}</span> ]
     </button>
   );
 }

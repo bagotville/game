@@ -1,7 +1,6 @@
 @import '../../styles/colors';
 
-.type-confirm {
-  color: $aquamarine-color;
+.text {
   cursor: pointer;
 
   &:hover {
@@ -9,13 +8,16 @@
   }
 }
 
-.type-cancel {
-  color: $watermelon-color;
-  cursor: pointer;
+.color-blue {
+  color: $aquamarine-color;
+}
 
-  &:hover {
-    text-decoration: underline;
-  }
+.color-pink {
+  color: $watermelon-color;
+}
+
+.color-yellow {
+  color: $dandelion-color;
 }
 
 .button {
@@ -30,8 +32,9 @@
   &:disabled {
     color: $gray-color;
 
-    .type-confirm,
-    .type-cancel {
+    .color-blue,
+    .color-pink,
+    .color-yellow {
       color: $gray-color;
       cursor: auto;
 

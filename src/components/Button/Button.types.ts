@@ -3,7 +3,7 @@ import { MouseEventHandler } from 'react';
 export interface IPropsButton {
   name: string;
   disabled?: boolean;
-  type?: 'confirm' | 'cancel';
+  color?: 'blue' | 'pink' | 'yellow';
   onCLick?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
 }
