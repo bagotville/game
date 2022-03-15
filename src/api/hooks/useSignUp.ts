@@ -1,8 +1,12 @@
-import { useMutation, UseMutationResult } from 'react-query';
+import { useQuery, UseQueryResult } from 'react-query';
 import { http } from '../../services';
 import { ISignupForm } from '../../types/api/auth';
 
-export function useSignUp(): UseMutationResult<{ id: number }, unknown, ISignupForm> {
-  const signUpQuery = (payload: ISignupForm): Promise<{ id: number }> => http.post(`/auth/signup`, payload);
-  return useMutation(signUpQuery);
+export function useSignUp(payload: ISignupForm): UseQueryResult<{ id: number }> {
+  const signUpQuery = (): Promise<{ id: number }> => http.post(`/auth/signup`, payload);
+  return useQuery('signUpQuery', signUpQuery, {
+    staleTime: Infinity,
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
 }
