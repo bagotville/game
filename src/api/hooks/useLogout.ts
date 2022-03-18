@@ -1,6 +1,6 @@
 import { useMutation, UseMutationResult } from 'react-query';
 import { http } from '../../services';
-import { removeUser } from '../../store/reducers/auth';
+import { removeUserFromStore } from '../../store/reducers/auth';
 import { useAppDispatch } from '../../store/store.hooks';
 
 export function useLogout(): UseMutationResult<'OK'> {
@@ -9,7 +9,7 @@ export function useLogout(): UseMutationResult<'OK'> {
 
   return useMutation(signInQuery, {
     onSuccess: () => {
-      dispatch(removeUser());
+      dispatch(removeUserFromStore());
     },
   });
 }

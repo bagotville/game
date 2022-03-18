@@ -1,6 +1,6 @@
 import { useMutation, UseMutationResult } from 'react-query';
 import { http } from '../../services';
-import { saveUser } from '../../store/reducers/auth';
+import { saveUserToStore } from '../../store/reducers/auth';
 import { useAppDispatch } from '../../store/store.hooks';
 import { IUserData } from '../../types/api/auth';
 
@@ -15,7 +15,7 @@ export function useChangeAvatar(): UseMutationResult<IUserData, unknown, File> {
 
   return useMutation(changeAvatarQuery, {
     onSuccess: (data) => {
-      dispatch(saveUser(data));
+      dispatch(saveUserToStore(data));
     },
   });
 }

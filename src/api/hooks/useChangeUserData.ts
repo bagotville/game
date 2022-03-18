@@ -2,7 +2,7 @@ import { useMutation, UseMutationResult } from 'react-query';
 import { http } from '../../services';
 import { IUserData } from '../../types/api/auth';
 import { useAppDispatch } from '../../store/store.hooks';
-import { saveUser } from '../../store/reducers/auth';
+import { saveUserToStore } from '../../store/reducers/auth';
 import { IChangeUserData } from '../../types/api/user';
 
 export function useChangeUserData(): UseMutationResult<IUserData, unknown, IChangeUserData> {
@@ -11,7 +11,7 @@ export function useChangeUserData(): UseMutationResult<IUserData, unknown, IChan
 
   return useMutation(changeUserDataQuery, {
     onSuccess: (data) => {
-      dispatch(saveUser(data));
+      dispatch(saveUserToStore(data));
     },
   });
 }

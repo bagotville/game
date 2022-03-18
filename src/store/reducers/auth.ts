@@ -13,7 +13,7 @@ export const slice = createSlice({
   name: 'authReducer',
   initialState,
   reducers: {
-    saveUser: (state, action: PayloadAction<IUserData>) => {
+    saveUserToStore: (state, action: PayloadAction<IUserData>) => {
       if (action.payload) {
         state.isAuth = true;
         state.user = action.payload;
@@ -22,7 +22,7 @@ export const slice = createSlice({
         state.user = undefined;
       }
     },
-    removeUser: (state) => {
+    removeUserFromStore: (state) => {
       state.error = '';
       state.isAuth = false;
       state.user = undefined;
@@ -35,7 +35,7 @@ export const slice = createSlice({
   },
 });
 
-export const { saveUser, removeUser, error } = slice.actions;
+export const { saveUserToStore, removeUserFromStore, error } = slice.actions;
 export default slice.reducer;
 export const currentUser = (state: RootState) => state.authReducer.user;
 export const isAuth = (state: RootState) => state.authReducer.isAuth;

@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import { http } from '../../services';
 import { IUserData } from '../../types/api/auth';
-import { saveUser, removeUser } from '../../store/reducers/auth';
+import { saveUserToStore, removeUserFromStore } from '../../store/reducers/auth';
 import { useAppDispatch } from '../../store/store.hooks';
 
 export function useAuthCurrent(): UseQueryResult<IUserData> {
@@ -12,7 +12,7 @@ export function useAuthCurrent(): UseQueryResult<IUserData> {
     staleTime: Infinity,
     retry: 0,
     refetchOnWindowFocus: false,
-    onSuccess: (data) => dispatch(saveUser(data)),
-    onError: () => dispatch(removeUser()),
+    onSuccess: (data) => dispatch(saveUserToStore(data)),
+    onError: () => dispatch(removeUserFromStore()),
   });
 }
