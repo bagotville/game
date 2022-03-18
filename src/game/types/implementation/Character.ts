@@ -1,9 +1,9 @@
+import { AnimationData, Direction, PlayerAnimation } from '../base/Animation';
 import { ICollidableEntity } from '../base/ICollidableEntity';
-import { IInteractiveEntity } from '../base/IInteractiveEntity';
+import { ISpriteInfo } from '../base/ISpriteInfo';
 import {
   COLLISION_LAG,
   GRAVITY_POWER,
-  KEYS,
   MAX_GRAVITY_POWER,
   PLAYER_X_SPEED,
   PLAYER_Y_SPEED as PLAYER_JUMP_SPEED,
@@ -15,10 +15,13 @@ import { Size } from './Size';
 import { Speed } from './Speed';
 import { Vector } from './Vector';
 
-export abstract class InteractiveCharacter
-  implements IInteractiveEntity, ICollidableEntity
-{
-  constructor(id: number, coordinates: Point, size: Size) {
+export abstract class InteractiveCharacter implements ICollidableEntity {
+  constructor(
+    id: number,
+    coordinates: Point,
+    size: Size,
+    spriteInfo: ISpriteInfo,
+  ) {
     this.id = id;
     this.globalCoordinates = coordinates;
     this.size = size;
@@ -28,6 +31,7 @@ export abstract class InteractiveCharacter
     this.isOnTheGround = false;
     this.isLeftBlocked = false;
     this.isRightBlocked = false;
+    this.sprites = spriteInfo;
   }
 
   isOnTheGround: boolean;
@@ -39,6 +43,10 @@ export abstract class InteractiveCharacter
   groundRectangle: Rectangle | null;
 
   collideRectangle: Rectangle;
+
+  isMoving: boolean;
+
+  sprites: ISpriteInfo;
 
   moveCollideRectangle = () => {
     this.collideRectangle.coordinates.x = this.globalCoordinates.x;
@@ -147,11 +155,6 @@ export abstract class InteractiveCharacter
     this.draw(canvas, viewport);
   };
 
-  abstract draw: (
-    canvas: CanvasRenderingContext2D,
-    viewportRectangle: Rectangle,
-  ) => void;
-
   refresh: () => void = () => {
     if (
       (this.speed.x > 0 && !this.isRightBlocked) ||
@@ -175,71 +178,198 @@ export abstract class InteractiveCharacter
 
   id: number;
 
-  onKeyDown: (keyEvent: KeyboardEvent) => void = (keyEvent) => {
-    switch (keyEvent.key) {
-      case KEYS.ARROW_LEFT:
-        this.moveLeft();
-        break;
-      case KEYS.ARROW_RIGHT:
-        this.moveRight();
-        break;
-      case KEYS.ARROW_UP:
-        this.jump();
-        break;
-      default:
-        break;
-    }
-  };
-
-  private moveLeft() {
+  protected moveLeft() {
     if (!this.vectors.some((vector) => vector.key === VECTOR_KEYS.MOVE_LEFT)) {
       this.vectors.push({
         x: -PLAYER_X_SPEED,
         y: 0,
         key: VECTOR_KEYS.MOVE_LEFT,
       });
+      this.isMoving = true;
     }
   }
 
-  private stopLeft() {
+  protected stopLeft() {
     this.vectors = this.vectors.filter(
       (vector) => vector.key !== VECTOR_KEYS.MOVE_LEFT,
     );
+    this.isMoving = false;
   }
 
-  private moveRight() {
+  protected moveRight() {
     if (!this.vectors.some((vector) => vector.key === VECTOR_KEYS.MOVE_RIGHT)) {
       this.vectors.push({
         x: PLAYER_X_SPEED,
         y: 0,
         key: VECTOR_KEYS.MOVE_RIGHT,
       });
+      this.isMoving = true;
     }
   }
 
-  private stopRight() {
+  protected stopRight() {
     this.vectors = this.vectors.filter(
       (vector) => vector.key !== VECTOR_KEYS.MOVE_RIGHT,
     );
+    this.isMoving = false;
   }
 
-  private jump() {
+  protected jump() {
     if (this.isOnTheGround) {
       this.vectors.push({ x: 0, y: -PLAYER_JUMP_SPEED, key: VECTOR_KEYS.JUMP });
       this.globalCoordinates.y -= COLLISION_LAG * 2;
     }
   }
 
-  onKeyUp: (keyEvent: KeyboardEvent) => void = (keyEvent) => {
-    switch (keyEvent.key) {
-      case KEYS.ARROW_LEFT:
-        this.stopLeft();
-        break;
-      case KEYS.ARROW_RIGHT:
-        this.stopRight();
-        break;
-      default:
-        break;
+  // sprite
+  private techAnimationCounter: number = Number.MIN_SAFE_INTEGER;
+
+  private animationCounter: number = 0;
+
+  private prevAnimation: PlayerAnimation;
+
+  private prevDirection: Direction;
+
+  getCurrentAnimation(): PlayerAnimation {
+    if (this.isMoving) {
+      return PlayerAnimation.WALK;
     }
+    return PlayerAnimation.IDLE;
+  }
+
+  getAnimationFrame(): AnimationData {
+    const currentAnim = this.getCurrentAnimation();
+    this.resetCounterIfChanged(currentAnim);
+    let currentImgColumns;
+    let currentImg;
+
+    switch (currentAnim) {
+      case PlayerAnimation.WALK: {
+        currentImg = this.getDependentOnDirection(
+          this.sprites.moveLeftSprite,
+          this.sprites.moveRightSprite,
+        );
+        currentImgColumns = this.sprites.moveColumns;
+        break;
+      }
+      case PlayerAnimation.IDLE:
+      default: {
+        currentImg = this.getDependentOnDirection(
+          this.sprites.idleLeftSprite,
+          this.sprites.idleRightSprite,
+        );
+        currentImgColumns = this.sprites.idleColumns;
+        break;
+      }
+    }
+    const currentFrameCount = this.getNewFrame(currentAnim);
+    const spriteWidth = currentImg.width / currentImgColumns;
+    const spriteHeight = currentImg.height;
+
+    return {
+      imageWidth: currentImg.width,
+      imageHeight: currentImg.height,
+      imageColumns: currentImgColumns,
+      imageRows: 1,
+      image: currentImg,
+      spriteWidth,
+      spriteHeight,
+      spriteX: currentFrameCount * spriteWidth,
+      spriteY: 0,
+      currentFrameCount,
+    };
+  }
+
+  private getDependentOnDirection(
+    leftImg: HTMLImageElement,
+    rightImg: HTMLImageElement,
+  ) {
+    const direction = this.getDirection();
+    const { prevDirection } = this;
+
+    if (
+      direction === Direction.RIGHT ||
+      (direction === Direction.UNDEFINED && prevDirection === Direction.RIGHT)
+    ) {
+      return rightImg;
+    }
+
+    if (
+      direction === Direction.LEFT ||
+      (direction === Direction.UNDEFINED && prevDirection === Direction.LEFT)
+    ) {
+      return leftImg;
+    }
+    return rightImg;
+  }
+
+  getDirection() {
+    const xVector = this.vectors.reduce((prev, next) => prev + next.x, 0);
+    if (xVector > 0) {
+      this.prevDirection = Direction.RIGHT;
+      return Direction.RIGHT;
+    }
+    if (xVector < 0) {
+      this.prevDirection = Direction.LEFT;
+      return Direction.LEFT;
+    }
+    return Direction.UNDEFINED;
+  }
+
+  resetCounterIfChanged(current: PlayerAnimation) {
+    if (this.prevAnimation !== current) {
+      this.animationCounter = 0;
+      this.prevAnimation = current;
+    }
+  }
+
+  getNewFrame(currentAnimation: PlayerAnimation) {
+    this.techAnimationCounter++;
+    if (this.techAnimationCounter > Number.MAX_SAFE_INTEGER) {
+      this.techAnimationCounter = Number.MIN_SAFE_INTEGER;
+    }
+    const currentAnimationRate = this.getCurrentAnimationRate(currentAnimation);
+    if (Math.floor(this.techAnimationCounter % currentAnimationRate) === 0) {
+      this.animationCounter++;
+      if (
+        (currentAnimation === PlayerAnimation.WALK &&
+          this.animationCounter >= this.sprites.moveColumns) ||
+        (currentAnimation === PlayerAnimation.IDLE &&
+          this.animationCounter >= this.sprites.idleColumns)
+      ) {
+        this.animationCounter = 0;
+      }
+    }
+    return this.animationCounter;
+  }
+
+  private getCurrentAnimationRate(currentAnim: PlayerAnimation) {
+    if (currentAnim === PlayerAnimation.IDLE) {
+      return this.sprites.idleAnimationRate;
+    }
+    return this.sprites.moveAnimationRate;
+  }
+
+  draw: (canvas: CanvasRenderingContext2D, viewport: Rectangle) => void = (
+    canvas,
+    viewport,
+  ) => {
+    const realX =
+      this.globalCoordinates.x - viewport.coordinates.x + viewport.size.x / 2;
+    const realY =
+      this.globalCoordinates.y - viewport.coordinates.y + viewport.size.y / 2;
+
+    const frame = this.getAnimationFrame();
+    canvas.drawImage(
+      frame.image, // image to draw
+      frame.spriteX, // x position on sprite img
+      frame.spriteY, // y position on sprite img
+      frame.spriteWidth, // width to take from sprite img
+      frame.spriteHeight, // height to take from sprite img
+      realX, // canvas x
+      realY - this.size.y / 2, // canvas y
+      this.size.x * this.sprites.scaleRate, // scale width on canvas
+      this.size.y * this.sprites.scaleRate,
+    ); // scale height on canvas
   };
 }

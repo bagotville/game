@@ -64,6 +64,10 @@ module.exports = {
           from: path.join(__dirname, 'static/favicon.svg'),
           to: path.join(__dirname, 'dist'),
         },
+        {
+          from: path.join(__dirname, 'static/sprites'),
+          to: path.join(__dirname, 'dist/sprites'),
+        },
       ],
     }),
     new MiniCssExtractPlugin({
