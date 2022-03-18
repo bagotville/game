@@ -65,8 +65,8 @@ module.exports = {
           to: path.join(__dirname, 'dist'),
         },
         {
-          from: path.join(__dirname, 'static/_redirects'),
-          to: path.join(__dirname, 'dist'),
+          from: path.join(__dirname, 'static/sprites'),
+          to: path.join(__dirname, 'dist/sprites'),
         },
       ],
     }),

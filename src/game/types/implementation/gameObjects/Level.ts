@@ -10,6 +10,7 @@ import {
   DEFAULT_WALL_WIDTH,
   LEVEL_OBJECT_TYPE,
   PLAYER_SIZE,
+  PLAYER_SPRITE_INFO,
 } from './gameObjectsConstants';
 import { Player } from './Player';
 
@@ -114,7 +115,12 @@ export class Level {
   }
 
   createPlayer(coordinates: Point) {
-    const player = new Player(getNewId(), coordinates, PLAYER_SIZE);
+    const player = new Player(
+      getNewId(),
+      coordinates,
+      PLAYER_SIZE,
+      PLAYER_SPRITE_INFO,
+    );
     this.visualElements.push(player);
     this.collidableObjects.push(player);
     this.gameObjects.push(player);
