@@ -5,7 +5,7 @@ import { InteractiveCharacter } from '../Character';
 import { Point } from '../Point';
 import { RectangleWithOwner } from '../Rectangle';
 import { Size } from '../Size';
-import { characterEvents, HIT_PROTECTION_TIME, KEYS, playerEvents } from './gameObjectsConstants';
+import { characterEvents, HIT_PROTECTION_TIME, KEYS, playerEvents, DEFAULT_PLAYER_LIFES } from './gameObjectsConstants';
 
 export class Player extends InteractiveCharacter implements IInteractiveEntity {
   constructor(id: number, coordinates: Point, size: Size, spriteInfo: ISpriteInfo, options?: ICharacterOptions) {
@@ -16,6 +16,8 @@ export class Player extends InteractiveCharacter implements IInteractiveEntity {
   private isHitted = false;
 
   private lastHitted: number = 0;
+
+  public lifes: number = DEFAULT_PLAYER_LIFES;
 
   onKeyDown: (keyEvent: KeyboardEvent) => void = (keyEvent) => {
     switch (keyEvent.key) {
@@ -65,5 +67,9 @@ export class Player extends InteractiveCharacter implements IInteractiveEntity {
         this.lastHitted = 0;
       }
     }
+  }
+    
+  die(): void {
+    this.lifes = 0;
   }
 }

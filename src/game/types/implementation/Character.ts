@@ -10,6 +10,7 @@ import {
   MAX_GRAVITY_POWER,
   PLAYER_X_SPEED,
   PLAYER_Y_SPEED as PLAYER_JUMP_SPEED,
+  TIME_IN_AIR_BEFORE_DIE,
   VECTOR_KEYS,
 } from './gameObjects/gameObjectsConstants';
 import { Point } from './Point';
@@ -124,12 +125,24 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
 
   getCollisionRectangles: () => Rectangle[] = () => [this.collideRectangle];
 
+  private lastTSOnTheGround: number = 0;
+
   checkIsOnTheGround() {
     if (this.isOnTheGround && this.groundRectangle != null && this.checkCollisionBottom(this.groundRectangle)) {
+      this.lastTSOnTheGround = +new Date() / 1000;
       return true;
     }
+    this.checkIsFallenToDeath();
     return false;
   }
+
+  private checkIsFallenToDeath() {
+    if (this.lastTSOnTheGround !== 0 && +new Date() / 1000 - this.lastTSOnTheGround >= TIME_IN_AIR_BEFORE_DIE) {
+      this.die();
+    }
+  }
+
+  abstract die(): void;
 
   render: (canvas: CanvasRenderingContext2D, viewport: Rectangle) => void = (canvas, viewport) => {
     const absoluteVector: Vector = { x: 0, y: 0, key: VECTOR_KEYS.UNDEFINED };
