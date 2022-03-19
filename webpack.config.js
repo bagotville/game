@@ -64,19 +64,19 @@ module.exports = {
           to: path.join(__dirname, 'dist'),
         },
         {
-          from: path.join(__dirname, 'static/sprites/Player/WalkLeft.png'),
+          from: path.join(__dirname, 'static/sprites/player/WalkLeft.png'),
           to: path.join(__dirname, 'dist/sprites/Player/walkLeft.png'),
         },
         {
-          from: path.join(__dirname, 'static/sprites/Player/WalkRight.png'),
+          from: path.join(__dirname, 'static/sprites/player/WalkRight.png'),
           to: path.join(__dirname, 'dist/sprites/Player/walkRight.png'),
         },
         {
-          from: path.join(__dirname, 'static/sprites/Player/IdleLeft.png'),
+          from: path.join(__dirname, 'static/sprites/player/IdleLeft.png'),
           to: path.join(__dirname, 'dist/sprites/Player/idleLeft.png'),
         },
         {
-          from: path.join(__dirname, 'static/sprites/Player/IdleRight.png'),
+          from: path.join(__dirname, 'static/sprites/player/IdleRight.png'),
           to: path.join(__dirname, 'dist/sprites/Player/idleRight.png'),
         },
       ],
