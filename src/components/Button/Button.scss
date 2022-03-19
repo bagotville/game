@@ -1,7 +1,6 @@
 @import '../../styles/colors';
 
-.type-confirm {
-  color: $aquamarine-color;
+.text {
   cursor: pointer;
 
   &:hover {
@@ -12,6 +11,7 @@
 .color-blue {
   color: $aquamarine-color;
 }
+
 .color-pink {
   color: $watermelon-color;
 }

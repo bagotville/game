@@ -1,4 +1,3 @@
-import { LEVEL_01 } from './levels/levels';
 import { IRenderableEntity } from './types/base/IRenderableEntity';
 import { Player } from './types/implementation/gameObjects/Player';
 import { Level } from './types/implementation/gameObjects/Level';
@@ -9,6 +8,10 @@ import { IGameEntity } from './types/base/IGameEntity';
 import { getNewId } from './types/implementation/ObjectsRegistrator';
 
 export class Game {
+  constructor(level: string) {
+    this.currentLevel = level;
+  }
+
   private gameObjects: IGameEntity[];
 
   private visualObjects: IRenderableEntity[];
@@ -18,6 +21,8 @@ export class Game {
   private canvasContext: CanvasRenderingContext2D;
 
   private camera: Camera;
+
+  private currentLevel: string;
 
   private player: Player;
 
@@ -51,14 +56,10 @@ export class Game {
 
   private setupKeyboard() {
     document.addEventListener('keydown', (keyEvent) => {
-      this.interactiveObjects.forEach((subscriber) =>
-        subscriber.onKeyDown(keyEvent),
-      );
+      this.interactiveObjects.forEach((subscriber) => subscriber.onKeyDown(keyEvent));
     });
     document.addEventListener('keyup', (keyEvent) => {
-      this.interactiveObjects.forEach((subscriber) =>
-        subscriber.onKeyUp(keyEvent),
-      );
+      this.interactiveObjects.forEach((subscriber) => subscriber.onKeyUp(keyEvent));
     });
   }
 
@@ -77,7 +78,7 @@ export class Game {
   }
 
   private clearScreen() {
-    this.canvasContext.fillStyle = 'black';
+    this.canvasContext.fillStyle = '#222';
     this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
@@ -109,19 +110,11 @@ export class Game {
   }
 
   private loadLevel() {
-    const currentLevel = new Level(LEVEL_01);
-    currentLevel
-      .getGameObjects()
-      .forEach((item) => this.gameObjects.push(item));
-    currentLevel
-      .getCollidableObjects()
-      .forEach((item) => this.collidableObjects.push(item));
-    currentLevel
-      .getInteractiveObjects()
-      .forEach((item) => this.interactiveObjects.push(item));
-    currentLevel
-      .getVisualObjects()
-      .forEach((item) => this.visualObjects.push(item));
+    const currentLevel = new Level(this.currentLevel);
+    currentLevel.getGameObjects().forEach((item) => this.gameObjects.push(item));
+    currentLevel.getCollidableObjects().forEach((item) => this.collidableObjects.push(item));
+    currentLevel.getInteractiveObjects().forEach((item) => this.interactiveObjects.push(item));
+    currentLevel.getVisualObjects().forEach((item) => this.visualObjects.push(item));
     this.player = currentLevel.getPlayer();
   }
 }

@@ -52,16 +52,16 @@ export const PLAYER_IDLE_COLUMNS = 4;
 export const PLAYER_WALK_COLUMNS = 6;
 
 const playerIdleSpriteRight = new Image();
-playerIdleSpriteRight.src = 'sprites/Player/idleRight.png';
+playerIdleSpriteRight.src = '/sprites/Player/idleRight.png';
 
 const playerIdleSpriteLeft = new Image();
-playerIdleSpriteLeft.src = 'sprites/Player/idleLeft.png';
+playerIdleSpriteLeft.src = '/sprites/Player/idleLeft.png';
 
 const playerWalkSpriteRight = new Image();
-playerWalkSpriteRight.src = 'sprites/Player/walkRight.png';
+playerWalkSpriteRight.src = '/sprites/Player/walkRight.png';
 
 const playerWalkSpriteLeft = new Image();
-playerWalkSpriteLeft.src = 'sprites/Player/walkLeft.png';
+playerWalkSpriteLeft.src = '/sprites/Player/walkLeft.png';
 
 // замедляет анимацию. Чем меньше тем чаще будет происходить смена кадров спрайта
 const playerIdleAnimationRate = 10;

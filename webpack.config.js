@@ -29,12 +29,12 @@ module.exports = {
   context: path.join(__dirname, 'src'),
   mode: 'development',
   entry: {
-    // main: ['@babel/polyfill', './index.tsx'],
-    main: ['@babel/polyfill', './game/index.ts'],
+    main: ['@babel/polyfill', './index.tsx'],
   },
   output: {
     path: path.join(__dirname, '/dist'),
     filename: filename('js'),
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
@@ -51,8 +51,7 @@ module.exports = {
   devtool: isDev ? 'source-map' : false,
   plugins: [
     new HtmlWebpackPlugin({
-      // template: '../static/index.html',
-      template: './game/index.html',
+      template: '../static/index.html',
       minify: {
         collapseWhitespace: isProd,
       },
@@ -65,8 +64,20 @@ module.exports = {
           to: path.join(__dirname, 'dist'),
         },
         {
-          from: path.join(__dirname, 'static/sprites'),
-          to: path.join(__dirname, 'dist/sprites'),
+          from: path.join(__dirname, 'static/sprites/Player/WalkLeft.png'),
+          to: path.join(__dirname, 'dist/sprites/Player/walkLeft.png'),
+        },
+        {
+          from: path.join(__dirname, 'static/sprites/Player/WalkRight.png'),
+          to: path.join(__dirname, 'dist/sprites/Player/walkRight.png'),
+        },
+        {
+          from: path.join(__dirname, 'static/sprites/Player/IdleLeft.png'),
+          to: path.join(__dirname, 'dist/sprites/Player/idleLeft.png'),
+        },
+        {
+          from: path.join(__dirname, 'static/sprites/Player/IdleRight.png'),
+          to: path.join(__dirname, 'dist/sprites/Player/idleRight.png'),
         },
       ],
     }),

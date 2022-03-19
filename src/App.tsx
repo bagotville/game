@@ -14,6 +14,7 @@ import { GuardRoute } from './components/GuardRoute';
 import { Profile } from './pages/Profile';
 import { useAuthCurrent } from './api';
 import { isAuth } from './store/reducers/auth';
+import { GamePage } from './pages/Game/GamePage';
 import { Leaderboard } from './pages/Leaderboard';
 import { Forum } from './pages/Forum';
 
@@ -42,6 +43,7 @@ export function App() {
         <Route path={ROUTES.profile} element={<Profile className={styles.page} />} />
         <Route path={ROUTES.leaderboard} element={<Leaderboard className={styles.page} />} />
         <Route path={ROUTES.forum} element={<Forum className={styles.page} />} />
+        <Route path={`${ROUTES.game}/:levelId`} element={<GamePage className={styles.page} />} />
       </Route>
 
       <Route
