@@ -1,3 +1,4 @@
+import { ICollidableEntity } from '../base/ICollidableEntity';
 import { COLLISION_LAG } from './gameObjects/gameObjectsConstants';
 import { Point } from './Point';
 import { Size } from './Size';
@@ -12,11 +13,8 @@ export class Rectangle {
 
   size: Size;
 
-
   public isColidedWith(other: Rectangle) {
-    return (
-      Rectangle.isCollided(this, other) || Rectangle.isCollided(other, this)
-    );
+    return Rectangle.isCollided(this, other) || Rectangle.isCollided(other, this);
   }
 
   public static isCollided(left: Rectangle, right: Rectangle) {
@@ -31,40 +29,28 @@ export class Rectangle {
   public static isCollidedLeft(left: Rectangle, right: Rectangle) {
     return (
       this.isIntersectsVertically(left, right) &&
-      Math.abs(
-        Math.ceil(right.coordinates.x + right.size.x - left.coordinates.x),
-      ) < COLLISION_LAG
+      Math.abs(Math.ceil(right.coordinates.x + right.size.x - left.coordinates.x)) < COLLISION_LAG
     );
   }
 
   public static isCollidedRight(left: Rectangle, right: Rectangle) {
     return (
       this.isIntersectsVertically(left, right) &&
-      Math.abs(
-        Math.ceil(right.coordinates.x - (left.coordinates.x + left.size.x)),
-      ) < COLLISION_LAG
+      Math.abs(Math.ceil(right.coordinates.x - (left.coordinates.x + left.size.x))) < COLLISION_LAG
     );
   }
 
   public static isCollidedTop(left: Rectangle, right: Rectangle) {
     return (
       this.isIntersectsHorizontally(left, right) &&
-      this.isInside(
-        left.coordinates.y,
-        right.coordinates.y,
-        right.coordinates.y + right.size.y,
-      )
+      this.isInside(left.coordinates.y, right.coordinates.y, right.coordinates.y + right.size.y)
     );
   }
 
   public static isCollidedBottom(left: Rectangle, right: Rectangle) {
     return (
       this.isIntersectsHorizontally(left, right) &&
-      this.isInside(
-        left.coordinates.y + left.size.y,
-        right.coordinates.y,
-        right.coordinates.y + right.size.y,
-      )
+      this.isInside(left.coordinates.y + left.size.y, right.coordinates.y, right.coordinates.y + right.size.y)
     );
   }
 
@@ -86,27 +72,15 @@ export class Rectangle {
     );
   }
 
-  private static isLinesIntersects(
-    x1: number,
-    x2: number,
-    y1: number,
-    y2: number,
-  ) {
-    return (
-      this.isOneOfInside(x1, x2, y1, y2) || this.isOneOfInside(y1, y2, x1, x2)
-    );
+  private static isLinesIntersects(x1: number, x2: number, y1: number, y2: number) {
+    return this.isOneOfInside(x1, x2, y1, y2) || this.isOneOfInside(y1, y2, x1, x2);
   }
 
   private static isInside(x1: number, start: number, end: number) {
     return x1 >= start && x1 <= end;
   }
 
-  private static isOneOfInside(
-    x1: number,
-    x2: number,
-    start: number,
-    end: number,
-  ) {
+  private static isOneOfInside(x1: number, x2: number, start: number, end: number) {
     return (
       this.isInside(x1, start, end) ||
       this.isInside(x2, start, end) ||
@@ -115,3 +89,8 @@ export class Rectangle {
     );
   }
 }
+
+export type RectangleWithOwner = {
+  rect: Rectangle;
+  owner: ICollidableEntity;
+};

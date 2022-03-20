@@ -1,6 +1,7 @@
 import { ICollidableEntity } from '../../base/ICollidableEntity';
 import { IGameEntity } from '../../base/IGameEntity';
 import { IInteractiveEntity } from '../../base/IInteractiveEntity';
+import { MoveLeftRightEnemy } from '../MoveLeftRightEnemy';
 import { getNewId } from '../ObjectsRegistrator';
 import { Point } from '../Point';
 import { Size } from '../Size';
@@ -9,6 +10,9 @@ import {
   DEFAULT_WALL_HEIGHT,
   DEFAULT_WALL_WIDTH,
   LEVEL_OBJECT_TYPE,
+  MACHINE1_MAX_SPEED,
+  MACHINE1_SIZE,
+  MACHINE_1_SPRITE_INFO,
   PLAYER_SIZE,
   PLAYER_SPRITE_INFO,
 } from './gameObjectsConstants';
@@ -95,6 +99,9 @@ export class Level {
       case LEVEL_OBJECT_TYPE.PLAYER:
         this.createPlayer(coordinates);
         break;
+      case LEVEL_OBJECT_TYPE.MOVE_LEFT_RIGHT_ENEMY:
+        this.createLeftRightEnemy(coordinates);
+        break;
       case LEVEL_OBJECT_TYPE.FREE_SPACE:
         break;
       default:
@@ -115,17 +122,21 @@ export class Level {
   }
 
   createPlayer(coordinates: Point) {
-    const player = new Player(
-      getNewId(),
-      coordinates,
-      PLAYER_SIZE,
-      PLAYER_SPRITE_INFO,
-    );
+    const player = new Player(getNewId(), coordinates, PLAYER_SIZE, PLAYER_SPRITE_INFO);
     this.visualElements.push(player);
     this.collidableObjects.push(player);
     this.gameObjects.push(player);
     this.interactiveObjects.push(player);
     this.player = player;
+  }
+
+  createLeftRightEnemy(coordinates: Point) {
+    const enemy = new MoveLeftRightEnemy(getNewId(), coordinates, MACHINE1_SIZE, MACHINE_1_SPRITE_INFO, {
+      maxSpeed: MACHINE1_MAX_SPEED,
+    });
+    this.visualElements.push(enemy);
+    this.collidableObjects.push(enemy);
+    this.gameObjects.push(enemy);
   }
 
   getGameObjects() {

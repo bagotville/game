@@ -32,6 +32,7 @@ export const KEYS = {
 export const LEVEL_OBJECT_TYPE = {
   WALL: '#',
   PLAYER: '0',
+  MOVE_LEFT_RIGHT_ENEMY: '+',
   FREE_SPACE: ' ',
 };
 
@@ -52,16 +53,16 @@ export const PLAYER_IDLE_COLUMNS = 4;
 export const PLAYER_WALK_COLUMNS = 6;
 
 const playerIdleSpriteRight = new Image();
-playerIdleSpriteRight.src = '/sprites/Player/idleRight.png';
+playerIdleSpriteRight.src = '/sprites/player/IdleRight.png';
 
 const playerIdleSpriteLeft = new Image();
-playerIdleSpriteLeft.src = '/sprites/Player/idleLeft.png';
+playerIdleSpriteLeft.src = '/sprites/player/IdleLeft.png';
 
 const playerWalkSpriteRight = new Image();
-playerWalkSpriteRight.src = '/sprites/Player/walkRight.png';
+playerWalkSpriteRight.src = '/sprites/player/WalkRight.png';
 
 const playerWalkSpriteLeft = new Image();
-playerWalkSpriteLeft.src = '/sprites/Player/walkLeft.png';
+playerWalkSpriteLeft.src = '/sprites/player/WalkLeft.png';
 
 // замедляет анимацию. Чем меньше тем чаще будет происходить смена кадров спрайта
 const playerIdleAnimationRate = 10;
@@ -72,9 +73,56 @@ export const PLAYER_SPRITE_INFO: ISpriteInfo = {
   moveAnimationRate: playerMoveAnimationRate,
   idleColumns: 4,
   moveColumns: 6,
-  scaleRate: 1.5,
+  scaleRate: 2,
   idleLeftSprite: playerIdleSpriteLeft,
   idleRightSprite: playerIdleSpriteRight,
   moveLeftSprite: playerWalkSpriteLeft,
   moveRightSprite: playerWalkSpriteRight,
 };
+
+const machine1IdleAnimationRate = 10;
+const machine1MoveAnimationRate = 3;
+export const MACHINE1_SIZE: Size = {
+  x: 45,
+  y: 45,
+};
+const machine1IdleSpriteRight = new Image();
+machine1IdleSpriteRight.src = '/sprites/machine1/IdleRight.png';
+
+const machine1IdleSpriteLeft = new Image();
+machine1IdleSpriteLeft.src = '/sprites/machine1/IdleLeft.png';
+
+const machine1WalkSpriteRight = new Image();
+machine1WalkSpriteRight.src = '/sprites/machine1/WalkRight.png';
+
+const machine1WalkSpriteLeft = new Image();
+machine1WalkSpriteLeft.src = '/sprites/machine1/WalkLeft.png';
+
+export const MACHINE1_MAX_SPEED = 2;
+
+export const MACHINE_1_SPRITE_INFO: ISpriteInfo = {
+  idleAnimationRate: machine1IdleAnimationRate,
+  moveAnimationRate: machine1MoveAnimationRate,
+  idleColumns: 4,
+  moveColumns: 4,
+  scaleRate: 2,
+  idleLeftSprite: machine1IdleSpriteLeft,
+  idleRightSprite: machine1IdleSpriteRight,
+  moveLeftSprite: machine1WalkSpriteLeft,
+  moveRightSprite: machine1WalkSpriteRight,
+};
+
+export enum characterEvents {
+  COLLIDED_LEFT = 'COLLIDED_LEFT',
+  COLLIDED_RIGHT = 'COLLIDED_RIGHT',
+  COLLIDED_TOP = 'COLLIDED_TOP',
+  COLLIDED_BOTTOM = 'COLLIDED_BOTTOM',
+  COLLIDED = 'COLLIDED',
+}
+
+export enum playerEvents {
+  DIED = 'DIED',
+  LOST_LIFE = 'LOST_LIFE',
+}
+
+export const HIT_PROTECTION_TIME = 2;
