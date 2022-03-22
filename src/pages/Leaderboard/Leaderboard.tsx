@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
+import { range } from 'lodash';
 import styles from './Leaderboard.scss';
 import { Svg } from '../../components/Svg';
 import { Icons } from '../../components/Svg/Svg.types';
+import { useGetLeaderboard } from '../../api/hooks/useGetLeaderboard';
 
 interface Props {
   className: string;
@@ -10,13 +12,14 @@ interface Props {
 
 export function Leaderboard(props: Props) {
   const { className: externalClassName } = props;
+
   const leaderboardClasses = classNames(styles.leaderboard, externalClassName);
 
-  const numbers: number[] = [];
+  const getLeaderboard = useGetLeaderboard();
 
-  for (let i = 1; i <= 23; i += 1) {
-    numbers.push(i);
-  }
+  useEffect(() => {
+    getLeaderboard.mutateAsync({ cursor: 0, limit: 10, ratingFieldName: 'rating' });
+  }, []);
 
   function getUserIcon(place: number) {
     if (place === 1) return <Svg icon={Icons.Crown} />;
@@ -35,7 +38,7 @@ export function Leaderboard(props: Props) {
   return (
     <div className={leaderboardClasses}>
       <div>
-        {numbers.map((number) => (
+        {range(1, 24).map((number) => (
           <div className={styles.number} key={number}>
             {number}
           </div>
@@ -50,7 +53,9 @@ export function Leaderboard(props: Props) {
 
         <div className={styles.divider}>----------------------</div>
 
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((place) => {
+        {getLeaderboard.data?.map((user, index) => {
+          const place = index + 1;
+
           const avatarClasses = classNames(styles.avatar, {
             [styles.avatar_first]: place === 1,
             [styles.avatar_second]: place === 2,
@@ -72,9 +77,11 @@ export function Leaderboard(props: Props) {
               <div className={styles['user-info-wrapper']}>
                 <div className={userInfoClasses}>
                   <span className={styles['user-icon']}>{getUserIcon(place)}&ensp;</span>
-                  <span className={styles['user-name']}>Username</span>
+                  <span className={styles['user-name']}>{`${user?.data?.first_name || 'Anonymous'} ${
+                    user?.data?.second_name || ''
+                  }`}</span>
                   <span>| {getUserPlace(place)}&ensp;</span>
-                  <span>| 100500 points </span>
+                  <span>| {user?.data?.rating} </span>
                 </div>
                 <div>==================================================</div>
               </div>
