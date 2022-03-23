@@ -5,12 +5,10 @@ import styles from './Leaderboard.scss';
 import { Svg } from '../../components/Svg';
 import { Icons } from '../../components/Svg/Svg.types';
 import { useGetLeaderboard } from '../../api/hooks/useGetLeaderboard';
+import { ILeaderboardProps } from './Leaderboard.types';
+import { BASE_URL } from '../../services';
 
-interface Props {
-  className: string;
-}
-
-export function Leaderboard(props: Props) {
+export function Leaderboard(props: ILeaderboardProps) {
   const { className: externalClassName } = props;
 
   const leaderboardClasses = classNames(styles.leaderboard, externalClassName);
@@ -71,7 +69,11 @@ export function Leaderboard(props: Props) {
           return (
             <div className={styles['user-card']} key={place}>
               <div className={avatarClasses}>
-                <Svg icon={Icons.LogoBug} />
+                {user?.data?.avatar ? (
+                  <img src={`${BASE_URL}/resources/${user.data.avatar}`} alt="" />
+                ) : (
+                  <Svg icon={Icons.LogoBug} />
+                )}
               </div>
 
               <div className={styles['user-info-wrapper']}>

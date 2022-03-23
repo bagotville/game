@@ -1,3 +1,3 @@
-export interface HeaderProps {
+export interface IHeaderProps {
   isAuthRefetch: () => void;
 }

@@ -1,8 +1,9 @@
 import { useMutation, UseMutationResult } from 'react-query';
-import { http } from '../../services';
-import { ILeaderData } from '../../types/api/leaderboard';
+import { http, TEAM_NAME } from '../../services';
+import { ILeaderboardModel, ILeaderData } from '../../types/api/leaderboard';
 
 export function useSaveToLeaderboard(): UseMutationResult<'OK', unknown, ILeaderData> {
-  const saveToLeaderboardQuery = (payload: ILeaderData): Promise<'OK'> => http.post(`/leaderboard`, payload);
+  const saveToLeaderboardQuery = (data: ILeaderData): Promise<'OK'> =>
+    http.post(`/leaderboard`, { data, ratingFieldName: 'rating', teamName: TEAM_NAME } as ILeaderboardModel);
   return useMutation(saveToLeaderboardQuery);
 }
