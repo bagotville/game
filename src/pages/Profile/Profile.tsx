@@ -9,26 +9,16 @@ import { Validator } from '../../services';
 import { useValidateForm } from '../../services/hooks/useValidateForm';
 import { IControlInfo } from '../../services/hooks/useValidateControl/useValidateContol.types';
 import { Button } from '../../components/Button';
-import {
-  PROFILE_INPUTS_DATA,
-  PROFILE_INPUTS_PASSWORD,
-} from './Profile.constants';
+import { PROFILE_INPUTS_DATA, PROFILE_INPUTS_PASSWORD } from './Profile.constants';
 
-function getErrorMessage(
-  control: IControlInfo,
-  controlName: ControlNames,
-): string {
+function getErrorMessage(control: IControlInfo, controlName: ControlNames): string {
   const { errors } = control;
 
   if (controlName === ControlNames.Login) {
-    return (
-      errors.required || errors.minLength || errors.maxLength || errors.login
-    );
+    return errors.required || errors.minLength || errors.maxLength || errors.login;
   }
   if (controlName === ControlNames.DisplayName) {
-    return (
-      errors.required || errors.minLength || errors.maxLength || errors.login
-    );
+    return errors.required || errors.minLength || errors.maxLength || errors.login;
   }
   if (controlName === ControlNames.FirstName) {
     return errors.required || errors.userName;
@@ -40,19 +30,13 @@ function getErrorMessage(
     return errors.required || errors.email;
   }
   if (controlName === ControlNames.Phone) {
-    return (
-      errors.required || errors.minLength || errors.maxLength || errors.phone
-    );
+    return errors.required || errors.minLength || errors.maxLength || errors.phone;
   }
   if (controlName === ControlNames.NewPassword) {
-    return (
-      errors.required || errors.minLength || errors.maxLength || errors.password
-    );
+    return errors.required || errors.minLength || errors.maxLength || errors.password;
   }
   if (controlName === ControlNames.OldPassword) {
-    return (
-      errors.required || errors.minLength || errors.maxLength || errors.password
-    );
+    return errors.required || errors.minLength || errors.maxLength || errors.password;
   }
   return errors.passwordRepeat;
 }
@@ -64,65 +48,31 @@ export function Profile(props: IPropsProfile) {
   const [passValue, setPassValue] = useState('');
 
   const formData = useValidateForm({
-    [ControlNames.FirstName]: [
-      'Ivan',
-      [Validator.required('First name'), Validator.userName],
-    ],
-    [ControlNames.LastName]: [
-      'Ivanov',
-      [Validator.required('Last name'), Validator.userName],
-    ],
-    [ControlNames.Email]: [
-      'ivanov321@yandex.ru',
-      [Validator.required('Email'), Validator.email],
-    ],
+    [ControlNames.FirstName]: ['Ivan', [Validator.required('First name'), Validator.userName]],
+    [ControlNames.LastName]: ['Ivanov', [Validator.required('Last name'), Validator.userName]],
+    [ControlNames.Email]: ['ivanov321@yandex.ru', [Validator.required('Email'), Validator.email]],
     [ControlNames.DisplayName]: [
       'Ivan',
-      [
-        Validator.required('Display name'),
-        Validator.login,
-        Validator.minLength(3),
-        Validator.maxLength(20),
-      ],
+      [Validator.required('Display name'), Validator.login, Validator.minLength(3), Validator.maxLength(20)],
     ],
     [ControlNames.Phone]: [
       '8432442334423',
-      [
-        Validator.required('Phone'),
-        Validator.phone,
-        Validator.minLength(10),
-        Validator.maxLength(15),
-      ],
+      [Validator.required('Phone'), Validator.phone, Validator.minLength(10), Validator.maxLength(15)],
     ],
     [ControlNames.Login]: [
       'Ivan123',
-      [
-        Validator.required('Login'),
-        Validator.login,
-        Validator.minLength(3),
-        Validator.maxLength(20),
-      ],
+      [Validator.required('Login'), Validator.login, Validator.minLength(3), Validator.maxLength(20)],
     ],
   });
 
   const formPass = useValidateForm({
     [ControlNames.OldPassword]: [
       '',
-      [
-        Validator.required('Old password'),
-        Validator.password,
-        Validator.minLength(8),
-        Validator.maxLength(40),
-      ],
+      [Validator.required('Old password'), Validator.password, Validator.minLength(8), Validator.maxLength(40)],
     ],
     [ControlNames.NewPassword]: [
       '',
-      [
-        Validator.required('New password'),
-        Validator.password,
-        Validator.minLength(8),
-        Validator.maxLength(40),
-      ],
+      [Validator.required('New password'), Validator.password, Validator.minLength(8), Validator.maxLength(40)],
     ],
     [ControlNames.PasswordRepeat]: ['', [Validator.passwordRepeat(passValue)]],
   });
@@ -160,20 +110,14 @@ export function Profile(props: IPropsProfile) {
       <div className={styles['data-header']}>## Data</div>
 
       <div className={styles['change-data-btn']}>
-        <Button
-          name="Change"
-          disabled={formData.isInvalid || !formData.isDirty}
-        />
+        <Button name="Change" disabled={formData.isInvalid || !formData.isDirty} />
         <Button name="Cancel" color="pink" disabled={!formData.isDirty} />
       </div>
 
       <div className={styles['pass-header']}>## Password</div>
 
       <div className={styles['change-pass-btn']}>
-        <Button
-          name="Change"
-          disabled={formPass.isInvalid || !formPass.isDirty}
-        />
+        <Button name="Change" disabled={formPass.isInvalid || !formPass.isDirty} />
         <Button name="Cancel" color="pink" disabled={!formPass.isDirty} />
       </div>
 

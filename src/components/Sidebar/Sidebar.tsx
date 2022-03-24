@@ -24,16 +24,12 @@ export function Sidebar() {
         <div className={styles.divider} />
 
         <div className={styles['level-tree']}>
-          <div
-            className={styles['tree-header']}
-            onClick={() => setIsOpenTree(!isOpenTree)}>
+          <div className={styles['tree-header']} onClick={() => setIsOpenTree(!isOpenTree)}>
             <Svg className={treeClasses} icon={Icons.OpenTree} height={10} />
             Bugoville
           </div>
 
-          {isOpenTree ? (
-            <div className={styles.tree}>{'</>'} ?????????</div>
-          ) : null}
+          {isOpenTree ? <div className={styles.tree}>{'</>'} ?????????</div> : null}
         </div>
       </div>
 
