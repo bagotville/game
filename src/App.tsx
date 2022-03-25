@@ -18,8 +18,6 @@ import { Leaderboard } from './pages/Leaderboard';
 import { Forum } from './pages/Forum';
 import '@reach/dialog/styles.css';
 
-// test build
-
 export function App() {
   const authCurrent = useAuthCurrent();
   const isAuthenticated = useSelector(isAuth);
