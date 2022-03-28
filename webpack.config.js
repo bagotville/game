@@ -81,6 +81,7 @@ module.exports = {
       },
       {
         test: /\.s?[ca]ss$/,
+        exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
           {
@@ -94,6 +95,10 @@ module.exports = {
           },
           'sass-loader',
         ],
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,

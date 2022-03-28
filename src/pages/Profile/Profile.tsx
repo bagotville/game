@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import Dialog from '@reach/dialog';
 import { isEqual, range } from 'lodash';
+import { toast } from 'react-toastify';
 import styles from './Profile.scss';
 import { Icons } from '../../components/Svg/Svg.types';
 import { Input } from '../../components/Input';
@@ -84,16 +85,27 @@ export function Profile(props: IPropsProfile) {
   const changeAvatarHandler = () => {
     if (!avatar) return;
     changeAvatar.mutateAsync(avatar, {
-      onSuccess: () => setAvatar(null),
+      onSuccess: () => {
+        setAvatar(null);
+        toast.success('Avatar successfully changed');
+      },
     });
   };
 
   const changeDataHandler = () => {
-    changeUserData.mutateAsync(formData.value);
+    changeUserData.mutateAsync(formData.value, {
+      onSuccess: () => {
+        toast.success('Data changed successfully');
+      },
+    });
   };
 
   const changePassHandler = () => {
-    changeUserPass.mutateAsync(formPass.value);
+    changeUserPass.mutateAsync(formPass.value, {
+      onSuccess: () => {
+        toast.success('Password changed successfully');
+      },
+    });
     resetPassForm();
   };
 
