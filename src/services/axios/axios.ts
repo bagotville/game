@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { toast, ToastOptions } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { BASE_URL } from '../constants';
 
 const http = axios.create({
@@ -10,14 +10,11 @@ const http = axios.create({
 http.interceptors.response.use(
   (response) => response.data,
   (err) => {
-    const toastOption: ToastOptions = {
-      theme: 'dark',
-      autoClose: 3000,
-    };
-
     err.response?.data?.reason
-      ? toast.error(`${err.response.status} ${err.response.data.reason}`, toastOption)
-      : toast.error(`${err.response?.status || err.name} ${err.response?.statusText || err.message}`, toastOption);
+      ? toast.error(`${err.response.status} ${err.response.data.reason}`, { autoClose: 3000 })
+      : toast.error(`${err.response?.status || err.name} ${err.response?.statusText || err.message}`, {
+          autoClose: 3000,
+        });
 
     return Promise.reject(err);
   },

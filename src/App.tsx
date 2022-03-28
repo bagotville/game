@@ -20,6 +20,7 @@ import { Leaderboard } from './pages/Leaderboard';
 import { Forum } from './pages/Forum';
 import { ErrorFallback } from './pages/ErrorFallback';
 import 'react-toastify/dist/ReactToastify.css';
+import '@reach/dialog/styles.css';
 
 export function App() {
   const authCurrent = useAuthCurrent();
@@ -36,7 +37,7 @@ export function App() {
           element={
             <GuardRoute canActivate={isAuthenticated} redirectTo={ROUTES.login}>
               <div className={styles.app}>
-                <Header isAuthRefetch={authCurrent.refetch} />
+                <Header />
                 <div className={styles.main}>
                   <Sidebar />
                   <ErrorBoundary FallbackComponent={ErrorFallback} resetKeys={[location.pathname]}>
@@ -69,7 +70,7 @@ export function App() {
           }
         />
       </Routes>
-      <ToastContainer />
+      <ToastContainer autoClose={2000} theme="dark" />
     </>
   );
 }
