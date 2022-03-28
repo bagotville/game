@@ -21,9 +21,9 @@ export function ErrorFallback(props: FallbackProps) {
         </span>
         <pre>{error.message}</pre>
         {location.pathname === ROUTES.home ? (
-          <Button name="Reload page" onCLick={() => document.location.reload()} />
+          <Button name="Reload page" onClick={() => document.location.reload()} />
         ) : (
-          <Button onCLick={() => navigate(ROUTES.home)} name="To Home Page" />
+          <Button onClick={() => navigate(ROUTES.home)} name="To Home Page" />
         )}
       </div>
     </div>
