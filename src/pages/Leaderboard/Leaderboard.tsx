@@ -52,6 +52,7 @@ export function Leaderboard(props: ILeaderboardProps) {
         <div className={styles.divider}>----------------------</div>
 
         {getLeaderboard.data?.map((user, index) => {
+          const { avatar, first_name: firstName, second_name: secondName, rating } = user?.data ?? {};
           const place = index + 1;
 
           const avatarClasses = classNames(styles.avatar, {
@@ -69,21 +70,15 @@ export function Leaderboard(props: ILeaderboardProps) {
           return (
             <div className={styles['user-card']} key={place}>
               <div className={avatarClasses}>
-                {user?.data?.avatar ? (
-                  <img src={`${BASE_URL}/resources/${user.data.avatar}`} alt="" />
-                ) : (
-                  <Svg icon={Icons.LogoBug} />
-                )}
+                {avatar ? <img src={`${BASE_URL}/resources/${avatar}`} alt="" /> : <Svg icon={Icons.LogoBug} />}
               </div>
 
               <div className={styles['user-info-wrapper']}>
                 <div className={userInfoClasses}>
                   <span className={styles['user-icon']}>{getUserIcon(place)}&ensp;</span>
-                  <span className={styles['user-name']}>{`${user?.data?.first_name || 'Anonymous'} ${
-                    user?.data?.second_name || ''
-                  }`}</span>
+                  <span className={styles['user-name']}>{`${firstName || 'Anonymous'} ${secondName || ''}`}</span>
                   <span>| {getUserPlace(place)}&ensp;</span>
-                  <span>| {user?.data?.rating} </span>
+                  <span>| {rating} </span>
                 </div>
                 <div>==================================================</div>
               </div>

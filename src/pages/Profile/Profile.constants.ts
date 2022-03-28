@@ -1,72 +1,73 @@
 import { InputTypes } from '../../components/Input/Input.types';
-import { ControlNames, IProfileInput } from './Profile.types';
+import { IProfileInput } from './Profile.types';
 import styles from './Profile.scss';
+import { ControlsData, ControlsPass } from '../../types/api/user';
 
-export const PROFILE_INPUTS_DATA: IProfileInput[] = [
+export const PROFILE_INPUTS_DATA: IProfileInput<ControlsData>[] = [
   {
     id: 'profile-login',
     type: InputTypes.Text,
     label: 'Login',
-    controlName: ControlNames.Login,
+    controlName: ControlsData.Login,
     className: styles.login,
   },
   {
     id: 'profile-display-name',
     type: InputTypes.Text,
     label: 'Display name',
-    controlName: ControlNames.DisplayName,
+    controlName: ControlsData.DisplayName,
     className: styles['display-name'],
   },
   {
     id: 'profile-first-name',
     type: InputTypes.Text,
     label: 'First name',
-    controlName: ControlNames.FirstName,
+    controlName: ControlsData.FirstName,
     className: styles['first-name'],
   },
   {
     id: 'profile-last-name',
     type: InputTypes.Text,
     label: 'Last name',
-    controlName: ControlNames.LastName,
+    controlName: ControlsData.SecondName,
     className: styles['last-name'],
   },
   {
     id: 'profile-email',
     type: InputTypes.Email,
     label: 'Email',
-    controlName: ControlNames.Email,
+    controlName: ControlsData.Email,
     className: styles.email,
   },
   {
     id: 'profile-phone',
     type: InputTypes.Text,
     label: 'Phone',
-    controlName: ControlNames.Phone,
+    controlName: ControlsData.Phone,
     className: styles.phone,
   },
 ];
 
-export const PROFILE_INPUTS_PASSWORD: IProfileInput[] = [
+export const PROFILE_INPUTS_PASSWORD: IProfileInput<ControlsPass>[] = [
   {
     id: 'profile-new-pass',
     type: InputTypes.Password,
     label: 'New password',
-    controlName: ControlNames.NewPassword,
+    controlName: ControlsPass.NewPassword,
     className: styles['new-pass'],
   },
   {
     id: 'profile-repeat-pass',
     type: InputTypes.Password,
     label: 'Password (repeat)',
-    controlName: ControlNames.PasswordRepeat,
+    controlName: ControlsPass.PasswordRepeat,
     className: styles['repeat-pass'],
   },
   {
     id: 'profile-old-pass',
     type: InputTypes.Password,
     label: 'Old password',
-    controlName: ControlNames.OldPassword,
+    controlName: ControlsPass.OldPassword,
     className: styles['old-pass'],
   },
 ];

@@ -55,19 +55,65 @@
   border-radius: 4px;
 }
 
-.avatar {
+.avatar-backdrop {
   display: flex;
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
+  border-radius: 50%;
+  background-color: $backdrop-color;
+  font-size: 20px;
+  text-align: center;
+}
+
+.avatar {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 11px;
   overflow: hidden;
   border-radius: 50%;
   background-color: $dandelion-color;
+  cursor: pointer;
+
+  &:hover {
+    .avatar-backdrop {
+      visibility: visible;
+    }
+  }
+
+  & > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
   & > svg {
     fill: $graphite-color;
   }
+}
+
+.file-name-wrapper {
+  display: flex;
+
+  svg {
+    flex-shrink: 0;
+    align-self: center;
+    margin: 0 5px 0 -5px;
+  }
+}
+
+.file-name {
+  color: $herbal-color;
+  white-space: nowrap;
 }
 
 .data-header {
@@ -135,4 +181,22 @@
 .old-pass {
   grid-column: 2/3;
   grid-row: 27/30;
+}
+
+[data-reach-dialog-overlay] {
+  display: flex;
+  align-items: center;
+}
+
+.dialog.custom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+  border-radius: 8px;
+  background: #282729;
+
+  h3 {
+    margin-top: 0;
+  }
 }

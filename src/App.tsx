@@ -1,6 +1,8 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ToastContainer } from 'react-toastify';
 import styles from './App.scss';
 import { Main } from './components/Main';
 import { Sidebar } from './components/Sidebar';
@@ -16,50 +18,59 @@ import { useAuthCurrent } from './api';
 import { isAuth } from './store/reducers/auth';
 import { Leaderboard } from './pages/Leaderboard';
 import { Forum } from './pages/Forum';
+import { ErrorFallback } from './pages/ErrorFallback';
+import 'react-toastify/dist/ReactToastify.css';
+import '@reach/dialog/styles.css';
 
 export function App() {
   const authCurrent = useAuthCurrent();
   const isAuthenticated = useSelector(isAuth);
+  const location = useLocation();
 
   return authCurrent.isLoading ? (
     <div className={styles.loading}>Loading...</div>
   ) : (
-    <Routes>
-      <Route
-        path={ROUTES.home}
-        element={
-          <GuardRoute canActivate={isAuthenticated} redirectTo={ROUTES.login}>
-            <div className={styles.app}>
-              <Header isAuthRefetch={authCurrent.refetch} />
-              <div className={styles.main}>
-                <Sidebar />
-                <Main />
+    <>
+      <Routes>
+        <Route
+          path={ROUTES.home}
+          element={
+            <GuardRoute canActivate={isAuthenticated} redirectTo={ROUTES.login}>
+              <div className={styles.app}>
+                <Header />
+                <div className={styles.main}>
+                  <Sidebar />
+                  <ErrorBoundary FallbackComponent={ErrorFallback} resetKeys={[location.pathname]}>
+                    <Main />
+                  </ErrorBoundary>
+                </div>
               </div>
-            </div>
-          </GuardRoute>
-        }>
-        <Route path={ROUTES.profile} element={<Profile className={styles.page} />} />
-        <Route path={ROUTES.leaderboard} element={<Leaderboard className={styles.page} />} />
-        <Route path={ROUTES.forum} element={<Forum className={styles.page} />} />
-      </Route>
+            </GuardRoute>
+          }>
+          <Route path={ROUTES.profile} element={<Profile className={styles.page} />} />
+          <Route path={ROUTES.leaderboard} element={<Leaderboard className={styles.page} />} />
+          <Route path={ROUTES.forum} element={<Forum className={styles.page} />} />
+        </Route>
 
-      <Route
-        path={ROUTES.login}
-        element={
-          <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
-            <LoginPage isAuthRefetch={authCurrent.refetch} messages={LOGIN_MESSAGES} />
-          </GuardRoute>
-        }
-      />
+        <Route
+          path={ROUTES.login}
+          element={
+            <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
+              <LoginPage isAuthRefetch={authCurrent.refetch} messages={LOGIN_MESSAGES} />
+            </GuardRoute>
+          }
+        />
 
-      <Route
-        path={ROUTES.register}
-        element={
-          <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
-            <RegisterPage isAuthRefetch={authCurrent.refetch} messages={REGISTER_PAGE_MESSAGES} />
-          </GuardRoute>
-        }
-      />
-    </Routes>
+        <Route
+          path={ROUTES.register}
+          element={
+            <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
+              <RegisterPage isAuthRefetch={authCurrent.refetch} messages={REGISTER_PAGE_MESSAGES} />
+            </GuardRoute>
+          }
+        />
+      </Routes>
+      <ToastContainer autoClose={2000} theme="dark" />
+    </>
   );
 }
