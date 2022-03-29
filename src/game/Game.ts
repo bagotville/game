@@ -30,6 +30,10 @@ export class Game {
 
   private collidableObjects: ICollidableEntity[];
 
+  private isGameOver: boolean;
+
+  private gameEndEventSubscribers: (() => void)[] = [];
+
   public start() {
     this.initialize();
     this.setupKeyboard();
@@ -38,11 +42,16 @@ export class Game {
     this.setupRenderer();
   }
 
+  public subscribeForGameEndEvent(callback: () => void) {
+    this.gameEndEventSubscribers.push(callback);
+  }
+
   private initialize() {
     this.interactiveObjects = [];
     this.visualObjects = [];
     this.gameObjects = [];
     this.collidableObjects = [];
+    this.isGameOver = false;
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
     const optionalContext = this.canvas.getContext('2d');
     if (optionalContext) {
@@ -74,7 +83,22 @@ export class Game {
     this.visualObjects.forEach((item) => {
       item.render(this.canvasContext, this.camera.getViewportRectangle());
     });
-    requestAnimationFrame(this.render.bind(this));
+    this.checkForGameEnd();
+    if (!this.isGameOver) {
+      requestAnimationFrame(this.render.bind(this));
+    } else {
+      this.callGameEnd();
+    }
+  }
+
+  private callGameEnd() {
+    this.gameEndEventSubscribers.forEach((callback) => callback());
+  }
+
+  private checkForGameEnd() {
+    if (this.player && this.player.lifes <= 0) {
+      this.isGameOver = true;
+    }
   }
 
   private clearScreen() {

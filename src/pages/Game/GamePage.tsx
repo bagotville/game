@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import { IGameProps } from './GamePage.types';
@@ -9,14 +9,25 @@ import styles from './GamePage.scss';
 
 let currentLevel: string;
 
+let game: Game;
+
 export function GamePage(props: IGameProps) {
   const { levelId } = useParams();
+  const [isGameEnded, setIsGameEnded] = useState(false);
   if (levelId === undefined) {
     throw new Error('invalid level passed');
   }
   const { className } = props;
   currentLevel = getCurrentLevel(levelId);
-  return (
+  game = new Game(currentLevel);
+  game.subscribeForGameEndEvent(() => {
+    setIsGameEnded(true);
+  });
+  return isGameEnded ? (
+    <div className={classNames(className, styles['game-page'])}>
+      <h1 className={styles['game-end-message']}>Game end. You died.</h1>
+    </div>
+  ) : (
     <div className={classNames(className, styles['game-page'])}>
       <div id="game-root">
         <button className={styles['game-start-btn']} type="button" onClick={() => startGame()}>
@@ -38,7 +49,6 @@ function startGame() {
   canvas.className = styles['canvas-style'];
   root.appendChild(canvas);
 
-  const game = new Game(currentLevel);
   game.start();
 }
 

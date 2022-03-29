@@ -8,11 +8,14 @@ export const PLAYER_WIDTH = 50;
 export const PLAYER_HEIGHT = 50;
 export const PLAYER_X_SPEED = 7;
 export const PLAYER_Y_SPEED = 14;
+export const DEFAULT_PLAYER_LIFES = 3;
 export const COLLISION_LAG = 4;
 
 export const GRAVITY_POWER = 0.9;
 export const MAX_GRAVITY_POWER = 14;
 export const VECTOR_APPLY_FREQUENCY = 5;
+
+export const TIME_IN_AIR_BEFORE_DIE = 3;
 
 export const VECTOR_KEYS = {
   MOVE_LEFT: 'move-left',
