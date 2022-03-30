@@ -1,11 +1,11 @@
 const STATIC_CACHE_NAME = 's-app-game-v1';
 const DYNAMIC_CACHE_NAME = 'd-app-game-v1';
 
-const assetUrls = ['index.html'];
+const ASSET_URLS = ['index.html'];
 
 self.addEventListener('install', async () => {
   const cache = await caches.open(STATIC_CACHE_NAME);
-  await cache.addAll(assetUrls);
+  await cache.addAll(ASSET_URLS);
 });
 
 self.addEventListener('activate', async () => {
