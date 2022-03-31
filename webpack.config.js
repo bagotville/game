@@ -66,6 +66,30 @@ module.exports = {
           from: path.join(__dirname, 'static/_redirects'),
           to: path.join(__dirname, 'dist'),
         },
+        {
+          from: path.join(__dirname, 'static/icon-144-144.png'),
+          to: path.join(__dirname, 'dist'),
+        },
+        {
+          from: path.join(__dirname, 'static/apple-touch-icon.png'),
+          to: path.join(__dirname, 'dist'),
+        },
+        {
+          from: path.join(__dirname, 'static/icon-256-256.png'),
+          to: path.join(__dirname, 'dist'),
+        },
+        {
+          from: path.join(__dirname, 'static/icon-512-512.png'),
+          to: path.join(__dirname, 'dist'),
+        },
+        {
+          from: path.join(__dirname, 'service-worker.js'),
+          to: path.join(__dirname, 'dist'),
+        },
+        {
+          from: path.join(__dirname, 'manifest.json'),
+          to: path.join(__dirname, 'dist'),
+        },
       ],
     }),
     new MiniCssExtractPlugin({
