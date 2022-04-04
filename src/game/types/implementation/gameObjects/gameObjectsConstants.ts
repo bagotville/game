@@ -1,5 +1,6 @@
 import { ISpriteInfo } from '../../base/ISpriteInfo';
 import { Size } from '../Size';
+import { Vector } from '../Vector';
 
 export const CODE_WIDTH = 10;
 export const CODE_HEIGHT = 30;
@@ -7,7 +8,7 @@ export const CODE_HEIGHT = 30;
 export const PLAYER_WIDTH = 50;
 export const PLAYER_HEIGHT = 50;
 export const PLAYER_X_SPEED = 7;
-export const PLAYER_Y_SPEED = 14;
+export const PLAYER_Y_SPEED = 7;
 export const DEFAULT_PLAYER_LIFES = 3;
 export const COLLISION_LAG = 4;
 
@@ -66,6 +67,9 @@ playerWalkSpriteRight.src = '/sprites/player/WalkRight.png';
 
 const playerWalkSpriteLeft = new Image();
 playerWalkSpriteLeft.src = '/sprites/player/WalkLeft.png';
+
+export const HEART_SPRITE = new Image();
+HEART_SPRITE.src = '/sprites/heart.png';
 
 // замедляет анимацию. Чем меньше тем чаще будет происходить смена кадров спрайта
 const playerIdleAnimationRate = 10;
@@ -129,3 +133,9 @@ export enum playerEvents {
 }
 
 export const HIT_PROTECTION_TIME = 2;
+
+export const GRAVITY_VECTOR: Vector = {
+  x: 0,
+  y: GRAVITY_POWER,
+  key: VECTOR_KEYS.GRAVITY,
+};

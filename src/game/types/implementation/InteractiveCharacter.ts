@@ -6,8 +6,7 @@ import { ISpriteInfo } from '../base/ISpriteInfo';
 import {
   characterEvents,
   COLLISION_LAG,
-  GRAVITY_POWER,
-  MAX_GRAVITY_POWER,
+  GRAVITY_VECTOR,
   PLAYER_X_SPEED,
   PLAYER_Y_SPEED as PLAYER_JUMP_SPEED,
   TIME_IN_AIR_BEFORE_DIE,
@@ -28,18 +27,12 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
     this.vectors = [];
     this.speed = { x: 0, y: 0 };
     this.isOnTheGround = false;
-    this.isLeftBlocked = false;
-    this.isRightBlocked = false;
     this.sprites = spriteInfo;
     this.options = options;
     this.eventBus.on(characterEvents.COLLIDED, this.onCollideWithOtherRect);
   }
 
   isOnTheGround: boolean;
-
-  isLeftBlocked: boolean;
-
-  isRightBlocked: boolean;
 
   groundRectangle: Rectangle | null;
 
@@ -52,6 +45,12 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
   options?: ICharacterOptions;
 
   public eventBus: EventBus = new EventBus();
+
+  forceMove(coordinates: Point) {
+    this.globalCoordinates.x = coordinates.x;
+    this.globalCoordinates.y = coordinates.y;
+    this.moveCollideRectangle();
+  }
 
   moveCollideRectangle = () => {
     this.collideRectangle.coordinates.x = this.globalCoordinates.x;
@@ -81,10 +80,7 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
     if (Rectangle.isCollidedRight(this.collideRectangle, other)) {
       this.speed.x = 0;
       this.globalCoordinates.x = other.coordinates.x - this.size.x - COLLISION_LAG;
-      this.isRightBlocked = true;
       this.eventBus.emit(characterEvents.COLLIDED_RIGHT);
-    } else {
-      this.isRightBlocked = false;
     }
   }
 
@@ -92,19 +88,16 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
     if (Rectangle.isCollidedLeft(this.collideRectangle, other)) {
       this.speed.x = 0;
       this.globalCoordinates.x = other.coordinates.x + other.size.x + COLLISION_LAG;
-      this.isLeftBlocked = true;
       this.eventBus.emit(characterEvents.COLLIDED_LEFT);
-    } else {
-      this.isLeftBlocked = false;
     }
   }
 
   private checkCollisionBottom(other: Rectangle) {
     if (Rectangle.isCollidedBottom(this.collideRectangle, other)) {
       this.speed.y = 0;
+      this.forceMove({ x: this.globalCoordinates.x, y: other.coordinates.y - this.size.y });
       this.isOnTheGround = true;
       this.groundRectangle = other;
-      this.globalCoordinates.y = other.coordinates.y - this.size.y;
       this.vectors = this.vectors.filter((vector) => vector.key !== VECTOR_KEYS.JUMP);
       this.eventBus.emit(characterEvents.COLLIDED_BOTTOM);
     } else if (other === this.groundRectangle) {
@@ -128,11 +121,13 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
   private lastTSOnTheGround: number = 0;
 
   checkIsOnTheGround() {
-    if (this.isOnTheGround && this.groundRectangle != null && this.checkCollisionBottom(this.groundRectangle)) {
+    if (this.groundRectangle != null && this.checkCollisionBottom(this.groundRectangle)) {
       this.lastTSOnTheGround = +new Date() / 1000;
+      this.isOnTheGround = true;
       return true;
     }
     this.checkIsFallenToDeath();
+    this.isOnTheGround = false;
     return false;
   }
 
@@ -145,13 +140,9 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
   abstract die(): void;
 
   render: (canvas: CanvasRenderingContext2D, viewport: Rectangle) => void = (canvas, viewport) => {
-    const absoluteVector: Vector = { x: 0, y: 0, key: VECTOR_KEYS.UNDEFINED };
-    this.vectors.forEach((vector) => {
-      absoluteVector.x += vector.x;
-      absoluteVector.y += vector.y;
-    });
-    this.speed.x += (absoluteVector.x - this.speed.x) / 4;
-    this.speed.y += absoluteVector.y - this.speed.y;
+    const absoluteVector = this.calculateAbsoluteVector();
+    this.speed.x += absoluteVector.x - this.speed.x * 0.2;
+    this.speed.y += absoluteVector.y - this.speed.y * 0.2;
     let maxSpeed = PLAYER_X_SPEED;
     if (this.options && this.options.maxSpeed) {
       maxSpeed = this.options.maxSpeed;
@@ -159,22 +150,36 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
     if (Math.abs(this.speed.x) > maxSpeed) {
       this.speed.x = this.speed.x > 0 ? maxSpeed : -maxSpeed;
     }
-    if (!this.checkIsOnTheGround()) {
-      if (this.speed.y < MAX_GRAVITY_POWER) this.vectors.push({ x: 0, y: GRAVITY_POWER, key: VECTOR_KEYS.GRAVITY });
-      // this.speed.y += GRAVITY_POWER;
-    } else {
-      this.vectors = this.vectors.filter((vector) => vector.key !== VECTOR_KEYS.GRAVITY);
-    }
+
     this.draw(canvas, viewport);
   };
 
+  calculateAbsoluteVector() {
+    const absoluteVector: Vector = { x: 0, y: 0, key: VECTOR_KEYS.UNDEFINED };
+    this.vectors.forEach((vector) => {
+      absoluteVector.x += vector.x;
+      absoluteVector.y += vector.y;
+    });
+    this.checkIsOnTheGround();
+    if (!this.isOnTheGround) {
+      this.vectors.push(GRAVITY_VECTOR);
+    } else {
+      this.vectors = this.vectors.filter((vector) => vector.key !== VECTOR_KEYS.GRAVITY);
+    }
+
+    this.vectors = this.vectors.filter(
+      (vector) =>
+        vector.key === VECTOR_KEYS.MOVE_LEFT ||
+        vector.key === VECTOR_KEYS.MOVE_RIGHT ||
+        vector.key === VECTOR_KEYS.JUMP ||
+        vector.key === VECTOR_KEYS.GRAVITY,
+    );
+    return absoluteVector;
+  }
+
   refresh: () => void = () => {
-    if ((this.speed.x > 0 && !this.isRightBlocked) || (this.speed.x < 0 && !this.isLeftBlocked)) {
-      this.globalCoordinates.x += this.speed.x;
-    }
-    if ((this.speed.y > 0 && !this.isOnTheGround) || this.speed.y < 0) {
-      this.globalCoordinates.y += this.speed.y;
-    }
+    this.globalCoordinates.x += this.speed.x;
+    this.globalCoordinates.y += this.speed.y;
     this.moveCollideRectangle();
   };
 
@@ -221,10 +226,16 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
   }
 
   protected jump() {
+    this.checkIsOnTheGround();
     if (this.isOnTheGround) {
-      this.vectors.push({ x: 0, y: -PLAYER_JUMP_SPEED, key: VECTOR_KEYS.JUMP });
-      this.globalCoordinates.y -= COLLISION_LAG * 2;
+      this.forceJump();
     }
+  }
+
+  protected forceJump() {
+    this.vectors.push({ x: 0, y: -PLAYER_JUMP_SPEED, key: VECTOR_KEYS.JUMP });
+    this.globalCoordinates.y -= COLLISION_LAG * 2;
+    this.isOnTheGround = false;
   }
 
   // sprite
@@ -339,7 +350,7 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
     return this.sprites.moveAnimationRate;
   }
 
-  draw: (canvas: CanvasRenderingContext2D, viewport: Rectangle) => void = (canvas, viewport) => {
+  draw(canvas: CanvasRenderingContext2D, viewport: Rectangle) {
     const realX = this.globalCoordinates.x - viewport.coordinates.x + viewport.size.x / 2;
     const realY = this.globalCoordinates.y - viewport.coordinates.y + viewport.size.y / 2;
 
@@ -355,5 +366,5 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
       this.size.x * this.sprites.scaleRate, // scale width on canvas
       this.size.y * this.sprites.scaleRate,
     ); // scale height on canvas
-  };
+  }
 }

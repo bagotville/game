@@ -6,6 +6,7 @@ import { ICollidableEntity } from './types/base/ICollidableEntity';
 import { Camera } from './types/implementation/gameObjects/Camera';
 import { IGameEntity } from './types/base/IGameEntity';
 import { getNewId } from './types/implementation/ObjectsRegistrator';
+import { HEART_SPRITE } from './types/implementation/gameObjects/gameObjectsConstants';
 
 export class Game {
   constructor(level: string) {
@@ -83,11 +84,27 @@ export class Game {
     this.visualObjects.forEach((item) => {
       item.render(this.canvasContext, this.camera.getViewportRectangle());
     });
+    this.drawLifes();
     this.checkForGameEnd();
     if (!this.isGameOver) {
       requestAnimationFrame(this.render.bind(this));
     } else {
       this.callGameEnd();
+    }
+  }
+
+  private drawLifes() {
+    const { lifes } = this.player;
+    const heartWidth = HEART_SPRITE.width / 10;
+    const heartHeight = HEART_SPRITE.height / 10;
+    for (let i = 0; i < lifes; i++) {
+      this.canvasContext.drawImage(
+        HEART_SPRITE,
+        i * heartWidth + 10,
+        this.canvas.height - heartHeight - 10,
+        heartWidth,
+        heartHeight,
+      );
     }
   }
 

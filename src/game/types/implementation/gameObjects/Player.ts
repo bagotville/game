@@ -1,11 +1,21 @@
+import { Direction } from '../../base/Animation';
 import { ICharacterOptions } from '../../base/ICharacterOptions';
 import { IInteractiveEntity } from '../../base/IInteractiveEntity';
 import { ISpriteInfo } from '../../base/ISpriteInfo';
-import { InteractiveCharacter } from '../Character';
+import { InteractiveCharacter } from '../InteractiveCharacter';
 import { Point } from '../Point';
 import { RectangleWithOwner } from '../Rectangle';
 import { Size } from '../Size';
-import { characterEvents, HIT_PROTECTION_TIME, KEYS, playerEvents, DEFAULT_PLAYER_LIFES } from './gameObjectsConstants';
+import {
+  characterEvents,
+  HIT_PROTECTION_TIME,
+  KEYS,
+  playerEvents,
+  DEFAULT_PLAYER_LIFES,
+  PLAYER_X_SPEED,
+  PLAYER_Y_SPEED,
+  VECTOR_KEYS,
+} from './gameObjectsConstants';
 
 export class Player extends InteractiveCharacter implements IInteractiveEntity {
   constructor(id: number, coordinates: Point, size: Size, spriteInfo: ISpriteInfo, options?: ICharacterOptions) {
@@ -18,6 +28,12 @@ export class Player extends InteractiveCharacter implements IInteractiveEntity {
   private lastHitted: number = 0;
 
   public lifes: number = DEFAULT_PLAYER_LIFES;
+
+  hitted(direction: Direction) {
+    const xSpeed = direction === Direction.LEFT ? -PLAYER_X_SPEED : PLAYER_X_SPEED;
+    this.vectors.push({ x: xSpeed * 3, y: -PLAYER_Y_SPEED * 3, key: VECTOR_KEYS.UNDEFINED });
+    this.lifes--;
+  }
 
   onKeyDown: (keyEvent: KeyboardEvent) => void = (keyEvent) => {
     switch (keyEvent.key) {
@@ -53,6 +69,9 @@ export class Player extends InteractiveCharacter implements IInteractiveEntity {
       this.checkHitProtection();
       if (!this.isHitted) {
         this.eventBus.emit(playerEvents.LOST_LIFE);
+        const hitDirection =
+          this.collideRectangle.coordinates.x > other.rect.coordinates.x ? Direction.RIGHT : Direction.LEFT;
+        this.hitted(hitDirection);
         this.isHitted = true;
         this.lastHitted = +new Date() / 1000;
       }
@@ -68,8 +87,9 @@ export class Player extends InteractiveCharacter implements IInteractiveEntity {
       }
     }
   }
-    
+
   die(): void {
     this.lifes = 0;
+    this.eventBus.emit(playerEvents.DIED);
   }
 }

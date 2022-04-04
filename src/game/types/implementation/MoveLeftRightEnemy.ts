@@ -1,11 +1,18 @@
 import { ICharacterOptions } from '../base/ICharacterOptions';
 import { ISpriteInfo } from '../base/ISpriteInfo';
-import { InteractiveCharacter } from './Character';
+import { InteractiveCharacter } from './InteractiveCharacter';
 import { characterEvents } from './gameObjects/gameObjectsConstants';
 import { Point } from './Point';
 import { Size } from './Size';
+import { Rectangle } from './Rectangle';
 
 export class MoveLeftRightEnemy extends InteractiveCharacter {
+  private isDied: boolean = false;
+
+  die(): void {
+    this.isDied = true;
+  }
+
   constructor(id: number, coordinates: Point, size: Size, spriteInfo: ISpriteInfo, options?: ICharacterOptions) {
     super(id, coordinates, size, spriteInfo, options);
     this.setupBehaviour();
@@ -23,5 +30,11 @@ export class MoveLeftRightEnemy extends InteractiveCharacter {
       this.moveRight();
     });
     this.moveRight();
+  }
+
+  draw(canvas: CanvasRenderingContext2D, viewport: Rectangle) {
+    if (!this.isDied) {
+      super.draw(canvas, viewport);
+    }
   }
 }
