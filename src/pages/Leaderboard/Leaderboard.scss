@@ -49,8 +49,15 @@ $height-grid-cell: 30px;
   width: 48px;
   height: 48px;
   margin-right: 8px;
+  overflow: hidden;
   border-radius: 50%;
   background-color: $lilac-color;
+
+  & > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
   &_first {
     background-color: $dandelion-color;

@@ -67,6 +67,30 @@ module.exports = {
           from: path.join(__dirname, 'static/sprites'),
           to: path.join(__dirname, 'dist/sprites'),
         },
+        {
+          from: path.join(__dirname, 'static/icon-144-144.png'),
+          to: path.join(__dirname, 'dist'),
+        },
+        {
+          from: path.join(__dirname, 'static/apple-touch-icon.png'),
+          to: path.join(__dirname, 'dist'),
+        },
+        {
+          from: path.join(__dirname, 'static/icon-256-256.png'),
+          to: path.join(__dirname, 'dist'),
+        },
+        {
+          from: path.join(__dirname, 'static/icon-512-512.png'),
+          to: path.join(__dirname, 'dist'),
+        },
+        {
+          from: path.join(__dirname, 'service-worker.js'),
+          to: path.join(__dirname, 'dist'),
+        },
+        {
+          from: path.join(__dirname, 'manifest.json'),
+          to: path.join(__dirname, 'dist'),
+        },
       ],
     }),
     new MiniCssExtractPlugin({
@@ -82,6 +106,7 @@ module.exports = {
       },
       {
         test: /\.s?[ca]ss$/,
+        exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
           {
@@ -95,6 +120,10 @@ module.exports = {
           },
           'sass-loader',
         ],
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,

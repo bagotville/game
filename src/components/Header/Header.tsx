@@ -4,21 +4,16 @@ import styles from './Header.scss';
 import { Icons } from '../Svg/Svg.types';
 import { HEADLINES } from './Header.constants';
 import { Svg } from '../Svg';
-import { HeaderProps } from './Header.types';
 import { useLogout } from '../../api';
 
-export function Header(props: HeaderProps) {
-  const { isAuthRefetch } = props;
-
+export function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const logout = useLogout();
 
   // todo: add modal for confirm
   const logoutHandler = () => {
-    logout.mutateAsync({}).then(() => {
-      isAuthRefetch();
-    });
+    logout.mutateAsync({});
   };
 
   return (

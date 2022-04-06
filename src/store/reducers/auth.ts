@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import { IUserData } from '../../types/api/auth';
+import { IState } from '../store.types';
 
-const initialState: any = {
+const initialState: IState = {
   error: '',
   isAuth: false,
   user: undefined,
@@ -12,7 +13,7 @@ export const slice = createSlice({
   name: 'authReducer',
   initialState,
   reducers: {
-    signIn: (state, action: PayloadAction<IUserData>) => {
+    saveUserToStore: (state, action: PayloadAction<IUserData>) => {
       if (action.payload) {
         state.isAuth = true;
         state.user = action.payload;
@@ -21,16 +22,10 @@ export const slice = createSlice({
         state.user = undefined;
       }
     },
-    signOut: (state) => {
+    removeUserFromStore: (state) => {
       state.error = '';
       state.isAuth = false;
       state.user = undefined;
-    },
-    fetchUser: (state, action: PayloadAction<IUserData>) => {
-      if (action.payload) {
-        state.user = action.payload;
-        state.isAuth = true;
-      }
     },
     error: (state, action: PayloadAction<string>) => {
       if (action.payload) {
@@ -40,8 +35,8 @@ export const slice = createSlice({
   },
 });
 
-export const { signIn, signOut, error, fetchUser } = slice.actions;
+export const { saveUserToStore, removeUserFromStore, error } = slice.actions;
 export default slice.reducer;
-export const getUser = (state: RootState) => state.authReducer.user;
+export const currentUser = (state: RootState) => state.authReducer.user;
 export const isAuth = (state: RootState) => state.authReducer.isAuth;
-export const getAuthErrors = (state: RootState) => state.authReducer.error;
+export const authErrors = (state: RootState) => state.authReducer.error;
