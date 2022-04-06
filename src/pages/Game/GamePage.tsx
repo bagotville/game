@@ -8,7 +8,7 @@ import { LEVEL_01, LEVEL_02 } from '../../game/levels/levels';
 import styles from './GamePage.scss';
 
 let currentLevel: string;
-
+// -Djava.library.path=/Users/iliya132/arcadia/idea-projects/market/mbo/alias-maker/contrib
 let game: Game;
 
 export function GamePage(props: IGameProps) {

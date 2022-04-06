@@ -15,6 +15,8 @@ import {
   PLAYER_X_SPEED,
   PLAYER_Y_SPEED,
   VECTOR_KEYS,
+  COLLISION_LAG,
+  gameEvents,
 } from './gameObjectsConstants';
 
 export class Player extends InteractiveCharacter implements IInteractiveEntity {
@@ -29,9 +31,11 @@ export class Player extends InteractiveCharacter implements IInteractiveEntity {
 
   public lifes: number = DEFAULT_PLAYER_LIFES;
 
+  public isPlayer: boolean = true;
+
   hitted(direction: Direction) {
     const xSpeed = direction === Direction.LEFT ? -PLAYER_X_SPEED : PLAYER_X_SPEED;
-    this.vectors.push({ x: xSpeed * 3, y: -PLAYER_Y_SPEED * 3, key: VECTOR_KEYS.UNDEFINED });
+    this.vectors.push({ x: xSpeed * 4, y: -PLAYER_Y_SPEED * 3, key: VECTOR_KEYS.UNDEFINED });
     this.lifes--;
   }
 
@@ -65,7 +69,14 @@ export class Player extends InteractiveCharacter implements IInteractiveEntity {
   };
 
   checkCollision(other: RectangleWithOwner) {
-    if ((other.owner as any).isEnemy) {
+    if (
+      (other.owner as any).isEnemy &&
+      other.rect.coordinates.y + COLLISION_LAG > Math.abs(this.collideRectangle.coordinates.y + this.size.y)
+    ) {
+      (other.owner as InteractiveCharacter).die();
+      this.vectors.push({ x: 0, y: -PLAYER_Y_SPEED, key: VECTOR_KEYS.JUMP });
+      this.eventBus.emit(gameEvents.SMALL_ENEMY_KILLED);
+    } else if ((other.owner as any).isEnemy) {
       this.checkHitProtection();
       if (!this.isHitted) {
         this.eventBus.emit(playerEvents.LOST_LIFE);

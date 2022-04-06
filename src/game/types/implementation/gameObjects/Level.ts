@@ -1,6 +1,8 @@
 import { ICollidableEntity } from '../../base/ICollidableEntity';
 import { IGameEntity } from '../../base/IGameEntity';
 import { IInteractiveEntity } from '../../base/IInteractiveEntity';
+import { Coin } from '../Coin';
+import { IRemovable } from '../../base/IRemovable';
 import { MoveLeftRightEnemy } from '../MoveLeftRightEnemy';
 import { getNewId } from '../ObjectsRegistrator';
 import { Point } from '../Point';
@@ -17,6 +19,7 @@ import {
   PLAYER_SPRITE_INFO,
 } from './gameObjectsConstants';
 import { Player } from './Player';
+import { IEventEmitters } from '../../base/IEventEmmiters';
 
 export class Level {
   private levelData: string;
@@ -31,11 +34,17 @@ export class Level {
 
   private interactiveObjects: IInteractiveEntity[];
 
+  private eventEmitters: IEventEmitters[];
+
+  private removable: IRemovable[];
+
   constructor(levelData: string) {
     this.levelData = levelData.replace('\t', '    ');
     this.visualElements = [];
     this.gameObjects = [];
     this.collidableObjects = [];
+    this.removable = [];
+    this.eventEmitters = [];
     this.interactiveObjects = [];
     this.generateLevel();
   }
@@ -104,6 +113,9 @@ export class Level {
         break;
       case LEVEL_OBJECT_TYPE.FREE_SPACE:
         break;
+      case LEVEL_OBJECT_TYPE.COIN:
+        this.createCoin(coordinates);
+        break;
       default:
         throw new Error('unknown object type');
     }
@@ -128,6 +140,8 @@ export class Level {
     this.gameObjects.push(player);
     this.interactiveObjects.push(player);
     this.player = player;
+    this.eventEmitters.push(player);
+    this.removable.push(player);
   }
 
   createLeftRightEnemy(coordinates: Point) {
@@ -137,6 +151,17 @@ export class Level {
     this.visualElements.push(enemy);
     this.collidableObjects.push(enemy);
     this.gameObjects.push(enemy);
+    this.eventEmitters.push(enemy);
+    this.removable.push(enemy);
+  }
+
+  createCoin(coordinates: Point) {
+    const coin = new Coin(getNewId(), coordinates);
+    this.visualElements.push(coin);
+    this.collidableObjects.push(coin);
+    this.gameObjects.push(coin);
+    this.removable.push(coin);
+    this.eventEmitters.push(coin);
   }
 
   getGameObjects() {
@@ -157,5 +182,13 @@ export class Level {
 
   getInteractiveObjects() {
     return this.interactiveObjects;
+  }
+
+  getRemovableObjects() {
+    return this.removable;
+  }
+
+  getEventEmmiters() {
+    return this.eventEmitters;
   }
 }
