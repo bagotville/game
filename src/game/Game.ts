@@ -10,6 +10,8 @@ import { gameEvents, HEART_SPRITE, playerEvents } from './types/implementation/g
 import { IRemovable } from './types/base/IRemovable';
 import { IEventEmitters } from './types/base/IEventEmmiters';
 import { Point } from './types/implementation/Point';
+import { EndReason } from '../pages/Game/GamePage.types';
+import { Escape } from './types/implementation/Escape';
 
 export class Game {
   constructor(level: string) {
@@ -38,11 +40,15 @@ export class Game {
 
   private collidableObjects: ICollidableEntity[];
 
+  private escape: Escape;
+
   private removable: IRemovable[];
 
   private isGameOver: boolean;
 
-  private gameEndEventSubscribers: (() => void)[] = [];
+  private gameEndReason: EndReason;
+
+  private gameEndEventSubscribers: ((reason: EndReason, score: number) => void)[] = [];
 
   public start() {
     this.initialize();
@@ -53,7 +59,7 @@ export class Game {
     this.setupRenderer();
   }
 
-  public subscribeForGameEndEvent(callback: () => void) {
+  public subscribeForGameEndEvent(callback: (reason: EndReason, score: number) => void) {
     this.gameEndEventSubscribers.push(callback);
   }
 
@@ -103,7 +109,7 @@ export class Game {
     if (!this.isGameOver) {
       requestAnimationFrame(this.render.bind(this));
     } else {
-      this.callGameEnd();
+      this.callGameEnd(this.gameEndReason);
     }
   }
 
@@ -129,12 +135,13 @@ export class Game {
     this.canvasContext.fillText(`SCORE: ${score}`, coordinates.x, coordinates.y);
   }
 
-  private callGameEnd() {
-    this.gameEndEventSubscribers.forEach((callback) => callback());
+  private callGameEnd(reason: EndReason) {
+    this.gameEndEventSubscribers.forEach((callback) => callback(reason, this.score));
   }
 
   private checkForGameEnd() {
     if (this.player && this.player.lifes <= 0) {
+      this.gameEndReason = EndReason.DIED;
       this.isGameOver = true;
     }
   }
@@ -179,6 +186,7 @@ export class Game {
     currentLevel.getVisualObjects().forEach((item) => this.visualObjects.push(item));
     currentLevel.getRemovableObjects().forEach((item) => this.removable.push(item));
     currentLevel.getEventEmmiters().forEach((item) => this.eventProviders.push(item));
+    this.escape = currentLevel.getEscape();
     this.player = currentLevel.getPlayer();
   }
 
@@ -200,6 +208,8 @@ export class Game {
       item.eventBus.on(gameEvents.SMALL_ENEMY_KILLED, () => {
         this.score += 100;
       });
+
+      this.escape.subscribeForGameEndEvent(() => this.callGameEnd(EndReason.ESCAPED));
     });
   }
 }
