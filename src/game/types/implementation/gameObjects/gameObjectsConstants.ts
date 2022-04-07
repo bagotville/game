@@ -37,6 +37,7 @@ export const LEVEL_OBJECT_TYPE = {
   WALL: '#',
   PLAYER: '0',
   MOVE_LEFT_RIGHT_ENEMY: '+',
+  COIN: '$',
   FREE_SPACE: ' ',
 };
 
@@ -105,6 +106,30 @@ machine1WalkSpriteRight.src = '/sprites/machine1/WalkRight.png';
 const machine1WalkSpriteLeft = new Image();
 machine1WalkSpriteLeft.src = '/sprites/machine1/WalkLeft.png';
 
+const coinSprite = new Image();
+coinSprite.src = '/sprites/coin/coin.png';
+
+const coinAnimationRate = 6;
+
+export const COIN_SIZE: Size = {
+  x: 20,
+  y: 20,
+};
+
+export const COIN_SPRITE_INFO: ISpriteInfo = {
+  idleAnimationRate: coinAnimationRate,
+  moveAnimationRate: coinAnimationRate,
+  idleColumns: 6,
+  moveColumns: 6,
+  scaleRate: 2,
+  moveRows: 1,
+  idleRows: 1,
+  idleLeftSprite: coinSprite,
+  idleRightSprite: coinSprite,
+  moveLeftSprite: coinSprite,
+  moveRightSprite: coinSprite,
+};
+
 export const MACHINE1_MAX_SPEED = 2;
 
 export const MACHINE_1_SPRITE_INFO: ISpriteInfo = {
@@ -130,6 +155,11 @@ export enum characterEvents {
 export enum playerEvents {
   DIED = 'DIED',
   LOST_LIFE = 'LOST_LIFE',
+}
+
+export enum gameEvents {
+  COLLECTED_COIN = 'COLLECTED_COIN',
+  SMALL_ENEMY_KILLED = 'SMALL_ENEMY_KILLED',
 }
 
 export const HIT_PROTECTION_TIME = 2;

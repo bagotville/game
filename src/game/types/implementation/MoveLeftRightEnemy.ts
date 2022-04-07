@@ -1,7 +1,7 @@
 import { ICharacterOptions } from '../base/ICharacterOptions';
 import { ISpriteInfo } from '../base/ISpriteInfo';
 import { InteractiveCharacter } from './InteractiveCharacter';
-import { characterEvents } from './gameObjects/gameObjectsConstants';
+import { characterEvents, playerEvents } from './gameObjects/gameObjectsConstants';
 import { Point } from './Point';
 import { Size } from './Size';
 import { Rectangle } from './Rectangle';
@@ -11,6 +11,7 @@ export class MoveLeftRightEnemy extends InteractiveCharacter {
 
   die(): void {
     this.isDied = true;
+    this.eventBus.emit(playerEvents.DIED);
   }
 
   constructor(id: number, coordinates: Point, size: Size, spriteInfo: ISpriteInfo, options?: ICharacterOptions) {

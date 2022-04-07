@@ -6,7 +6,10 @@ import { ICollidableEntity } from './types/base/ICollidableEntity';
 import { Camera } from './types/implementation/gameObjects/Camera';
 import { IGameEntity } from './types/base/IGameEntity';
 import { getNewId } from './types/implementation/ObjectsRegistrator';
-import { HEART_SPRITE } from './types/implementation/gameObjects/gameObjectsConstants';
+import { gameEvents, HEART_SPRITE, playerEvents } from './types/implementation/gameObjects/gameObjectsConstants';
+import { IRemovable } from './types/base/IRemovable';
+import { IEventEmitters } from './types/base/IEventEmmiters';
+import { Point } from './types/implementation/Point';
 
 export class Game {
   constructor(level: string) {
@@ -14,6 +17,8 @@ export class Game {
   }
 
   private gameObjects: IGameEntity[];
+
+  private eventProviders: IEventEmitters[];
 
   private visualObjects: IRenderableEntity[];
 
@@ -27,9 +32,13 @@ export class Game {
 
   private player: Player;
 
+  private score: number;
+
   private interactiveObjects: IInteractiveEntity[];
 
   private collidableObjects: ICollidableEntity[];
+
+  private removable: IRemovable[];
 
   private isGameOver: boolean;
 
@@ -39,6 +48,7 @@ export class Game {
     this.initialize();
     this.setupKeyboard();
     this.loadLevel();
+    this.addEvents();
     this.createCamera();
     this.setupRenderer();
   }
@@ -51,8 +61,11 @@ export class Game {
     this.interactiveObjects = [];
     this.visualObjects = [];
     this.gameObjects = [];
+    this.removable = [];
     this.collidableObjects = [];
+    this.eventProviders = [];
     this.isGameOver = false;
+    this.score = 0;
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
     const optionalContext = this.canvas.getContext('2d');
     if (optionalContext) {
@@ -85,6 +98,7 @@ export class Game {
       item.render(this.canvasContext, this.camera.getViewportRectangle());
     });
     this.drawLifes();
+    this.drawScore();
     this.checkForGameEnd();
     if (!this.isGameOver) {
       requestAnimationFrame(this.render.bind(this));
@@ -106,6 +120,13 @@ export class Game {
         heartHeight,
       );
     }
+  }
+
+  private drawScore() {
+    const { score } = this;
+    const heartHeight = HEART_SPRITE.height / 10 - 10;
+    const coordinates: Point = { x: 20, y: this.canvas.height - heartHeight - 40 };
+    this.canvasContext.fillText(`SCORE: ${score}`, coordinates.x, coordinates.y);
   }
 
   private callGameEnd() {
@@ -156,6 +177,29 @@ export class Game {
     currentLevel.getCollidableObjects().forEach((item) => this.collidableObjects.push(item));
     currentLevel.getInteractiveObjects().forEach((item) => this.interactiveObjects.push(item));
     currentLevel.getVisualObjects().forEach((item) => this.visualObjects.push(item));
+    currentLevel.getRemovableObjects().forEach((item) => this.removable.push(item));
+    currentLevel.getEventEmmiters().forEach((item) => this.eventProviders.push(item));
     this.player = currentLevel.getPlayer();
+  }
+
+  private addEvents() {
+    this.eventProviders.forEach((item) => {
+      item.eventBus.on(playerEvents.DIED, () => {
+        this.gameObjects = this.gameObjects.filter((go) => go !== (item as any));
+        this.collidableObjects = this.collidableObjects.filter((co) => co !== (item as any));
+        this.interactiveObjects = this.interactiveObjects.filter((io) => io !== (item as any));
+        this.visualObjects = this.visualObjects.filter((vo) => vo !== (item as any));
+        this.removable = this.removable.filter((ro) => ro !== item);
+        this.eventProviders = this.eventProviders.filter((ep) => ep !== item);
+      });
+
+      item.eventBus.on(gameEvents.COLLECTED_COIN, () => {
+        this.score += 50;
+      });
+
+      item.eventBus.on(gameEvents.SMALL_ENEMY_KILLED, () => {
+        this.score += 100;
+      });
+    });
   }
 }

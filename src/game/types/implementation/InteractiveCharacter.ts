@@ -2,6 +2,8 @@ import EventBus from '../../Utils/EventBus';
 import { AnimationData, Direction, PlayerAnimation } from '../base/Animation';
 import { ICharacterOptions } from '../base/ICharacterOptions';
 import { ICollidableEntity } from '../base/ICollidableEntity';
+import { IEventEmitters } from '../base/IEventEmmiters';
+import { IRemovable } from '../base/IRemovable';
 import { ISpriteInfo } from '../base/ISpriteInfo';
 import {
   characterEvents,
@@ -18,12 +20,12 @@ import { Size } from './Size';
 import { Speed } from './Speed';
 import { Vector } from './Vector';
 
-export abstract class InteractiveCharacter implements ICollidableEntity {
+export abstract class InteractiveCharacter implements ICollidableEntity, IRemovable, IEventEmitters {
   constructor(id: number, coordinates: Point, size: Size, spriteInfo: ISpriteInfo, options?: ICharacterOptions) {
     this.id = id;
     this.globalCoordinates = coordinates;
     this.size = size;
-    this.collideRectangle = new Rectangle(coordinates, size);
+    this.collideRectangle = new Rectangle({ x: coordinates.x, y: coordinates.y }, { x: size.x, y: size.y });
     this.vectors = [];
     this.speed = { x: 0, y: 0 };
     this.isOnTheGround = false;
@@ -70,9 +72,9 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
   };
 
   onCollideWithOtherRect: (other: RectangleWithOwner) => void = (other) => {
-    this.checkCollisionLeft(other.rect);
-    this.checkCollisionRight(other.rect);
-    this.checkCollisionBottom(other.rect);
+    if (this.checkCollisionLeft(other.rect)) return;
+    if (this.checkCollisionRight(other.rect)) return;
+    if (this.checkCollisionBottom(other.rect)) return;
     this.checkCollisionTop(other.rect);
   };
 
@@ -81,7 +83,9 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
       this.speed.x = 0;
       this.globalCoordinates.x = other.coordinates.x - this.size.x - COLLISION_LAG;
       this.eventBus.emit(characterEvents.COLLIDED_RIGHT);
+      return true;
     }
+    return false;
   }
 
   private checkCollisionLeft(other: Rectangle) {
@@ -89,7 +93,9 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
       this.speed.x = 0;
       this.globalCoordinates.x = other.coordinates.x + other.size.x + COLLISION_LAG;
       this.eventBus.emit(characterEvents.COLLIDED_LEFT);
+      return true;
     }
+    return false;
   }
 
   private checkCollisionBottom(other: Rectangle) {
@@ -110,10 +116,12 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
   private checkCollisionTop(other: Rectangle) {
     if (Rectangle.isCollidedTop(this.collideRectangle, other)) {
       this.globalCoordinates.y += COLLISION_LAG;
-      this.vectors = this.vectors.filter((vector) => vector.y >= 0);
+      this.vectors = this.vectors.filter((vector) => vector.key !== VECTOR_KEYS.JUMP);
       this.speed.y = 0;
       this.eventBus.emit(characterEvents.COLLIDED_TOP);
+      return true;
     }
+    return false;
   }
 
   getCollisionRectangles: () => Rectangle[] = () => [this.collideRectangle];
@@ -141,7 +149,7 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
 
   render: (canvas: CanvasRenderingContext2D, viewport: Rectangle) => void = (canvas, viewport) => {
     const absoluteVector = this.calculateAbsoluteVector();
-    this.speed.x += absoluteVector.x - this.speed.x * 0.2;
+    this.speed.x += absoluteVector.x - this.speed.x * 0.1;
     this.speed.y += absoluteVector.y - this.speed.y * 0.2;
     let maxSpeed = PLAYER_X_SPEED;
     if (this.options && this.options.maxSpeed) {
@@ -258,24 +266,27 @@ export abstract class InteractiveCharacter implements ICollidableEntity {
     const currentAnim = this.getCurrentAnimation();
     this.resetCounterIfChanged(currentAnim);
     let currentImgColumns;
+    let currentImgRows;
     let currentImg;
 
     switch (currentAnim) {
       case PlayerAnimation.WALK: {
         currentImg = this.getDependentOnDirection(this.sprites.moveLeftSprite, this.sprites.moveRightSprite);
         currentImgColumns = this.sprites.moveColumns;
+        currentImgRows = this.sprites.moveRows ?? 1;
         break;
       }
       case PlayerAnimation.IDLE:
       default: {
         currentImg = this.getDependentOnDirection(this.sprites.idleLeftSprite, this.sprites.idleRightSprite);
         currentImgColumns = this.sprites.idleColumns;
+        currentImgRows = this.sprites.idleRows ?? 1;
         break;
       }
     }
     const currentFrameCount = this.getNewFrame(currentAnim);
     const spriteWidth = currentImg.width / currentImgColumns;
-    const spriteHeight = currentImg.height;
+    const spriteHeight = currentImg.height / currentImgRows;
 
     return {
       imageWidth: currentImg.width,
