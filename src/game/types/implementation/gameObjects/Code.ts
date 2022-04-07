@@ -26,20 +26,15 @@ export class Code implements ICollidableEntity {
   }
 
   getRandomCode(len: number) {
-    const codeSample = CODE_SAMPLE.replace('\n', '')
-      .replace('\t', '')
-      .replace(/\s/g, '')
-      .replace('\r\n', '');
+    const codeSample = CODE_SAMPLE.replace('\n', '').replace('\t', '').replace(/\s/g, '').replace('\r\n', '');
 
-    const start = Math.random() * codeSample.length - len;
+    const start = Math.floor(Math.random() * (codeSample.length - len));
     const end = start + len;
     return codeSample.slice(start, end);
   }
 
   isCollided: (other: ICollidableEntity) => boolean = (other) =>
-    other
-      .getCollisionRectangles()
-      .some((rect) => this.collisionRectangle.isColidedWith(rect));
+    other.getCollisionRectangles().some((rect) => this.collisionRectangle.isColidedWith(rect));
 
   onCollide: () => void = () => {};
 
@@ -50,13 +45,8 @@ export class Code implements ICollidableEntity {
   speed: Speed = { x: 0, y: 0 };
 
   render(canvas: CanvasRenderingContext2D, viewport: Rectangle) {
-    const realX =
-      this.globalCoordinates.x - viewport.coordinates.x + viewport.size.x / 2;
-    const realY =
-      this.globalCoordinates.y -
-      viewport.coordinates.y +
-      viewport.size.y / 2 +
-      CANVAS_FONT_SIZE;
+    const realX = this.globalCoordinates.x - viewport.coordinates.x + viewport.size.x / 2;
+    const realY = this.globalCoordinates.y - viewport.coordinates.y + viewport.size.y / 2 + CANVAS_FONT_SIZE;
 
     canvas.fillStyle = 'white';
     canvas.font = CANVAS_FONT;
