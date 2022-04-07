@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import { IGameProps } from './GamePage.types';
 import { Game } from '../../game/Game';
-import { CANVAS_ROOT_ID } from './GameConstants';
+import { CANVAS_ROOT_ID, FULL_SCREEN_BTN_ID } from './GameConstants';
 import { LEVEL_01, LEVEL_02 } from '../../game/levels/levels';
 import styles from './GamePage.scss';
 
@@ -44,9 +44,19 @@ function startGame() {
     throw new Error('cant ascquire root for starting the game');
   }
   root.innerHTML = '';
+  const fullScreenBtn = document.createElement('button');
+  fullScreenBtn.id = FULL_SCREEN_BTN_ID;
+  fullScreenBtn.className = styles['full-screen-btn'];
+  fullScreenBtn.innerText = 'Expand to full screen';
+
+  root.appendChild(fullScreenBtn);
   const canvas = document.createElement('canvas');
   canvas.id = CANVAS_ROOT_ID;
   canvas.className = styles['canvas-style'];
+  fullScreenBtn.addEventListener('click', () => {
+    canvas.requestFullscreen();
+  });
+  root.appendChild(fullScreenBtn);
   root.appendChild(canvas);
 
   game.start();
