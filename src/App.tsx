@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Routes, useLocation, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ToastContainer } from 'react-toastify';
@@ -21,13 +21,27 @@ import { Forum } from './pages/Forum';
 import { ErrorFallback } from './pages/ErrorFallback';
 import 'react-toastify/dist/ReactToastify.css';
 import '@reach/dialog/styles.css';
+import { useServiceId } from './api/hooks/useServiceId';
+import { useOAuth } from './api/hooks/useOAuth';
 
 export function App() {
   const authCurrent = useAuthCurrent();
+  const serviceId = useServiceId();
   const isAuthenticated = useSelector(isAuth);
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const oAuth = useOAuth();
 
-  return authCurrent.isLoading ? (
+  const code = searchParams.get('code');
+
+  useEffect(() => {
+    if (!code) return;
+    oAuth.mutateAsync({ code }).then(() => {
+      authCurrent.refetch();
+    });
+  }, []);
+
+  return authCurrent.isLoading || serviceId.isLoading ? (
     <div className={styles.loading}>Loading...</div>
   ) : (
     <>
