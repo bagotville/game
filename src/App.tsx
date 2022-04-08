@@ -65,7 +65,7 @@ export function App() {
           <Route
             path={ROUTES.profile}
             element={
-              <React.Suspense fallback={false}>
+              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
                 <Profile className={styles.page} />
               </React.Suspense>
             }
@@ -73,7 +73,7 @@ export function App() {
           <Route
             path={ROUTES.leaderboard}
             element={
-              <React.Suspense fallback={false}>
+              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
                 <Leaderboard className={styles.page} />
               </React.Suspense>
             }
@@ -81,7 +81,7 @@ export function App() {
           <Route
             path={ROUTES.forum}
             element={
-              <React.Suspense fallback={false}>
+              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
                 <Forum className={styles.page} />
               </React.Suspense>
             }
