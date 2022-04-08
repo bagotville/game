@@ -8,21 +8,22 @@ import { Main } from './components/Main';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { ROUTES } from './services';
-import { LoginPage } from './pages/Login/Login';
 import { LOGIN_MESSAGES } from './pages/Login/Login.constants';
-import { RegisterPage } from './pages/Register/Register';
 import { REGISTER_PAGE_MESSAGES } from './pages/Register/Register.constants';
 import { GuardRoute } from './components/GuardRoute';
-import { Profile } from './pages/Profile';
 import { useAuthCurrent } from './api';
 import { isAuth } from './store/reducers/auth';
-import { Leaderboard } from './pages/Leaderboard';
-import { Forum } from './pages/Forum';
-import { ErrorFallback } from './pages/ErrorFallback';
 import 'react-toastify/dist/ReactToastify.css';
 import '@reach/dialog/styles.css';
 import { useServiceId } from './api/hooks/useServiceId';
 import { useOAuth } from './api/hooks/useOAuth';
+import { ErrorFallback } from './pages/ErrorFallback';
+
+const Login = React.lazy(() => import('./pages/Login'));
+const Forum = React.lazy(() => import('./pages/Forum'));
+const Leaderboard = React.lazy(() => import('./pages/Leaderboard'));
+const Profile = React.lazy(() => import('./pages/Profile'));
+const Register = React.lazy(() => import('./pages/Register'));
 
 export function App() {
   const authCurrent = useAuthCurrent();
@@ -61,16 +62,39 @@ export function App() {
               </div>
             </GuardRoute>
           }>
-          <Route path={ROUTES.profile} element={<Profile className={styles.page} />} />
-          <Route path={ROUTES.leaderboard} element={<Leaderboard className={styles.page} />} />
-          <Route path={ROUTES.forum} element={<Forum className={styles.page} />} />
+          <Route
+            path={ROUTES.profile}
+            element={
+              <React.Suspense fallback={false}>
+                <Profile className={styles.page} />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path={ROUTES.leaderboard}
+            element={
+              <React.Suspense fallback={false}>
+                <Leaderboard className={styles.page} />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path={ROUTES.forum}
+            element={
+              <React.Suspense fallback={false}>
+                <Forum className={styles.page} />
+              </React.Suspense>
+            }
+          />
         </Route>
 
         <Route
           path={ROUTES.login}
           element={
             <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
-              <LoginPage isAuthRefetch={authCurrent.refetch} messages={LOGIN_MESSAGES} />
+              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
+                <Login isAuthRefetch={authCurrent.refetch} messages={LOGIN_MESSAGES} />
+              </React.Suspense>
             </GuardRoute>
           }
         />
@@ -79,7 +103,9 @@ export function App() {
           path={ROUTES.register}
           element={
             <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
-              <RegisterPage isAuthRefetch={authCurrent.refetch} messages={REGISTER_PAGE_MESSAGES} />
+              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
+                <Register isAuthRefetch={authCurrent.refetch} messages={REGISTER_PAGE_MESSAGES} />
+              </React.Suspense>
             </GuardRoute>
           }
         />

@@ -15,7 +15,7 @@ function isValid(result: TStringOnlyValues) {
   return !(!result.login || result.login.length < 3 || result.login.length > 20);
 }
 
-export function LoginPage(props: LoginMessages) {
+export function Login(props: LoginMessages) {
   const { messages, isAuthRefetch } = props;
 
   const cServiceId = useSelector(serviceId);
@@ -44,10 +44,7 @@ export function LoginPage(props: LoginMessages) {
   };
 
   const oAuthHandler = () => {
-    window.open(
-      `${OAUTH_URL}?response_type=code&client_id=${cServiceId}&redirect_uri=${document.location.origin}`,
-      '_blank',
-    );
+    window.open(`${OAUTH_URL}?response_type=code&client_id=${cServiceId}&redirect_uri=${document.location.origin}`);
   };
 
   return (

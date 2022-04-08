@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { NavLink } from 'react-router-dom';
 import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from './Console.constant';
 import styles from './Console.style.scss';
 import { IConsoleProps } from './console.types';
@@ -35,9 +36,9 @@ export default function Console(props: IConsoleProps) {
                   <li
                     className={tab.selected ? [styles.tab, styles['tab-selected']].join(' ') : styles.tab}
                     key={tab.name}>
-                    <a href={tab.href} key={tab.href}>
+                    <NavLink to={tab.href} key={tab.href}>
                       {tab.name}
-                    </a>
+                    </NavLink>
                   </li>
                 ))}
               </ul>
