@@ -28,7 +28,7 @@ export class Code implements ICollidableEntity {
   getRandomCode(len: number) {
     const codeSample = CODE_SAMPLE.replace('\n', '').replace('\t', '').replace(/\s/g, '').replace('\r\n', '');
 
-    const start = Math.random() * codeSample.length - len;
+    const start = Math.floor(Math.random() * (codeSample.length - len));
     const end = start + len;
     return codeSample.slice(start, end);
   }
