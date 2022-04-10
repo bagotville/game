@@ -20,6 +20,7 @@ import {
 } from './gameObjectsConstants';
 import { Player } from './Player';
 import { IEventEmitters } from '../../base/IEventEmmiters';
+import { Escape } from '../Escape';
 
 export class Level {
   private levelData: string;
@@ -37,6 +38,8 @@ export class Level {
   private eventEmitters: IEventEmitters[];
 
   private removable: IRemovable[];
+
+  private escape: Escape;
 
   constructor(levelData: string) {
     this.levelData = levelData.replace('\t', '    ');
@@ -116,6 +119,9 @@ export class Level {
       case LEVEL_OBJECT_TYPE.COIN:
         this.createCoin(coordinates);
         break;
+      case LEVEL_OBJECT_TYPE.ESCAPE:
+        this.createEscape(coordinates);
+        break;
       default:
         throw new Error('unknown object type');
     }
@@ -123,7 +129,7 @@ export class Level {
 
   validateLevel() {
     // TODO можно придумать что валидировать. Пока проверяем только наличие игрока
-    return this.levelData.indexOf('0') > 0;
+    return this.levelData.indexOf('0') > 0 && this.levelData.indexOf('E') > 0;
   }
 
   createWall(coordinates: Point, size: Size) {
@@ -142,6 +148,14 @@ export class Level {
     this.player = player;
     this.eventEmitters.push(player);
     this.removable.push(player);
+  }
+
+  createEscape(coordinates: Point) {
+    const escape = new Escape(getNewId(), coordinates, { x: DEFAULT_WALL_WIDTH, y: DEFAULT_WALL_HEIGHT });
+    this.escape = escape;
+    this.visualElements.push(escape);
+    this.collidableObjects.push(escape);
+    this.gameObjects.push(escape);
   }
 
   createLeftRightEnemy(coordinates: Point) {
@@ -190,5 +204,9 @@ export class Level {
 
   getEventEmmiters() {
     return this.eventEmitters;
+  }
+
+  getEscape() {
+    return this.escape;
   }
 }

@@ -39,6 +39,7 @@ export const LEVEL_OBJECT_TYPE = {
   MOVE_LEFT_RIGHT_ENEMY: '+',
   COIN: '$',
   FREE_SPACE: ' ',
+  ESCAPE: 'E',
 };
 
 export const DEFAULT_WALL_WIDTH = 50;
