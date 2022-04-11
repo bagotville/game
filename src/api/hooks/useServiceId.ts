@@ -4,7 +4,7 @@ import { useAppDispatch } from '../../store/store.hooks';
 import { saveServiceIdToStore } from '../../store/reducers/auth';
 
 export function useServiceId(): UseQueryResult<{ service_id: string }> {
-  const serviceIdQuery = (): Promise<{ service_id: string }> => http.get('/oauth/yandex/service-id');
+  const serviceIdQuery = (): Promise<{ service_id: string }> => http.get(`/oauth/yandex/service-id?redirect_uri=${document.location.origin}`);
   const dispatch = useAppDispatch();
 
   return useQuery('serviceIdQuery', serviceIdQuery, {
