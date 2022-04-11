@@ -37,7 +37,7 @@ export function App() {
 
   useEffect(() => {
     if (!code) return;
-    oAuth.mutateAsync({ code }).then(() => {
+    oAuth.mutateAsync({ code, redirect_uri: document.location.origin }).then(() => {
       authCurrent.refetch();
     });
   }, []);
