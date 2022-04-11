@@ -29,7 +29,16 @@ export function Sidebar() {
             Bugoville
           </div>
 
-          {isOpenTree ? <div className={styles.tree}>{'</>'} ?????????</div> : null}
+          {isOpenTree ? (
+            <>
+              <NavLink className={navLinkActiveClasses} to="/game/level1" reloadDocument>
+                <div className={styles.tree}>{'</>'} Level 1 </div>
+              </NavLink>
+              <NavLink className={navLinkActiveClasses} to="/game/level2" reloadDocument>
+                <div className={styles.tree}>{'</>'} Level 2 </div>
+              </NavLink>
+            </>
+          ) : null}
         </div>
       </div>
 

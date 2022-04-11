@@ -35,7 +35,6 @@ export function LoginPage(props: LoginMessages) {
         );
     }
   };
-
   return (
     <Console header="login" tabs={loginTabs}>
       <ConsoleStrategy messages={error} onSuccessHookHandler={tryLogin} />

@@ -34,6 +34,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, '/dist'),
     filename: filename('js'),
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
@@ -63,8 +64,8 @@ module.exports = {
           to: path.join(__dirname, 'dist'),
         },
         {
-          from: path.join(__dirname, 'static/_redirects'),
-          to: path.join(__dirname, 'dist'),
+          from: path.join(__dirname, 'static/sprites'),
+          to: path.join(__dirname, 'dist/sprites'),
         },
         {
           from: path.join(__dirname, 'static/icon-144-144.png'),
