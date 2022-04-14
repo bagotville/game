@@ -16,7 +16,7 @@ export const GRAVITY_POWER = 0.9;
 export const MAX_GRAVITY_POWER = 14;
 export const VECTOR_APPLY_FREQUENCY = 5;
 
-export const TIME_IN_AIR_BEFORE_DIE = 3;
+export const TIME_IN_AIR_BEFORE_DIE = 1;
 
 export const VECTOR_KEYS = {
   MOVE_LEFT: 'move-left',

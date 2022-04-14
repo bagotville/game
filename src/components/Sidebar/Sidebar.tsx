@@ -32,10 +32,13 @@ export function Sidebar() {
           {isOpenTree ? (
             <>
               <NavLink className={navLinkActiveClasses} to="/game/level1" reloadDocument>
-                <div className={styles.tree}>{'</>'} Level 1 </div>
+                <div className={styles.tree}>{'</>'} Level 01 </div>
               </NavLink>
               <NavLink className={navLinkActiveClasses} to="/game/level2" reloadDocument>
-                <div className={styles.tree}>{'</>'} Level 2 </div>
+                <div className={styles.tree}>{'</>'} Level 02 </div>
+              </NavLink>
+              <NavLink className={navLinkActiveClasses} to="/game/level3" reloadDocument>
+                <div className={styles.tree}>{'</>'} Level 03 </div>
               </NavLink>
             </>
           ) : null}
