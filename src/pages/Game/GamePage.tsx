@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { EndReason, IGameProps } from './GamePage.types';
 import { Game } from '../../game/Game';
 import { CANVAS_ROOT_ID, FULL_SCREEN_BTN_ID } from './GameConstants';
-import { LEVEL_01, LEVEL_02 } from '../../game/levels/levels';
+import { LEVEL_01, LEVEL_02, LEVEL_03 } from '../../game/levels/levels';
 import styles from './GamePage.scss';
 import { GameEndPage } from './GameEndPage';
 
@@ -70,8 +70,10 @@ function getCurrentLevel(levelId: string) {
       return LEVEL_01;
     case 'level2':
       return LEVEL_02;
+    case 'level3':
+      return LEVEL_03;
     default:
-      return LEVEL_02;
+      return LEVEL_01;
   }
 }
 
