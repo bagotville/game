@@ -36,7 +36,7 @@ export function Leaderboard(props: ILeaderboardProps) {
   return (
     <div className={leaderboardClasses}>
       <div>
-        {range(1, 24).map((number) => (
+        {range(1, 4).map((number) => (
           <div className={styles.number} key={number}>
             {number}
           </div>

@@ -32,8 +32,9 @@ export function GamePage(props: IGameProps) {
   ) : (
     <div className={classNames(className, styles['game-page'])}>
       <div id="game-root">
-        <button className={styles['game-start-btn']} type="button" onClick={() => startGame()}>
-          start game
+        <button className={styles['game-message']} type="button" onClick={() => startGame()}>
+          <p className={styles['message-title']}>{getLevelName(levelId)}</p>
+          <p className={styles['message-action']}>click here to start</p>
         </button>
       </div>
     </div>
@@ -49,7 +50,7 @@ function startGame() {
   const fullScreenBtn = document.createElement('button');
   fullScreenBtn.id = FULL_SCREEN_BTN_ID;
   fullScreenBtn.className = styles['full-screen-btn'];
-  fullScreenBtn.innerText = 'Expand to full screen';
+  fullScreenBtn.innerText = 'Fullscreen Mode';
 
   root.appendChild(fullScreenBtn);
   const canvas = document.createElement('canvas');
@@ -62,6 +63,10 @@ function startGame() {
   root.appendChild(canvas);
 
   game.start();
+}
+
+function getLevelName(levelId: string) {
+  return levelId.replace('level', 'level 0');
 }
 
 function getCurrentLevel(levelId: string) {

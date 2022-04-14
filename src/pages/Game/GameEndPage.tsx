@@ -10,21 +10,38 @@ export function GameEndPage(props: IGameEndProps) {
     case EndReason.DIED:
       return (
         <div className={classNames(className, styles['game-page'])}>
-          <h1 className={styles['game-end-message']}>Game end. You died. Your final score is {score}</h1>
+          <button className={styles['game-message']} type="button" onClick={() => restartLevel()}>
+            <p className={classNames(styles['message-title'], styles['red-color'])}>you are bugged</p>
+            <p className={styles['message-subtitle']}>
+              score:
+              <span className={styles['red-color']}> {score} </span>
+            </p>
+            <p className={classNames(styles['message-action'], styles.red)}>click here to restart</p>
+          </button>
         </div>
       );
     case EndReason.ESCAPED:
       return (
         <div className={classNames(className, styles['game-page'])}>
-          <h1 className={styles['game-end-message']}>
-            Congratulations! You made it! Your final score is {score}. Try out next level:&nbsp;
-            <NavLink className={styles['game-end-link']} to={`/game/level${currentLevelId + 1}`} reloadDocument>
-              <div className={styles.tree}>{` Level ${currentLevelId + 1}`} </div>
-            </NavLink>
-          </h1>
+          <NavLink
+            className={styles['game-message']}
+            type="button"
+            to={`/game/level${currentLevelId + 1}`}
+            reloadDocument>
+            <p className={styles['message-title']}>congrats, tough nut</p>
+            <p className={styles['message-subtitle']}>
+              score:
+              <span className={styles['yellow-color']}> {score} </span>
+            </p>
+            <p className={styles['message-action']}>click here to next level</p>
+          </NavLink>
         </div>
       );
     default:
       throw new Error('Unkown game end event');
   }
+}
+
+function restartLevel() {
+  window.location.reload();
 }
