@@ -11,16 +11,13 @@ export function Forum(props: ForumProps) {
   const numbersRef = useRef(null);
 
   const numbers: number[] = [];
-  for (let i = 1; i <= 500; i += 1) {
+  for (let i = 1; i <= 5; i += 1) {
     numbers.push(i);
   }
 
   const scrollHandler = (e: React.UIEvent<HTMLElement>) => {
     if (!numbersRef || !numbersRef.current) return;
-    (numbersRef.current as HTMLElement).scrollTo(
-      0,
-      (e.target as HTMLElement).scrollTop,
-    );
+    (numbersRef.current as HTMLElement).scrollTo(0, (e.target as HTMLElement).scrollTop);
   };
 
   return (

@@ -9,7 +9,6 @@ import { getNewId } from './types/implementation/ObjectsRegistrator';
 import { gameEvents, HEART_SPRITE, playerEvents } from './types/implementation/gameObjects/gameObjectsConstants';
 import { IRemovable } from './types/base/IRemovable';
 import { IEventEmitters } from './types/base/IEventEmmiters';
-import { Point } from './types/implementation/Point';
 import { EndReason } from '../pages/Game/GamePage.types';
 import { Escape } from './types/implementation/Escape';
 
@@ -112,16 +111,17 @@ export class Game {
       this.callGameEnd(this.gameEndReason);
     }
   }
+  // TODO: Нормальный расчёт координат для HUD'а
 
   private drawLifes() {
     const { lifes } = this.player;
-    const heartWidth = HEART_SPRITE.width / 10;
-    const heartHeight = HEART_SPRITE.height / 10;
+    const heartWidth = HEART_SPRITE.width * 2;
+    const heartHeight = HEART_SPRITE.height * 2;
     for (let i = 0; i < lifes; i++) {
       this.canvasContext.drawImage(
         HEART_SPRITE,
-        i * heartWidth + 10,
-        this.canvas.height - heartHeight - 10,
+        32 + i * heartWidth + 16 * i,
+        80 - heartHeight - 10,
         heartWidth,
         heartHeight,
       );
@@ -130,9 +130,13 @@ export class Game {
 
   private drawScore() {
     const { score } = this;
-    const heartHeight = HEART_SPRITE.height / 10 - 10;
-    const coordinates: Point = { x: 20, y: this.canvas.height - heartHeight - 40 };
-    this.canvasContext.fillText(`SCORE: ${score}`, coordinates.x, coordinates.y);
+    const x = HEART_SPRITE.width * 6 + 120;
+    this.canvasContext.font = '40px Consolas';
+    this.canvasContext.fillStyle = '#96939B';
+    this.canvasContext.fillText(`score: `, x, 59);
+    this.canvasContext.font = '36px Consolas';
+    this.canvasContext.fillStyle = '#FFFFFF';
+    this.canvasContext.fillText(`${score}`, x + 150, 59);
   }
 
   private callGameEnd(reason: EndReason) {
@@ -147,7 +151,7 @@ export class Game {
   }
 
   private clearScreen() {
-    this.canvasContext.fillStyle = '#222';
+    this.canvasContext.fillStyle = '#282729';
     this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
