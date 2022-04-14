@@ -9,7 +9,9 @@ export const ROUTES = {
   login: '/login',
   logout: '/logout',
   register: '/register',
+  game: '/game',
   home: '/',
+  other: '*',
 };
 
 export const REG_EXP_VALIDATE_LOGIN = /^\b[A-Za-z][\w-]+\b$/;

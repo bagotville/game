@@ -1,3 +1,5 @@
+@import './styles/colors';
+
 .loading {
   display: flex;
   align-items: center;
@@ -6,10 +8,17 @@
   font-size: 18px;
 }
 
+body {
+  max-height: 100vh;
+  overflow: hidden;
+}
+
 .app {
   display: flex;
   flex-direction: column;
   height: 100%;
+  max-height: 100vh;
+  background-color: $night-color;
 }
 
 .main {

@@ -13,6 +13,7 @@ import { REGISTER_PAGE_MESSAGES } from './pages/Register/Register.constants';
 import { GuardRoute } from './components/GuardRoute';
 import { useAuthCurrent } from './api';
 import { isAuth } from './store/reducers/auth';
+import { GamePage } from './pages/Game/GamePage';
 import 'react-toastify/dist/ReactToastify.css';
 import '@reach/dialog/styles.css';
 import { useServiceId } from './api/hooks/useServiceId';
@@ -86,6 +87,7 @@ export function App() {
               </React.Suspense>
             }
           />
+          <Route path={`${ROUTES.game}/:levelId`} element={<GamePage className={styles.page} />} />
         </Route>
 
         <Route
@@ -109,7 +111,10 @@ export function App() {
             </GuardRoute>
           }
         />
+
+        <Route path={ROUTES.other} element={<ErrorFallback error={new Error('404 Not found')} />} />
       </Routes>
+
       <ToastContainer autoClose={2000} theme="dark" />
     </>
   );
