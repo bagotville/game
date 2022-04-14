@@ -11,6 +11,7 @@ import { IRemovable } from './types/base/IRemovable';
 import { IEventEmitters } from './types/base/IEventEmmiters';
 import { EndReason } from '../pages/Game/GamePage.types';
 import { Escape } from './types/implementation/Escape';
+import { FPS } from './gameConstants';
 
 export class Game {
   constructor(level: string) {
@@ -95,20 +96,32 @@ export class Game {
     this.render();
   }
 
+  private now: number;
+
+  private lastRender: number = Date.now();
+
+  private interval = 1000 / FPS;
+
   private render() {
-    this.gameObjects.forEach((obj) => obj.refresh());
-    this.checkForCollisions();
-    this.clearScreen();
-    this.visualObjects.forEach((item) => {
-      item.render(this.canvasContext, this.camera.getViewportRectangle());
-    });
-    this.drawLifes();
-    this.drawScore();
     this.checkForGameEnd();
     if (!this.isGameOver) {
       requestAnimationFrame(this.render.bind(this));
     } else {
       this.callGameEnd(this.gameEndReason);
+    }
+    this.now = Date.now();
+
+    const diff = this.now - this.lastRender;
+    if (diff > this.interval) {
+      this.gameObjects.forEach((obj) => obj.refresh());
+      this.checkForCollisions();
+      this.clearScreen();
+      this.visualObjects.forEach((item) => {
+        item.render(this.canvasContext, this.camera.getViewportRectangle());
+      });
+      this.drawLifes();
+      this.drawScore();
+      this.lastRender = Date.now();
     }
   }
   // TODO: Нормальный расчёт координат для HUD'а
