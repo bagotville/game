@@ -10,7 +10,8 @@
     "test-components": "ts-mocha --require ignore-styles -p \"./tsconfig.json\" \"src/**/*.spec.{js,jsx,ts,tsx}\"",
     "stylelint": "stylelint --fix \"src/**/*.scss\"",
     "codestyle": "eslint \"src/**/*.{ts,tsx}\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "release-heroku": "heroku container:login && heroku container:push web && heroku container:release web && heroku open"
   },
   "author": "",
   "license": "ISC",
