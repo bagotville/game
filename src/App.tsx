@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Routes, useLocation, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ToastContainer } from 'react-toastify';
@@ -8,27 +8,42 @@ import { Main } from './components/Main';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { ROUTES } from './services';
-import { LoginPage } from './pages/Login/Login';
 import { LOGIN_MESSAGES } from './pages/Login/Login.constants';
-import { RegisterPage } from './pages/Register/Register';
 import { REGISTER_PAGE_MESSAGES } from './pages/Register/Register.constants';
 import { GuardRoute } from './components/GuardRoute';
-import { Profile } from './pages/Profile';
 import { useAuthCurrent } from './api';
 import { isAuth } from './store/reducers/auth';
 import { GamePage } from './pages/Game/GamePage';
-import { Leaderboard } from './pages/Leaderboard';
-import { Forum } from './pages/Forum';
-import { ErrorFallback } from './pages/ErrorFallback';
 import 'react-toastify/dist/ReactToastify.css';
 import '@reach/dialog/styles.css';
+import { useServiceId } from './api/hooks/useServiceId';
+import { useOAuth } from './api/hooks/useOAuth';
+import { ErrorFallback } from './pages/ErrorFallback';
+
+const Login = React.lazy(() => import('./pages/Login'));
+const Forum = React.lazy(() => import('./pages/Forum'));
+const Leaderboard = React.lazy(() => import('./pages/Leaderboard'));
+const Profile = React.lazy(() => import('./pages/Profile'));
+const Register = React.lazy(() => import('./pages/Register'));
 
 export function App() {
   const authCurrent = useAuthCurrent();
+  const serviceId = useServiceId();
   const isAuthenticated = useSelector(isAuth);
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const oAuth = useOAuth();
 
-  return authCurrent.isLoading ? (
+  const code = searchParams.get('code');
+
+  useEffect(() => {
+    if (!code) return;
+    oAuth.mutateAsync({ code, redirect_uri: document.location.origin }).then(() => {
+      authCurrent.refetch();
+    });
+  }, []);
+
+  return authCurrent.isLoading || serviceId.isLoading ? (
     <div className={styles.loading}>Loading...</div>
   ) : (
     <>
@@ -46,19 +61,42 @@ export function App() {
                   </ErrorBoundary>
                 </div>
               </div>
+            </GuardRoute>
+          }>
+          <Route
+            path={ROUTES.profile}
+            element={
+              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
+                <Profile className={styles.page} />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path={ROUTES.leaderboard}
+            element={
+              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
+                <Leaderboard className={styles.page} />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path={ROUTES.forum}
+            element={
+              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
+                <Forum className={styles.page} />
+              </React.Suspense>
+            }
+          />
+          <Route path={`${ROUTES.game}/:levelId`} element={<GamePage className={styles.page} />} />
+        </Route>
 
-          </GuardRoute>
-        }>
-        <Route path={ROUTES.profile} element={<Profile className={styles.page} />} />
-        <Route path={ROUTES.leaderboard} element={<Leaderboard className={styles.page} />} />
-        <Route path={ROUTES.forum} element={<Forum className={styles.page} />} />
-        <Route path={`${ROUTES.game}/:levelId`} element={<GamePage className={styles.page} />} />
-      </Route>
         <Route
           path={ROUTES.login}
           element={
             <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
-              <LoginPage isAuthRefetch={authCurrent.refetch} messages={LOGIN_MESSAGES} />
+              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
+                <Login isAuthRefetch={authCurrent.refetch} messages={LOGIN_MESSAGES} />
+              </React.Suspense>
             </GuardRoute>
           }
         />
@@ -67,11 +105,16 @@ export function App() {
           path={ROUTES.register}
           element={
             <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
-              <RegisterPage isAuthRefetch={authCurrent.refetch} messages={REGISTER_PAGE_MESSAGES} />
+              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
+                <Register isAuthRefetch={authCurrent.refetch} messages={REGISTER_PAGE_MESSAGES} />
+              </React.Suspense>
             </GuardRoute>
           }
         />
+
+        <Route path={ROUTES.other} element={<ErrorFallback error={new Error('404 Not found')} />} />
       </Routes>
+
       <ToastContainer autoClose={2000} theme="dark" />
     </>
   );

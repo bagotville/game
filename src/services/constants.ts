@@ -1,4 +1,5 @@
 export const BASE_URL: string = 'https://ya-praktikum.tech/api/v2';
+export const OAUTH_URL: string = 'https://oauth.yandex.ru/authorize';
 export const TEAM_NAME = 'bugotville';
 
 export const ROUTES = {
@@ -10,6 +11,7 @@ export const ROUTES = {
   register: '/register',
   game: '/game',
   home: '/',
+  other: '*',
 };
 
 export const REG_EXP_VALIDATE_LOGIN = /^\b[A-Za-z][\w-]+\b$/;

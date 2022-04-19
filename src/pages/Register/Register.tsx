@@ -8,7 +8,7 @@ import { TStringOnlyValues } from '../../components/ConsoleStrategy/ConsoleStrat
 import { ISignupForm } from '../../types/api/auth';
 import { useSignUp } from '../../api';
 
-export function RegisterPage(props: RegisterPageMessages) {
+export function Register(props: RegisterPageMessages) {
   const { messages, isAuthRefetch } = props;
 
   const signUp = useSignUp();

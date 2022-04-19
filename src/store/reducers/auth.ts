@@ -7,6 +7,7 @@ const initialState: IState = {
   error: '',
   isAuth: false,
   user: undefined,
+  serviceId: undefined,
 };
 
 export const slice = createSlice({
@@ -27,6 +28,9 @@ export const slice = createSlice({
       state.isAuth = false;
       state.user = undefined;
     },
+    saveServiceIdToStore: (state, action: PayloadAction<string>) => {
+      state.serviceId = action.payload;
+    },
     error: (state, action: PayloadAction<string>) => {
       if (action.payload) {
         state.error = action.payload;
@@ -35,8 +39,9 @@ export const slice = createSlice({
   },
 });
 
-export const { saveUserToStore, removeUserFromStore, error } = slice.actions;
+export const { saveUserToStore, removeUserFromStore, error, saveServiceIdToStore } = slice.actions;
 export default slice.reducer;
 export const currentUser = (state: RootState) => state.authReducer.user;
 export const isAuth = (state: RootState) => state.authReducer.isAuth;
 export const authErrors = (state: RootState) => state.authReducer.error;
+export const serviceId = (state: RootState) => state.authReducer.serviceId;

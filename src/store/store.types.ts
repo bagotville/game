@@ -4,4 +4,5 @@ export interface IState {
   error: string;
   isAuth: boolean;
   user?: IUserData;
+  serviceId?: string;
 }
