@@ -14,7 +14,7 @@ const queryClient = new QueryClient();
 
 startServiceWorker();
 
-ReactDOM.render(
+ReactDOM.hydrate(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
