@@ -14,8 +14,6 @@ import { GuardRoute } from './components/GuardRoute';
 import { useAuthCurrent } from './api';
 import { isAuth } from './store/reducers/auth';
 import { GamePage } from './pages/Game/GamePage';
-import 'react-toastify/dist/ReactToastify.css';
-import '@reach/dialog/styles.css';
 import { useServiceId } from './api/hooks/useServiceId';
 import { useOAuth } from './api/hooks/useOAuth';
 import { ErrorFallback } from './pages/ErrorFallback';
@@ -31,6 +29,7 @@ export function App() {
   const serviceId = useServiceId();
   const isAuthenticated = useSelector(isAuth);
   const location = useLocation();
+
   const [searchParams] = useSearchParams();
   const oAuth = useOAuth();
 
