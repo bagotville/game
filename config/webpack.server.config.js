@@ -44,8 +44,4 @@ module.exports = {
   module: {
     rules: [fileLoader.server, tsLoader.server, sassLoader.server, cssLoader.server],
   },
-  optimization: {
-    chunkIds: 'named',
-    concatenateModules: false,
-  },
 };

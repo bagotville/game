@@ -60,35 +60,35 @@ module.exports = {
       patterns: [
         {
           from: path.join(__dirname, '../static/favicon.svg'),
-          to: path.join(__dirname, '../dist/static'),
+          to: path.join(__dirname, '../dist/client'),
         },
         {
           from: path.join(__dirname, '../static/sprites'),
-          to: path.join(__dirname, '../dist/static/sprites'),
+          to: path.join(__dirname, '../dist/client/sprites'),
         },
         {
           from: path.join(__dirname, '../static/icon-144-144.png'),
-          to: path.join(__dirname, '../dist/static'),
+          to: path.join(__dirname, '../dist/client'),
         },
         {
           from: path.join(__dirname, '../static/apple-touch-icon.png'),
-          to: path.join(__dirname, '../dist/static'),
+          to: path.join(__dirname, '../dist/client'),
         },
         {
           from: path.join(__dirname, '../static/icon-256-256.png'),
-          to: path.join(__dirname, '../dist/static'),
+          to: path.join(__dirname, '../dist/client'),
         },
         {
           from: path.join(__dirname, '../static/icon-512-512.png'),
-          to: path.join(__dirname, '../dist/static'),
+          to: path.join(__dirname, '../dist/client'),
         },
         {
           from: path.join(__dirname, '../service-worker.js'),
-          to: path.join(__dirname, '../dist'),
+          to: path.join(__dirname, '../dist/client'),
         },
         {
           from: path.join(__dirname, '../manifest.json'),
-          to: path.join(__dirname, '../dist'),
+          to: path.join(__dirname, '../dist/client'),
         },
       ],
     }),

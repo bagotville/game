@@ -6,9 +6,11 @@ import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { store } from './store/store';
-import App from './app.index';
 import { startServiceWorker } from './helpers';
 import { ErrorFallback } from './pages/ErrorFallback';
+import { App } from './App';
+import 'react-toastify/dist/ReactToastify.css';
+import '@reach/dialog/styles.css';
 
 const queryClient = new QueryClient();
 

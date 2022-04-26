@@ -14,7 +14,6 @@ import { GuardRoute } from './components/GuardRoute';
 import { useAuthCurrent } from './api';
 import { isAuth } from './store/reducers/auth';
 import { GamePage } from './pages/Game/GamePage';
-import { useServiceId } from './api/hooks/useServiceId';
 import { useOAuth } from './api/hooks/useOAuth';
 import { ErrorFallback } from './pages/ErrorFallback';
 
@@ -26,10 +25,8 @@ const Register = React.lazy(() => import('./pages/Register'));
 
 export function App() {
   const authCurrent = useAuthCurrent();
-  const serviceId = useServiceId();
   const isAuthenticated = useSelector(isAuth);
   const location = useLocation();
-
   const [searchParams] = useSearchParams();
   const oAuth = useOAuth();
 
@@ -42,9 +39,7 @@ export function App() {
     });
   }, []);
 
-  return authCurrent.isLoading || serviceId.isLoading ? (
-    <div className={styles.loading}>Loading...</div>
-  ) : (
+  return (
     <>
       <Routes>
         <Route
