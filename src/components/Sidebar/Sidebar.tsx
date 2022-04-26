@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styles from './Sidebar.scss';
 import { Icons } from '../Svg/Svg.types';
 import { Svg } from '../Svg';
+import { isDarkScheme } from '../../store/reducers/scheme';
 
 export function Sidebar() {
   const [isOpenTree, setIsOpenTree] = useState(false);
+
+  const isDark = useSelector(isDarkScheme);
+
+  const sidebarClasses = classNames(styles.sidebar, {
+    [styles.sidebar_dark]: isDark,
+  });
 
   const treeClasses = classNames(styles['icon-tree'], {
     [styles['icon-tree_open']]: isOpenTree,
@@ -17,8 +25,12 @@ export function Sidebar() {
       [styles['link-active']]: isActive,
     });
 
+  const navigationClasses = classNames(styles.navigation, {
+    [styles.navigation_dark]: isDark,
+  });
+
   return (
-    <div className={styles.sidebar}>
+    <div className={sidebarClasses}>
       <div className={styles.explorer}>
         <span className={styles.title}>Explorer</span>
         <div className={styles.divider} />
@@ -45,7 +57,7 @@ export function Sidebar() {
         </div>
       </div>
 
-      <nav className={styles.navigation}>
+      <nav className={navigationClasses}>
         <NavLink className={navLinkActiveClasses} to="/forum">
           <Svg icon={Icons.Forum} className={styles['icon-active']} />
           forum

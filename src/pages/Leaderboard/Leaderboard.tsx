@@ -1,17 +1,23 @@
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { range } from 'lodash';
+import { useSelector } from 'react-redux';
 import styles from './Leaderboard.scss';
 import { Svg } from '../../components/Svg';
 import { Icons } from '../../components/Svg/Svg.types';
 import { useGetLeaderboard } from '../../api/hooks/useGetLeaderboard';
 import { ILeaderboardProps } from './Leaderboard.types';
 import { BASE_URL } from '../../services';
+import { isDarkScheme } from '../../store/reducers/scheme';
 
 export function Leaderboard(props: ILeaderboardProps) {
   const { className: externalClassName } = props;
 
-  const leaderboardClasses = classNames(styles.leaderboard, externalClassName);
+  const isDark = useSelector(isDarkScheme);
+
+  const leaderboardClasses = classNames(styles.leaderboard, externalClassName, {
+    [styles.leaderboard_dark]: isDark,
+  });
 
   const getLeaderboard = useGetLeaderboard();
 

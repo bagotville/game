@@ -1,9 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 import styles from './Input.scss';
 import { IInputProps } from './Input.types';
 import { Icons } from '../Svg/Svg.types';
 import { Svg } from '../Svg';
+import { isDarkScheme } from '../../store/reducers/scheme';
 
 export function Input(props: IInputProps) {
   const {
@@ -21,15 +23,15 @@ export function Input(props: IInputProps) {
     onInput,
   } = props;
 
-  const inputWrapperClasses = classNames(
-    styles['input-wrapper'],
-    externalClassName,
-  );
+  const isDark = useSelector(isDarkScheme);
+
+  const inputWrapperClasses = classNames(styles['input-wrapper'], externalClassName);
 
   const inputClasses = classNames(styles.input, {
     [styles.error]: isInvalid,
     [styles.success]: isValid,
     [styles.disabled]: disabled,
+    [styles.input_dark]: isDark,
   });
 
   return (

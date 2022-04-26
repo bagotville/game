@@ -4,8 +4,12 @@
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: $light-black-gray-color;
+  background-color: #dedede;
   background-image: url('../../assets/images/placeholder.svg');
   background-repeat: no-repeat;
   background-position: center;
+
+  &_dark {
+    background-color: $light-black-gray-color;
+  }
 }

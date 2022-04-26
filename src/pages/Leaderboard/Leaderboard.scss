@@ -9,8 +9,13 @@ $height-grid-cell: 30px;
   width: 100%;
   height: 100%;
   padding: 10px 5px 0;
-  background-color: $night-color;
-  color: $dust-color;
+  background-color: $beige-color;
+  color: $gray-color;
+
+  &_dark {
+    background-color: $night-color;
+    color: $dust-color;
+  }
 }
 
 .number {

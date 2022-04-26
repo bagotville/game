@@ -27,7 +27,7 @@
   padding: 0;
   border: none;
   background-color: transparent;
-  color: $white-color;
+  color: $black-color;
 
   &:disabled {
     color: $gray-color;
@@ -42,5 +42,9 @@
         text-decoration: none;
       }
     }
+  }
+
+  &_dark {
+    color: $white-color;
   }
 }
