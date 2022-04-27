@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 import { EndReason, IGameProps } from './GamePage.types';
 import { Game } from '../../game/Game';
 import { CANVAS_ROOT_ID, FULL_SCREEN_BTN_ID } from './GameConstants';
 import { LEVEL_01, LEVEL_02, LEVEL_03 } from '../../game/levels/levels';
 import styles from './GamePage.scss';
 import { GameEndPage } from './GameEndPage';
+import { isDarkScheme } from '../../store/reducers/scheme';
 
 let currentLevel: string;
 let game: Game;
@@ -16,21 +18,30 @@ export function GamePage(props: IGameProps) {
   const [isGameEnded, setIsGameEnded] = useState(false);
   const [score, setScore] = useState(0);
   const [gameEndReason, setGameEndReason] = useState(EndReason.UNDEFINED);
+
+  const isDark = useSelector(isDarkScheme);
+
   if (levelId === undefined) {
     throw new Error('invalid level passed');
   }
+
   const { className } = props;
   currentLevel = getCurrentLevel(levelId);
+
   game = new Game(currentLevel);
   game.subscribeForGameEndEvent((reason: EndReason, score: number) => {
     setGameEndReason(reason);
     setScore(score);
     setIsGameEnded(true);
   });
+
   return isGameEnded ? (
     GameEndPage({ className, currentLevelId: getCurrentLevelId(levelId), endReason: gameEndReason, score })
   ) : (
-    <div className={classNames(className, styles['game-page'])}>
+    <div
+      className={classNames(className, styles['game-page'], {
+        [styles['game-page_dark']]: isDark,
+      })}>
       <div id="game-root">
         <button className={styles['game-message']} type="button" onClick={() => startGame()}>
           <p className={styles['message-title']}>{getLevelName(levelId)}</p>

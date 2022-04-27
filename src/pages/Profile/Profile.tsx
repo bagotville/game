@@ -20,10 +20,15 @@ import { useChangeUserData } from '../../api/hooks/useChangeUserData';
 import { IControls } from '../../services/hooks/useValidateForm/useValidateForm.types';
 import { ControlsData, ControlsPass, IChangeUserData, IChangeUserPass } from '../../types/api/user';
 import { useChangeUserPass } from '../../api/hooks/useChangeUserPass';
+import { isDarkScheme } from '../../store/reducers/scheme';
 
 export function Profile(props: IPropsProfile) {
   const { className: externalClassName } = props;
-  const profileClasses = classNames(styles.profile, externalClassName);
+  const isDark = useSelector(isDarkScheme);
+
+  const profileClasses = classNames(styles.profile, externalClassName, {
+    [styles.profile_dark]: isDark,
+  });
 
   const [passValue, setPassValue] = useState('');
   const [avatar, setAvatar] = useState<File | null>(null);

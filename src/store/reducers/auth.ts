@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import { IUserData } from '../../types/api/auth';
-import { IState } from '../store.types';
+import { IAuthState } from '../store.types';
 
-const initialState: IState = {
+const initialState: IAuthState = {
   error: '',
   isAuth: false,
   user: undefined,

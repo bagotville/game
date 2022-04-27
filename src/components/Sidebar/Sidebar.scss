@@ -9,7 +9,11 @@
   width: 350px;
   height: 100%;
   padding-top: 20px;
-  background-color: $graphite-color;
+  background-color: $white-color;
+
+  &_dark {
+    background-color: $graphite-color;
+  }
 }
 
 .explorer {
@@ -66,8 +70,12 @@
   justify-content: space-between;
   width: 100%;
   height: 70px;
-  background: $light-black-color;
+  background: $beige-color;
   box-shadow: 0 -2px 2px rgb(0 0 0 / 40%);
+
+  &_dark {
+    background: $light-black-color;
+  }
 }
 
 .icon-active {

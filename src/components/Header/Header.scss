@@ -10,12 +10,34 @@
   justify-content: space-between;
   height: 40px;
   padding: 0 8px;
-  background-color: $graphite-color;
+  background-color: $white-color;
   box-shadow: 0 2px 2px rgb(0 0 0 / 60%);
-  color: $white-color;
+  color: $black-color;
   font-size: 20px;
+
+  &_dark {
+    background-color: $graphite-color;
+    color: $white-color;
+  }
 }
 
 .action {
   cursor: pointer;
+}
+
+.wrapper-logout {
+  display: flex;
+  align-items: center;
+}
+
+.scheme {
+  width: 28px;
+  height: 28px;
+  margin-right: 12px;
+  background: url('../../assets/images/light-scheme-icon.svg');
+  cursor: pointer;
+
+  &_dark {
+    background: url('../../assets/images/dark-scheme-icon.svg');
+  }
 }

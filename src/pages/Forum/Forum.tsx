@@ -1,12 +1,23 @@
 import React, { useRef } from 'react';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 import styles from './Forum.scss';
 import { Button } from '../../components/Button';
 import { ForumProps } from './Forum.types';
+import { isDarkScheme } from '../../store/reducers/scheme';
 
 export function Forum(props: ForumProps) {
   const { className: externalClassName } = props;
-  const forumClasses = classNames(styles.forum, externalClassName);
+
+  const isDark = useSelector(isDarkScheme);
+
+  const forumClasses = classNames(styles.forum, externalClassName, {
+    [styles.forum_dark]: isDark,
+  });
+
+  const topicNameClasses = classNames(styles['topic-name'], {
+    [styles['topic-name_dark']]: isDark,
+  });
 
   const numbersRef = useRef(null);
 
@@ -36,12 +47,12 @@ export function Forum(props: ForumProps) {
 
         <div className={styles['forum-card']}>
           ##&ensp;
-          <span className={styles['topic-name']}>Free communication</span>&ensp;
+          <span className={topicNameClasses}>Free communication</span>&ensp;
           <span>| 236 topics</span>&ensp;
           <span>| 14543 messages</span>&ensp;
           <div className={styles.actions}>
             <Button name="Show all" className={styles.action} />
-            <Button name="New topic" className={styles.action} color="yellow" />
+            <Button name="New topic" className={styles.action} color={isDark ? 'yellow' : 'pink'} />
           </div>
         </div>
       </div>

@@ -12,12 +12,16 @@
   border: 1px dashed $gray-color;
   border-radius: 4px;
   background-color: transparent;
-  color: $white-color;
+  color: $black-color;
   font-size: 16px;
 
   &:focus {
     border-color: $light-gray-color;
     outline: none;
+  }
+
+  &_dark {
+    color: $white-color;
   }
 }
 
