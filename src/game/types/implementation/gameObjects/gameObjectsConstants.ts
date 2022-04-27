@@ -2,6 +2,8 @@ import { ISpriteInfo } from '../../base/ISpriteInfo';
 import { Size } from '../Size';
 import { Vector } from '../Vector';
 
+const isClientSide = typeof window !== 'undefined';
+
 export const CODE_WIDTH = 10;
 export const CODE_HEIGHT = 30;
 
@@ -58,19 +60,19 @@ export const CANVAS_FONT = `${CANVAS_FONT_SIZE}px consolas`;
 export const PLAYER_IDLE_COLUMNS = 4;
 export const PLAYER_WALK_COLUMNS = 6;
 
-const playerIdleSpriteRight = new Image();
+const playerIdleSpriteRight = isClientSide ? new Image() : { src: null };
 playerIdleSpriteRight.src = '/sprites/player/IdleRight.png';
 
-const playerIdleSpriteLeft = new Image();
+const playerIdleSpriteLeft = isClientSide ? new Image() : { src: null };
 playerIdleSpriteLeft.src = '/sprites/player/IdleLeft.png';
 
-const playerWalkSpriteRight = new Image();
+const playerWalkSpriteRight = isClientSide ? new Image() : { src: null };
 playerWalkSpriteRight.src = '/sprites/player/WalkRight.png';
 
-const playerWalkSpriteLeft = new Image();
+const playerWalkSpriteLeft = isClientSide ? new Image() : { src: null };
 playerWalkSpriteLeft.src = '/sprites/player/WalkLeft.png';
 
-export const HEART_SPRITE = new Image();
+export const HEART_SPRITE = isClientSide ? new Image() : { src: null };
 HEART_SPRITE.src = '/sprites/heart.png';
 
 // замедляет анимацию. Чем меньше тем чаще будет происходить смена кадров спрайта
@@ -95,19 +97,19 @@ export const MACHINE1_SIZE: Size = {
   x: 45,
   y: 45,
 };
-const machine1IdleSpriteRight = new Image();
+const machine1IdleSpriteRight = isClientSide ? new Image() : { src: null };
 machine1IdleSpriteRight.src = '/sprites/machine1/IdleRight.png';
 
-const machine1IdleSpriteLeft = new Image();
+const machine1IdleSpriteLeft = isClientSide ? new Image() : { src: null };
 machine1IdleSpriteLeft.src = '/sprites/machine1/IdleLeft.png';
 
-const machine1WalkSpriteRight = new Image();
+const machine1WalkSpriteRight = isClientSide ? new Image() : { src: null };
 machine1WalkSpriteRight.src = '/sprites/machine1/WalkRight.png';
 
-const machine1WalkSpriteLeft = new Image();
+const machine1WalkSpriteLeft = isClientSide ? new Image() : { src: null };
 machine1WalkSpriteLeft.src = '/sprites/machine1/WalkLeft.png';
 
-const coinSprite = new Image();
+const coinSprite = isClientSide ? new Image() : { src: null };
 coinSprite.src = '/sprites/coin/coin.png';
 
 const coinAnimationRate = 6;
