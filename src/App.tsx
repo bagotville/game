@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader/root';
 import React, { useEffect } from 'react';
 import { Route, Routes, useLocation, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -16,14 +17,13 @@ import { isAuth } from './store/reducers/auth';
 import { GamePage } from './pages/Game/GamePage';
 import { useOAuth } from './api/hooks/useOAuth';
 import { ErrorFallback } from './pages/ErrorFallback';
+import Login from './pages/Login';
+import Forum from './pages/Forum';
+import Leaderboard from './pages/Leaderboard';
+import Profile from './pages/Profile';
+import Register from './pages/Register';
 
-const Login = React.lazy(() => import('./pages/Login'));
-const Forum = React.lazy(() => import('./pages/Forum'));
-const Leaderboard = React.lazy(() => import('./pages/Leaderboard'));
-const Profile = React.lazy(() => import('./pages/Profile'));
-const Register = React.lazy(() => import('./pages/Register'));
-
-export function App() {
+function App() {
   const authCurrent = useAuthCurrent();
   const isAuthenticated = useSelector(isAuth);
   const location = useLocation();
@@ -31,9 +31,9 @@ export function App() {
   const oAuth = useOAuth();
 
   const code = searchParams.get('code');
-
+  const isServer = typeof window === 'undefined';
   useEffect(() => {
-    if (!code) return;
+    if (isServer || !code) return;
     oAuth.mutateAsync({ code, redirect_uri: document.location.origin }).then(() => {
       authCurrent.refetch();
     });
@@ -57,30 +57,9 @@ export function App() {
               </div>
             </GuardRoute>
           }>
-          <Route
-            path={ROUTES.profile}
-            element={
-              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
-                <Profile className={styles.page} />
-              </React.Suspense>
-            }
-          />
-          <Route
-            path={ROUTES.leaderboard}
-            element={
-              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
-                <Leaderboard className={styles.page} />
-              </React.Suspense>
-            }
-          />
-          <Route
-            path={ROUTES.forum}
-            element={
-              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
-                <Forum className={styles.page} />
-              </React.Suspense>
-            }
-          />
+          <Route path={ROUTES.profile} element={<Profile className={styles.page} />} />
+          <Route path={ROUTES.leaderboard} element={<Leaderboard className={styles.page} />} />
+          <Route path={ROUTES.forum} element={<Forum className={styles.page} />} />
           <Route path={`${ROUTES.game}/:levelId`} element={<GamePage className={styles.page} />} />
         </Route>
 
@@ -88,9 +67,7 @@ export function App() {
           path={ROUTES.login}
           element={
             <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
-              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
-                <Login isAuthRefetch={authCurrent.refetch} messages={LOGIN_MESSAGES} />
-              </React.Suspense>
+              <Login isAuthRefetch={authCurrent.refetch} messages={LOGIN_MESSAGES} />
             </GuardRoute>
           }
         />
@@ -99,9 +76,7 @@ export function App() {
           path={ROUTES.register}
           element={
             <GuardRoute canActivate={!isAuthenticated} redirectTo={ROUTES.home}>
-              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
-                <Register isAuthRefetch={authCurrent.refetch} messages={REGISTER_PAGE_MESSAGES} />
-              </React.Suspense>
+              <Register isAuthRefetch={authCurrent.refetch} messages={REGISTER_PAGE_MESSAGES} />
             </GuardRoute>
           }
         />
@@ -113,3 +88,6 @@ export function App() {
     </>
   );
 }
+
+const AppHot = hot(App);
+export default AppHot;

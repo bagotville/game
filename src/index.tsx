@@ -8,7 +8,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { store } from './store/store';
 import { startServiceWorker } from './helpers';
 import { ErrorFallback } from './pages/ErrorFallback';
-import { App } from './App';
+import App from './App';
 import 'react-toastify/dist/ReactToastify.css';
 import '@reach/dialog/styles.css';
 
