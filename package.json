@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack serve --mode development --open",
+    "start": "cross-env NODE_ENV=development webpack --mode development && node ./dist/server/server.js",
     "dev": "cross-env NODE_ENV=development webpack --mode development",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "test-components": "ts-mocha --require ignore-styles -p \"./tsconfig.json\" \"src/**/*.spec.{js,jsx,ts,tsx}\"",
