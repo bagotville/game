@@ -50,7 +50,7 @@ module.exports = {
   devtool: isDev ? 'source-map' : false,
   plugins: [
     new HtmlWebpackPlugin({
-      template: '/static/index.html',
+      template: './static/index.html',
       minify: {
         collapseWhitespace: isProd,
       },

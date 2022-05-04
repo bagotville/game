@@ -1,4 +1,4 @@
-import { hot } from 'react-hot-loader/root';
+// import { hot } from 'react-hot-loader/root';
 import React, { useEffect } from 'react';
 import { Route, Routes, useLocation, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -19,6 +19,7 @@ import { useOAuth } from './api/hooks/useOAuth';
 import { ErrorFallback } from './pages/ErrorFallback';
 import Login from './pages/Login';
 import Forum from './pages/Forum';
+import Topic from './pages/Topic';
 import Leaderboard from './pages/Leaderboard';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
@@ -37,7 +38,7 @@ function App() {
     oAuth.mutateAsync({ code, redirect_uri: document.location.origin }).then(() => {
       authCurrent.refetch();
     });
-  }, []);
+  });
 
   return (
     <>
@@ -60,6 +61,14 @@ function App() {
           <Route path={ROUTES.profile} element={<Profile className={styles.page} />} />
           <Route path={ROUTES.leaderboard} element={<Leaderboard className={styles.page} />} />
           <Route path={ROUTES.forum} element={<Forum className={styles.page} />} />
+          <Route
+            path={`${ROUTES.forum}/:topicId`}
+            element={
+              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
+                <Topic className={styles.page} />
+              </React.Suspense>
+            }
+          />
           <Route path={`${ROUTES.game}/:levelId`} element={<GamePage className={styles.page} />} />
         </Route>
 
@@ -89,5 +98,6 @@ function App() {
   );
 }
 
-const AppHot = hot(App);
+// const AppHot = hot(App);
+const AppHot = App;
 export default AppHot;

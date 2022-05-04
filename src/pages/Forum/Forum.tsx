@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import React, { useRef } from 'react';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
@@ -5,6 +6,7 @@ import styles from './Forum.scss';
 import { Button } from '../../components/Button';
 import { ForumProps } from './Forum.types';
 import { isDarkScheme } from '../../store/reducers/scheme';
+import { forumList } from '../../assets/mock-data/forum';
 
 export function Forum(props: ForumProps) {
   const { className: externalClassName } = props;
@@ -21,8 +23,9 @@ export function Forum(props: ForumProps) {
 
   const numbersRef = useRef(null);
 
+  const linesCount: number = 4 + forumList.length * 3;
   const numbers: number[] = [];
-  for (let i = 1; i <= 5; i += 1) {
+  for (let i = 1; i <= linesCount; i += 1) {
     numbers.push(i);
   }
 
@@ -44,17 +47,20 @@ export function Forum(props: ForumProps) {
       <div className={styles.content}>
         <div className={styles.header}>Forum</div>
         <div className={styles.divider}>----------------------</div>
+        <Button name="Create topic" className={styles['new-topic']} />
 
-        <div className={styles['forum-card']}>
-          ##&ensp;
-          <span className={topicNameClasses}>Free communication</span>&ensp;
-          <span>| 236 topics</span>&ensp;
-          <span>| 14543 messages</span>&ensp;
-          <div className={styles.actions}>
-            <Button name="Show all" className={styles.action} />
-            <Button name="New topic" className={styles.action} color={isDark ? 'yellow' : 'pink'} />
+        {forumList.map(({ id, title }) => (
+          <div className={styles['forum-card']} key={id}>
+            ##&ensp;
+            <span className={topicNameClasses}>{title}</span>&ensp;
+            <span>| 10 messages</span>&ensp;
+            <div className={styles.actions}>
+              <NavLink to={`/forum/${id}`}>
+                <Button name="Show" className={styles.action} />
+              </NavLink>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );

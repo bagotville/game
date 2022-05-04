@@ -50,6 +50,7 @@ $height-grid-cell: 30px;
 
 .forum-card {
   height: 2 * $height-grid-cell;
+  margin-bottom: 30px;
   color: $blackberry-color;
 }
 
@@ -68,5 +69,13 @@ $height-grid-cell: 30px;
 .action {
   & > span {
     font-style: italic;
+  }
+}
+
+.new-topic {
+  margin-bottom: 43px;
+
+  span {
+    color: $dandelion-color;
   }
 }
