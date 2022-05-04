@@ -1,4 +1,5 @@
-const filenameRegexp = /^(?!.*\.inline).*\.(jpe?g|png|gif|eot|woff2?|ttf|svg)$/;
+const filenameRegexp = /^(?!.*\.inline).*\.(eot|woff2?|ttf)$/;
+const path = require('path');
 
 module.exports = {
   client: {
@@ -8,6 +9,9 @@ module.exports = {
 
   server: {
     test: filenameRegexp,
-    use: ['file-loader'],
+    loader: 'file-loader',
+    options: {
+      name: path.resolve('dist/client') + '/[name].[ext]',
+    },
   },
 };

@@ -31,6 +31,7 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
     'no-unused-vars': 'off',
+    'no-underscore-dangle': 'off',
     'no-unused-expressions': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',

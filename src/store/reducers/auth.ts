@@ -23,6 +23,9 @@ export const slice = createSlice({
         state.user = undefined;
       }
     },
+    setIsAuth: (state, action: PayloadAction<boolean>) => {
+      state.isAuth = action.payload;
+    },
     removeUserFromStore: (state) => {
       state.error = '';
       state.isAuth = false;
@@ -39,7 +42,7 @@ export const slice = createSlice({
   },
 });
 
-export const { saveUserToStore, removeUserFromStore, error, saveServiceIdToStore } = slice.actions;
+export const { saveUserToStore, removeUserFromStore, error, saveServiceIdToStore, setIsAuth } = slice.actions;
 export default slice.reducer;
 export const currentUser = (state: RootState) => state.authReducer.user;
 export const isAuth = (state: RootState) => state.authReducer.isAuth;

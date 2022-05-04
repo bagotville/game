@@ -7,6 +7,8 @@ const cssLoader = require('./loaders/css');
 const sassLoader = require('./loaders/sass');
 const nodeExternals = require('webpack-node-externals');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const assets = require('./loaders/assets.js');
 
 module.exports = {
   context: path.join(__dirname, '../src'),
@@ -24,24 +26,52 @@ module.exports = {
     __dirname: false,
     __filename: false,
   },
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   externals: [nodeExternals()],
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
-    fallback: {
-      url: require.resolve('url'),
-      fs: false,
-      assert: require.resolve('assert'),
-      crypto: require.resolve('crypto-browserify'),
-      http: require.resolve('stream-http'),
-      https: require.resolve('https-browserify'),
-      os: require.resolve('os-browserify/browser'),
-      buffer: require.resolve('buffer'),
-      stream: require.resolve('stream-browserify'),
-    },
   },
-  plugins: [new CleanWebpackPlugin(), new NodePolyfillPlugin(), new MiniCssExtractPlugin()],
+  plugins: [
+    new NodePolyfillPlugin(),
+    new MiniCssExtractPlugin({ filename: 'styles.css' }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.join(__dirname, '../static/favicon.svg'),
+          to: path.join(__dirname, '../dist/server'),
+        },
+        {
+          from: path.join(__dirname, '../static/sprites'),
+          to: path.join(__dirname, '../dist/server/sprites'),
+        },
+        {
+          from: path.join(__dirname, '../static/icon-144-144.png'),
+          to: path.join(__dirname, '../dist/server'),
+        },
+        {
+          from: path.join(__dirname, '../static/apple-touch-icon.png'),
+          to: path.join(__dirname, '../dist/server'),
+        },
+        {
+          from: path.join(__dirname, '../static/icon-256-256.png'),
+          to: path.join(__dirname, '../dist/server'),
+        },
+        {
+          from: path.join(__dirname, '../static/icon-512-512.png'),
+          to: path.join(__dirname, '../dist/server'),
+        },
+        {
+          from: path.join(__dirname, '../service-worker.js'),
+          to: path.join(__dirname, '../dist/server'),
+        },
+        {
+          from: path.join(__dirname, '../manifest.json'),
+          to: path.join(__dirname, '../dist/server'),
+        },
+      ],
+    }),
+  ],
   module: {
-    rules: [fileLoader.server, tsLoader.server, sassLoader.server, cssLoader.server],
+    rules: [fileLoader.server, tsLoader.server, sassLoader.server, cssLoader.server, assets.server],
   },
 };
