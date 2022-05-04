@@ -1,4 +1,19 @@
-export const forumList = [
+/* eslint-disable camelcase */
+export interface Message {
+  id?: number;
+  author_id?: number;
+  display_name?: string;
+  reply_id: number | null;
+  content: string;
+  timestamp: string;
+}
+
+interface Topic {
+  id: number;
+  title: string;
+}
+
+export const forumList: Topic[] = [
   {
     id: 0,
     title: 'Как пропатчить KDE под FreeBSD',
@@ -13,7 +28,7 @@ export const forumList = [
   },
 ];
 
-export const messages = [
+export const messages: Message[] = [
   {
     id: 0,
     reply_id: null,
@@ -59,3 +74,12 @@ export const messages = [
     timestamp: '2022-01-03T09:19:23.953Z',
   },
 ];
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const pushToMessage = ({ author_id, reply_id, content, timestamp }: Message) => {
+  const display_name = 'Current_User';
+  const id = messages.length;
+  messages.push({ id, display_name, reply_id, content, timestamp });
+};
+
+export const getTopic = (topicId: string | number) => forumList.find(({ id }) => id === Number(topicId))?.title;

@@ -1,23 +1,26 @@
+/* eslint-disable max-len */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable camelcase */
 import { useParams } from 'react-router-dom';
-import React, { useRef, useState } from 'react';
+import React, { ChangeEventHandler, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import avatarPlaceholder from '../../assets/images/avatar-placeholder.svg';
 import styles from './Topic.scss';
 import { Button } from '../../components/Button';
 import { TopicProps } from './Topic.types';
+import { currentUser } from '../../store/reducers/auth';
 import { isDarkScheme } from '../../store/reducers/scheme';
-import { forumList, messages } from '../../assets/mock-data/forum';
+import { getTopic, messages as topicMessageList, pushToMessage, Message } from '../../assets/mock-data/forum';
 
 /**
  * TODO:
- * 1. Отправка сообщения в массив
- * 2. Страница с созданием новой темы
- * 3. Отправка новой темы в массив
- * 4. Fake API с получением тем
- * 5. Fake API с получением внутренностей тем
+ * → Отправка сообщения в массив +
+ * → Разделение массива сообщений на топики
+ * → Страница с созданием новой темы
+ * → Отправка новой темы в массив
+ * → Fake API с получением тем
+ * → Fake API с получением внутренностей тем
  */
 
 function formatDate(timestamp: string) {
@@ -50,22 +53,25 @@ function formatDate(timestamp: string) {
   return `${dayOfMonth}.${month}.${year} ${hour}:${minutes}`;
 }
 
-const findMessage = (messageId: number) => messages.find(({ id }) => id === messageId);
+const findMessage = (messageId: number) => topicMessageList.find(({ id }) => id === messageId);
 
 export function Topic(props: TopicProps) {
   const { className: externalClassName } = props;
   const { topicId } = useParams();
-
+  if (topicId === undefined) {
+    throw new Error('Почему это у нас топик id undefined??');
+  }
+  const user = useSelector(currentUser);
   const isDark = useSelector(isDarkScheme);
+  const numbersRef = useRef(null);
+
+  const [repliedMessageId, setRepliedMessageId] = useState(null);
+  const [userMessage, setUserMessage] = useState('');
+  const [messageList, updateMessageList] = useState(topicMessageList);
 
   const topicClasses = classNames(styles.topic, externalClassName, {
     [styles.topic_dark]: isDark,
   });
-
-  const numbersRef = useRef(null);
-
-  const [repliedMessageId, setRepliedMessageId] = useState(null);
-
   const linesCount = 99;
   const numbers: number[] = [];
   for (let i = 1; i <= linesCount; i += 1) {
@@ -75,6 +81,30 @@ export function Topic(props: TopicProps) {
   const scrollHandler = (e: React.UIEvent<HTMLElement>) => {
     if (!numbersRef || !numbersRef.current) return;
     (numbersRef.current as HTMLElement).scrollTo(0, (e.target as HTMLElement).scrollTop);
+  };
+
+  const handleChange: ChangeEventHandler<HTMLTextAreaElement> = (event) => {
+    const element = event.currentTarget as HTMLTextAreaElement;
+    setUserMessage(element.value);
+  };
+
+  const submit = () => {
+    if (!user) {
+      throw new Error('Каким образом получилось так, что у нас на этом этапе может не быть данных юзера?');
+    }
+    const message: Message = {
+      author_id: user?.id,
+      reply_id: repliedMessageId,
+      content:
+        userMessage.trim() ||
+        'чел, ну не отправляй пустые сообщения, видишь же, что не допилили форум ещё, чего ты, ну',
+      timestamp: new Date().toISOString(),
+    };
+
+    setUserMessage('');
+    setRepliedMessageId(null);
+    pushToMessage(message);
+    updateMessageList(topicMessageList);
   };
 
   return (
@@ -90,18 +120,18 @@ export function Topic(props: TopicProps) {
       <main className={styles.content}>
         <div className={styles.header}>
           Тема:&nbsp;
-          <span className={styles['text-white']}>{forumList.find(({ id }) => id === Number(topicId))?.title}</span>
+          <span className={styles['text-white']}>{getTopic(topicId)}</span>
         </div>
         <div className={styles.divider}>----------------------</div>
 
-        {messages.map(({ id, content, display_name, timestamp, reply_id }) => {
+        {messageList.map(({ id, content, display_name, timestamp, reply_id }) => {
           const formattedStamp = formatDate(timestamp);
           let repliedMessage = null;
           let repliedMessageAuthor = null;
           if (reply_id !== null) {
-            const message = findMessage(reply_id);
-            repliedMessage = message?.content;
-            repliedMessageAuthor = message?.display_name;
+            const repliedMessageObj = findMessage(reply_id);
+            repliedMessage = repliedMessageObj?.content;
+            repliedMessageAuthor = repliedMessageObj?.display_name;
           }
           return (
             <article className={styles.message} key={id} id={`message-${id}`}>
@@ -136,7 +166,7 @@ export function Topic(props: TopicProps) {
           <label htmlFor="message-input" className={styles['reply-area-label']}>
             Reply in topic:
           </label>
-          <Button name="Send" className={styles['reply-area-button']} />
+          <Button name="Send" className={styles['reply-area-button']} onClick={submit} />
 
           {repliedMessageId !== null ? (
             <div className={styles['replied-message-container']}>
@@ -151,6 +181,8 @@ export function Topic(props: TopicProps) {
           )}
 
           <textarea
+            onChange={handleChange}
+            value={userMessage}
             className={styles['reply-area-input']}
             id="message-input"
             placeholder="Пожалуйста, отвечайте строго в тему"
