@@ -12,6 +12,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import serialize from 'serialize-javascript';
 import App from '../../App';
 import authReducer, { setIsAuth } from '../../store/reducers/auth';
+import schemeReducer from '../../store/reducers/scheme';
 import { ErrorFallbackStub } from '../../pages/ErrorFallback/ErrorFallbackStub';
 import { RootState } from '../../store/store';
 
@@ -38,6 +39,7 @@ function getStore(isAuth: boolean) {
   const store = configureStore({
     reducer: {
       authReducer,
+      schemeReducer,
     },
     middleware: [thunk],
   });
