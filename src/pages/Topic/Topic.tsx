@@ -146,9 +146,7 @@ export function Topic(props: TopicProps) {
               </a>
               <Button name="Clear" className={styles['reply-area-clear']} onClick={() => setRepliedMessageId(null)} />
             </div>
-          ) : (
-            ''
-          )}
+          ) : null}
 
           <textarea
             onChange={handleChange}

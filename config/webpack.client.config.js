@@ -11,13 +11,13 @@ const nodeExternals = require('webpack-node-externals');
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
 
-// const csp = {
-//   'default-src': "'self' 'unsafe-eval'",
-//   'font-src': "'self' https://fonts.gstatic.com",
-//   'img-src': "'self' https://ya-praktikum.tech data: https:",
-//   'connect-src': "'self' https://ya-praktikum.tech wss://ya-praktikum.tech",
-//   'style-src': "'self' 'unsafe-inline' https://fonts.googleapis.com",
-// };
+const csp = {
+  'default-src': "'self' 'unsafe-eval'",
+  'font-src': "'self' https://fonts.gstatic.com",
+  'img-src': "'self' https://ya-praktikum.tech data: https:",
+  'connect-src': "'self' https://ya-praktikum.tech wss://ya-praktikum.tech",
+  'style-src': "'self' 'unsafe-inline' https://fonts.googleapis.com",
+};
 
 const optimization = () => {
   const config = {
@@ -62,14 +62,14 @@ module.exports = {
       minify: {
         collapseWhitespace: isProd,
       },
-      // meta: {
-      //   'Content-Security-Policy': {
-      //     'http-equiv': 'Content-Security-Policy',
-      //     content: Object.entries(csp)
-      //       .map((e) => e.join(' '))
-      //       .join(';'),
-      //   },
-      // },
+      meta: {
+        'Content-Security-Policy': {
+          'http-equiv': 'Content-Security-Policy',
+          content: Object.entries(csp)
+            .map((e) => e.join(' '))
+            .join(';'),
+        },
+      },
     }),
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin({

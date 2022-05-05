@@ -63,14 +63,7 @@ function App() {
           <Route path={ROUTES.leaderboard} element={<Leaderboard className={styles.page} />} />
           <Route path={ROUTES.forum} element={<Forum className={styles.page} />} />
           <Route path={ROUTES.newTopic} element={<NewTopic className={styles.page} />} />
-          <Route
-            path={`${ROUTES.forum}/:topicId`}
-            element={
-              <React.Suspense fallback={<div className={styles.loading}>Loading...</div>}>
-                <Topic className={styles.page} />
-              </React.Suspense>
-            }
-          />
+          <Route path={`${ROUTES.forum}/:topicId`} element={<Topic className={styles.page} />} />
           <Route path={`${ROUTES.game}/:levelId`} element={<GamePage className={styles.page} />} />
         </Route>
 
