@@ -11,6 +11,14 @@ const nodeExternals = require('webpack-node-externals');
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
 
+const csp = {
+  'default-src': "'self' 'unsafe-eval'",
+  'font-src': "'self' https://fonts.gstatic.com",
+  'img-src': "'self' https://ya-praktikum.tech data: https:",
+  'connect-src': "'self' https://ya-praktikum.tech wss://ya-praktikum.tech",
+  'style-src': "'self' 'unsafe-inline' https://fonts.googleapis.com",
+};
+
 const optimization = () => {
   const config = {
     splitChunks: {
@@ -50,9 +58,17 @@ module.exports = {
   devtool: isDev ? 'source-map' : false,
   plugins: [
     new HtmlWebpackPlugin({
-      template: '/static/index.html',
+      template: './static/index.html',
       minify: {
         collapseWhitespace: isProd,
+      },
+      meta: {
+        'Content-Security-Policy': {
+          'http-equiv': 'Content-Security-Policy',
+          content: Object.entries(csp)
+            .map((e) => e.join(' '))
+            .join(';'),
+        },
       },
     }),
     new CleanWebpackPlugin(),

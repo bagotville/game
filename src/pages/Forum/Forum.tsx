@@ -1,10 +1,12 @@
-import React, { useRef } from 'react';
+import { NavLink } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import styles from './Forum.scss';
 import { Button } from '../../components/Button';
 import { ForumProps } from './Forum.types';
 import { isDarkScheme } from '../../store/reducers/scheme';
+import { getForumList } from '../../assets/mock-data/forum';
 
 export function Forum(props: ForumProps) {
   const { className: externalClassName } = props;
@@ -22,7 +24,7 @@ export function Forum(props: ForumProps) {
   const numbersRef = useRef(null);
 
   const numbers: number[] = [];
-  for (let i = 1; i <= 5; i += 1) {
+  for (let i = 1; i <= 99; i += 1) {
     numbers.push(i);
   }
 
@@ -30,6 +32,12 @@ export function Forum(props: ForumProps) {
     if (!numbersRef || !numbersRef.current) return;
     (numbersRef.current as HTMLElement).scrollTo(0, (e.target as HTMLElement).scrollTop);
   };
+
+  const [topicList, setTopicList] = useState(getForumList());
+
+  useEffect(() => {
+    setTopicList(topicList);
+  }, [topicList, topicList.length]);
 
   return (
     <div onScroll={scrollHandler} className={forumClasses}>
@@ -44,17 +52,25 @@ export function Forum(props: ForumProps) {
       <div className={styles.content}>
         <div className={styles.header}>Forum</div>
         <div className={styles.divider}>----------------------</div>
+        <NavLink to="/new-topic">
+          <Button name="Create topic" className={styles['new-topic']} />
+        </NavLink>
 
-        <div className={styles['forum-card']}>
-          ##&ensp;
-          <span className={topicNameClasses}>Free communication</span>&ensp;
-          <span>| 236 topics</span>&ensp;
-          <span>| 14543 messages</span>&ensp;
-          <div className={styles.actions}>
-            <Button name="Show all" className={styles.action} />
-            <Button name="New topic" className={styles.action} color={isDark ? 'yellow' : 'pink'} />
+        {topicList.map(({ id, title, messageCount }) => (
+          <div className={styles['forum-card']} key={id}>
+            ##&ensp;
+            <span className={topicNameClasses}>{title}</span>&ensp;
+            <span>
+              | {messageCount} message{messageCount > 1 ? 's' : ''}
+            </span>
+            &ensp;
+            <div className={styles.actions}>
+              <NavLink to={`/forum/${id}`}>
+                <Button name="Show" className={styles.action} />
+              </NavLink>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ export const TEAM_NAME = 'bugotville';
 export const ROUTES = {
   leaderboard: '/leaderboard',
   forum: '/forum',
+  newTopic: '/new-topic',
   profile: '/profile',
   login: '/login',
   logout: '/logout',

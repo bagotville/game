@@ -19,6 +19,8 @@ import { useOAuth } from './api/hooks/useOAuth';
 import { ErrorFallback } from './pages/ErrorFallback';
 import Login from './pages/Login';
 import Forum from './pages/Forum';
+import Topic from './pages/Topic';
+import NewTopic from './pages/NewTopic';
 import Leaderboard from './pages/Leaderboard';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
@@ -37,7 +39,7 @@ function App() {
     oAuth.mutateAsync({ code, redirect_uri: document.location.origin }).then(() => {
       authCurrent.refetch();
     });
-  }, []);
+  });
 
   return (
     <>
@@ -60,6 +62,8 @@ function App() {
           <Route path={ROUTES.profile} element={<Profile className={styles.page} />} />
           <Route path={ROUTES.leaderboard} element={<Leaderboard className={styles.page} />} />
           <Route path={ROUTES.forum} element={<Forum className={styles.page} />} />
+          <Route path={ROUTES.newTopic} element={<NewTopic className={styles.page} />} />
+          <Route path={`${ROUTES.forum}/:topicId`} element={<Topic className={styles.page} />} />
           <Route path={`${ROUTES.game}/:levelId`} element={<GamePage className={styles.page} />} />
         </Route>
 
