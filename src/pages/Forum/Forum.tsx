@@ -6,7 +6,9 @@ import styles from './Forum.scss';
 import { Button } from '../../components/Button';
 import { ForumProps } from './Forum.types';
 import { isDarkScheme } from '../../store/reducers/scheme';
-import { forumList } from '../../assets/mock-data/forum';
+import { getForumList } from '../../assets/mock-data/forum';
+
+const forumList = getForumList();
 
 export function Forum(props: ForumProps) {
   const { className: externalClassName } = props;

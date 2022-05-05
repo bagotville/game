@@ -11,63 +11,34 @@ import { Button } from '../../components/Button';
 import { TopicProps } from './Topic.types';
 import { currentUser } from '../../store/reducers/auth';
 import { isDarkScheme } from '../../store/reducers/scheme';
-import { getTopic, messages as topicMessageList, pushToMessage, Message } from '../../assets/mock-data/forum';
+import { getTopic, pushToTopicMessages } from '../../assets/mock-data/forum';
+import { formatDate } from '../../helpers';
 
 /**
  * TODO:
  * → Отправка сообщения в массив +
- * → Разделение массива сообщений на топики
+ * → Разделение массива сообщений на топики +
  * → Страница с созданием новой темы
  * → Отправка новой темы в массив
  * → Fake API с получением тем
  * → Fake API с получением внутренностей тем
  */
 
-function formatDate(timestamp: string) {
-  const date = new Date(timestamp);
-  let dayOfMonth: string | number = date.getDate();
-  let month: string | number = date.getMonth() + 1;
-  let year: string | number = date.getFullYear();
-  let hour: string | number = date.getHours();
-  let minutes: string | number = date.getMinutes();
-  const diffMs = Number(new Date()) - Number(date);
-  const diffSec = Math.round(diffMs / 1000);
-  const diffMin = Math.round(diffSec / 60);
-  const diffHour = Math.round(diffMin / 60);
-
-  year = year.toString().slice(-2);
-  month = month < 10 ? `0${month}` : month;
-  dayOfMonth = dayOfMonth < 10 ? `0${dayOfMonth}` : dayOfMonth;
-  hour = hour < 10 ? `0${hour}` : hour;
-  minutes = minutes < 10 ? `0${minutes}` : minutes;
-
-  if (diffMin < 1) {
-    return `только что`;
-  }
-  if (diffHour < 1) {
-    return `${diffMin} минут назад`;
-  }
-  if (diffHour < 24) {
-    return `${hour}:${minutes}`;
-  }
-  return `${dayOfMonth}.${month}.${year} ${hour}:${minutes}`;
-}
-
-const findMessage = (messageId: number) => topicMessageList.find(({ id }) => id === messageId);
-
 export function Topic(props: TopicProps) {
   const { className: externalClassName } = props;
-  const { topicId } = useParams();
-  if (topicId === undefined) {
-    throw new Error('Почему это у нас топик id undefined??');
-  }
   const user = useSelector(currentUser);
   const isDark = useSelector(isDarkScheme);
   const numbersRef = useRef(null);
 
-  const [repliedMessageId, setRepliedMessageId] = useState(null);
+  const [repliedMessageId, setRepliedMessageId] = useState<null | number>(null);
+  const { topicId } = useParams();
+
+  if (topicId === undefined) {
+    throw new Error('Почему это у нас топик id undefined??');
+  }
+  const [topic] = useState(getTopic(topicId));
+  const [messageList, updateMessageList] = useState(topic?.messages || []);
   const [userMessage, setUserMessage] = useState('');
-  const [messageList, updateMessageList] = useState(topicMessageList);
 
   const topicClasses = classNames(styles.topic, externalClassName, {
     [styles.topic_dark]: isDark,
@@ -88,23 +59,25 @@ export function Topic(props: TopicProps) {
     setUserMessage(element.value);
   };
 
+  const findMessage = (messageId: number) => messageList?.find(({ id }) => id === messageId);
+
   const submit = () => {
+    if (!userMessage.trim()) return;
     if (!user) {
       throw new Error('Каким образом получилось так, что у нас на этом этапе может не быть данных юзера?');
     }
-    const message: Message = {
+
+    const message = {
       author_id: user?.id,
       reply_id: repliedMessageId,
-      content:
-        userMessage.trim() ||
-        'чел, ну не отправляй пустые сообщения, видишь же, что не допилили форум ещё, чего ты, ну',
+      content: userMessage.trim(),
       timestamp: new Date().toISOString(),
     };
 
     setUserMessage('');
     setRepliedMessageId(null);
-    pushToMessage(message);
-    updateMessageList(topicMessageList);
+    pushToTopicMessages(topicId, message);
+    updateMessageList(getTopic(topicId)?.messages || []);
   };
 
   return (
@@ -120,11 +93,11 @@ export function Topic(props: TopicProps) {
       <main className={styles.content}>
         <div className={styles.header}>
           Тема:&nbsp;
-          <span className={styles['text-white']}>{getTopic(topicId)}</span>
+          <span className={styles['text-white']}>{topic?.title}</span>
         </div>
         <div className={styles.divider}>----------------------</div>
 
-        {messageList.map(({ id, content, display_name, timestamp, reply_id }) => {
+        {messageList?.map(({ id, content, display_name, timestamp, reply_id }) => {
           const formattedStamp = formatDate(timestamp);
           let repliedMessage = null;
           let repliedMessageAuthor = null;
@@ -144,7 +117,11 @@ export function Topic(props: TopicProps) {
                   </p>
                   <p className={styles.secondary}>{formattedStamp}</p>
                 </div>
-                <Button name="Reply" className={styles['message-reply']} onClick={() => setRepliedMessageId(id)} />
+                <Button
+                  name="Reply"
+                  className={styles['message-reply']}
+                  onClick={() => setRepliedMessageId(id || null)}
+                />
               </header>
 
               {reply_id !== null ? (
