@@ -14,6 +14,17 @@ interface Topic {
   messages: Message[];
 }
 
+interface FirstMessage {
+  author_id: number;
+  content: string;
+  timestamp: string;
+}
+
+interface NewTopic {
+  title: string;
+  first_message: FirstMessage;
+}
+
 const topics: Topic[] = [
   {
     id: 0,
@@ -167,7 +178,9 @@ const topics: Topic[] = [
   },
 ];
 
-export const getForumList = () => topics.map(({ id, title }) => ({ id, title }));
+// eslint-disable-next-line max-len
+export const getForumList = () =>
+  topics.map(({ id, title, messages }) => ({ id, title, messageCount: messages.length }));
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const pushToTopicMessages = (topicId: number | string, { author_id, reply_id, content, timestamp }: Message) => {
@@ -180,3 +193,20 @@ export const pushToTopicMessages = (topicId: number | string, { author_id, reply
 };
 
 export const getTopic = (topicId: string | number) => topics.find(({ id }) => id === Number(topicId));
+
+export const createNewTopic = ({ title, first_message }: NewTopic) => {
+  const newTopic = {
+    id: topics.length,
+    title,
+    messages: [
+      {
+        id: 0,
+        display_name: 'Current_User',
+        reply_id: null,
+        content: first_message.content,
+        timestamp: first_message.timestamp,
+      },
+    ],
+  };
+  return topics.push(newTopic) - 1;
+};

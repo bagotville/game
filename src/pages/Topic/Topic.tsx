@@ -14,16 +14,6 @@ import { isDarkScheme } from '../../store/reducers/scheme';
 import { getTopic, pushToTopicMessages } from '../../assets/mock-data/forum';
 import { formatDate } from '../../helpers';
 
-/**
- * TODO:
- * → Отправка сообщения в массив +
- * → Разделение массива сообщений на топики +
- * → Страница с созданием новой темы
- * → Отправка новой темы в массив
- * → Fake API с получением тем
- * → Fake API с получением внутренностей тем
- */
-
 export function Topic(props: TopicProps) {
   const { className: externalClassName } = props;
   const user = useSelector(currentUser);
@@ -49,14 +39,14 @@ export function Topic(props: TopicProps) {
     numbers.push(i);
   }
 
-  const scrollHandler = (e: React.UIEvent<HTMLElement>) => {
-    if (!numbersRef || !numbersRef.current) return;
-    (numbersRef.current as HTMLElement).scrollTo(0, (e.target as HTMLElement).scrollTop);
-  };
-
   const handleChange: ChangeEventHandler<HTMLTextAreaElement> = (event) => {
     const element = event.currentTarget as HTMLTextAreaElement;
     setUserMessage(element.value);
+  };
+
+  const scrollHandler = (e: React.UIEvent<HTMLElement>) => {
+    if (!numbersRef || !numbersRef.current) return;
+    (numbersRef.current as HTMLElement).scrollTo(0, (e.target as HTMLElement).scrollTop);
   };
 
   const findMessage = (messageId: number) => messageList?.find(({ id }) => id === messageId);
@@ -101,6 +91,7 @@ export function Topic(props: TopicProps) {
           const formattedStamp = formatDate(timestamp);
           let repliedMessage = null;
           let repliedMessageAuthor = null;
+          if (id === undefined) throw new Error('аларям, у сообщения потерялся айдишник, все на поиски');
           if (reply_id !== null) {
             const repliedMessageObj = findMessage(reply_id);
             repliedMessage = repliedMessageObj?.content;
@@ -120,7 +111,9 @@ export function Topic(props: TopicProps) {
                 <Button
                   name="Reply"
                   className={styles['message-reply']}
-                  onClick={() => setRepliedMessageId(id || null)}
+                  onClick={() => {
+                    setRepliedMessageId(id);
+                  }}
                 />
               </header>
 

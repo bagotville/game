@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import styles from './Forum.scss';
@@ -7,8 +7,6 @@ import { Button } from '../../components/Button';
 import { ForumProps } from './Forum.types';
 import { isDarkScheme } from '../../store/reducers/scheme';
 import { getForumList } from '../../assets/mock-data/forum';
-
-const forumList = getForumList();
 
 export function Forum(props: ForumProps) {
   const { className: externalClassName } = props;
@@ -25,9 +23,8 @@ export function Forum(props: ForumProps) {
 
   const numbersRef = useRef(null);
 
-  const linesCount: number = 4 + forumList.length * 3;
   const numbers: number[] = [];
-  for (let i = 1; i <= linesCount; i += 1) {
+  for (let i = 1; i <= 99; i += 1) {
     numbers.push(i);
   }
 
@@ -35,6 +32,12 @@ export function Forum(props: ForumProps) {
     if (!numbersRef || !numbersRef.current) return;
     (numbersRef.current as HTMLElement).scrollTo(0, (e.target as HTMLElement).scrollTop);
   };
+
+  const [topicList, setTopicList] = useState(getForumList());
+
+  useEffect(() => {
+    setTopicList(topicList);
+  }, [topicList, topicList.length]);
 
   return (
     <div onScroll={scrollHandler} className={forumClasses}>
@@ -49,13 +52,18 @@ export function Forum(props: ForumProps) {
       <div className={styles.content}>
         <div className={styles.header}>Forum</div>
         <div className={styles.divider}>----------------------</div>
-        <Button name="Create topic" className={styles['new-topic']} />
+        <NavLink to="/new-topic">
+          <Button name="Create topic" className={styles['new-topic']} />
+        </NavLink>
 
-        {forumList.map(({ id, title }) => (
+        {topicList.map(({ id, title, messageCount }) => (
           <div className={styles['forum-card']} key={id}>
             ##&ensp;
             <span className={topicNameClasses}>{title}</span>&ensp;
-            <span>| 10 messages</span>&ensp;
+            <span>
+              | {messageCount} message{messageCount > 1 ? 's' : ''}
+            </span>
+            &ensp;
             <div className={styles.actions}>
               <NavLink to={`/forum/${id}`}>
                 <Button name="Show" className={styles.action} />
