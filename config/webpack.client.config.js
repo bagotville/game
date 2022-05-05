@@ -16,7 +16,7 @@ const csp = {
   'font-src': "'self' https://fonts.gstatic.com",
   'img-src': "'self' https://ya-praktikum.tech data: https:",
   'connect-src': "'self' https://ya-praktikum.tech wss://ya-praktikum.tech",
-  'style-src': "'self' https://fonts.googleapis.com",
+  'style-src': "'self' 'unsafe-inline' https://fonts.googleapis.com",
 };
 
 const optimization = () => {

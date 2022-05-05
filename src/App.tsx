@@ -1,4 +1,4 @@
-// import { hot } from 'react-hot-loader/root';
+import { hot } from 'react-hot-loader/root';
 import React, { useEffect } from 'react';
 import { Route, Routes, useLocation, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -100,6 +100,5 @@ function App() {
   );
 }
 
-// const AppHot = hot(App);
-const AppHot = App;
+const AppHot = hot(App);
 export default AppHot;
